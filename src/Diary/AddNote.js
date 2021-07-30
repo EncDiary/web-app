@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import PropTypes from 'prop-types'
+import React, {useState, useContext} from 'react'
+import Context from '../context'
 
 function useInputValue(defaultValue='') {
     const [value, setValue] = useState(defaultValue)
@@ -14,14 +14,16 @@ function useInputValue(defaultValue='') {
     }
 }
 
-function AddNote({onCreate}) {
+function AddNote() {
+    const {addNote} = useContext(Context)
+
     const input = useInputValue('')
 
     function submitHandler(event) {
         event.preventDefault()
 
         if (input.value().trim()) {
-            onCreate(input.value())
+            addNote(input.value())
             input.clear()
         }
     }
@@ -62,8 +64,5 @@ function AddNote({onCreate}) {
     )
 }
 
-AddNote.propTypes = {
-    onCreate: PropTypes.func.isRequired
-}
 
 export default AddNote

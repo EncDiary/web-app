@@ -1,41 +1,32 @@
-import React, {useEffect} from 'react'
-import NotesList from './Diary/NotesList'
+import React from 'react'
 import Context from './context'
-import AddNote from './Diary/AddNote'
 import Header from './Components/Header'
-import Title from './Components/Title'
 import Swal from 'sweetalert2'
-import YearList from './Diary/YearList'
+import { AES, enc, SHA256 } from 'crypto-js'
+import EnterPassword from './Diary/EnterPassword'
+import Diary from './Diary'
 
 
 
 function App(props) {
   const [notes, setNotes] = React.useState([])
-  useEffect(() => {
-    fetch("https://cm42272.tmweb.ru/getNotes.php")
-      .then (response => response.json())
-      .then (response => {
+
+  // useEffect(() => {
+  //   fetch("https://cm42272.tmweb.ru/getNotes.php")
+  //     .then (response => response.json())
+  //     .then (response => {
+  //       response.forEach(element => {
+  //         element['year'] = new Date(element.datetime).getFullYear()
+  //       });
         
-        // console.log(response)
-        response.forEach(element => {
-          element['year'] = new Date(element.datetime).getFullYear()
-          // element['month'] = new Date(element.datetime).getMonth()
-        });
-        
-        setNotes(response)
-    })
-  }, [])
+  //       setNotes(response)
+  //   })
+  // }, [])
 
 
-  function toggleNote(id) {
-    setNotes(
-      notes.map(note => {
-      if (note.id === id) {
-        note.opened = !note.opened
-      }
-      return note
-    }))
-  }
+  const [notesPassword, setNotesPassword] = React.useState("")
+
+  
 
   function removeNote(id) {
     fetch("https://cm42272.tmweb.ru/deleteNote.php", {
@@ -75,7 +66,7 @@ function App(props) {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: JSON.stringify({
-          text: text
+          text: AES.encrypt(text, notesPassword).toString()
         })
       })
       .then (response => response.json())
@@ -107,7 +98,7 @@ function App(props) {
         },
         body: JSON.stringify({
           id: id,
-          text: text
+          text: AES.encrypt(text, notesPassword).toString()
         })
       })
       .then (response => response.json())
@@ -130,36 +121,62 @@ function App(props) {
     })
   }
 
-  function groupByNotes(notes, field) {
-    var groupArray = []
-    notes.forEach(note => {
-      console.log(note['year'])
-      if (note['year'] in groupArray) {
-        groupArray[note['year']].push(note)
-      } else {
-        groupArray[note['year']] = [note]
-        // groupArray.set(note['year'], new Array())
-        // groupArray[note['year']].push(note)
-      }
-      
-    });
-    return groupArray
+  function enterPassword(password) {
+    console.log("Пароль введен")
+    if (SHA256(password).toString() === "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918") {
+      setNotesPassword(password)
+      getNotes(password)
+    } else {
+      var input_field = document.getElementById("enter_password")
+      input_field.classList.add("input-shake", "input-error")
+      setTimeout(function() {
+        input_field.classList.remove("input-shake")
+      }, 1000)
+    }
   }
 
 
+  function getNotes(password=notesPassword) {
+    console.log("Refresh!!!")
+    fetch("https://cm42272.tmweb.ru/getNotes.php")
+      .then (response => response.json())
+      .then (response => {
+        response.forEach(element => {
+          element['year'] = new Date(element.datetime).getFullYear()
+
+
+          element['text'] = AES.decrypt(element['text'], password).toString(enc.Utf8);
+        });
+        
+        setNotes(response)
+    })
+  }
+
+  function lockDiary() {
+    console.log("Lock!!!")
+    setNotesPassword("")
+    setNotes([])
+  }
+  
+
 
   return (
-    <Context.Provider value={{removeNote, toggleNote, editNote}}>
+    <Context.Provider value={{addNote, removeNote, editNote, enterPassword, getNotes}}>
       <Header my_hist={props.history} />
       <div className="container">
-        <Title text={"Записи"}/>
-        <AddNote onCreate={addNote} />
-        { notes.length ? <YearList notes={groupByNotes(notes, 'year')} /> : <p>Записей пока нет</p>}
-
+        
         {
-          // onToggle={toggleNote} от NotesList
-            console.log('Группировка по году', groupByNotes(notes, 'year'))
+          notesPassword
+            ? <>
+                <button onClick={() => getNotes()}>Refresh!!!</button>
+                <button onClick={() => lockDiary()}>Lock!!!</button>
+                <Diary notes={notes} />
+              </>
+            : <>
+                <EnterPassword />
+              </>
         }
+        
       </div>
     </Context.Provider>
   );

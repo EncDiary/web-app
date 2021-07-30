@@ -1,7 +1,46 @@
-.wrapper {
-    background-color: #ddd;
+* {
+    --background: #fafafa;
+    --text-color: #050505;
+    --error-color: #e74859;
 }
 
-.opened_note {
-    background-color: rgb(60, 255, 0);
+body {
+    background-color: var(--background);
+    color: var(--text-color);
+}
+
+/* .input-shake {
+    animation:shake 50s cubic-bezier(.36,.07,.19,.97) 0s;
+    transition: border-color .15s ease;
+} */
+
+
+.input-shake {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+  
+  @keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+  
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+  
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }
+
+.input-error {
+    border-color: var(--error-color) !important;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.06),0 0 0 var(--focus-shadow-spread) var(--form-box-shadow-color-focus-error) !important;
 }
