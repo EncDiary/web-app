@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react'
-import {Form, Button} from 'react-bootstrap'
+import {Form} from 'react-bootstrap'
 import Context from '../context'
 
 
@@ -31,18 +31,17 @@ function EnterPassword() {
     }
 
     return (
-        <div>
-            <Form className="col-4 offset-4" onSubmit={submitHandler}>
+        <section className="decryption">
+            <Form onSubmit={submitHandler} className="decryption__form">
                 <Form.Group className="mb-3">
-                    <Form.Label>Пароль</Form.Label>
-                    <Form.Control {...input.bind} type="text" placeholder="Введите пароль" id="enter_password" />
+                    <Form.Control {...input.bind} type="password" placeholder="Введите пароль" id="enter_password" className="input decryption__input" autoFocus />
                 </Form.Group>
 
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
+                <button  type="submit" className="decryption__submit button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="feather feather-corner-down-left"><polyline points="9 10 4 15 9 20"></polyline><path d="M20 4v7a4 4 0 0 1-4 4H4"></path></svg>
+                </button>
             </Form>
-        </div>
+        </section>
     )
 }
 

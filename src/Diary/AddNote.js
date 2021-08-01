@@ -1,67 +1,59 @@
-import React, {useState, useContext} from 'react'
-import Context from '../context'
+import React, { useState, useContext } from 'react'
+import Context from '../context';
+import ReactQuill from 'react-quill';
 
-function useInputValue(defaultValue='') {
-    const [value, setValue] = useState(defaultValue)
 
-    return {
-        bind: {
-            value,
-            onChange: event => setValue(event.target.value)
-        },
-        clear: () => setValue(''),
-        value: () => value
-    }
-}
+
+
+import '../quill_custom_theme.scss'
+import {Container, Col} from 'react-bootstrap'
 
 function AddNote() {
-    const {addNote} = useContext(Context)
+  const {addNote} = useContext(Context)
 
-    const input = useInputValue('')
+  const [body, setBody] = useState("")
 
-    function submitHandler(event) {
-        event.preventDefault()
+  const modules = {
+    toolbar: [
+      ['bold', 'italic', 'underline','strike']
+    ],
+  }
+  
+  const formats = [
+    'bold', 'italic', 'underline', 'strike'
+  ]
 
-        if (input.value().trim()) {
-            addNote(input.value())
-            input.clear()
-        }
-    }
+  function handleChange(value) {
+    setBody(value)
+  }
 
-    return (
-        <>
-            <button type="button" className="btn btn-primary mb-3 mt-3" data-bs-toggle="modal" data-bs-target="#addModal">
-            Добавить запись
-            </button>
+  function submitHandler() {
+    console.log(body)
+    addNote(body)
+    setBody("")
+  }
 
-            <div className="modal fade" id="addModal" tabIndex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <form onSubmit={submitHandler}>
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="addModalLabel">Добавление записи</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-                                
-                                {/* <input {...input.bind} /> */}
-
-                                <div className="mb-3">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">Запись</label>
-                                    <input {...input.bind} type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
-                                </div>
-
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Добавить запись</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>           
-        </>
-    )
+  return (
+    <>
+      <section className="writer">
+        <Container>
+          <Col md={{ span: 8, offset: 2 }} >
+            <ReactQuill onChange={handleChange}
+                      value={body}
+                      modules={modules}
+                      formats={formats}
+                      theme={null}
+                      compatibilityMode={false}
+                      className="writer__editor editor"
+                      placeholder="Напишите здесь что-нибудь..." />
+            <div className="editor__actions">
+              <button onClick={submitHandler} className="editor__button editor__button-active button">Сохранить</button>
+            </div>
+          </Col>
+        </Container>
+      </section>
+    </>
+  )
 }
 
 

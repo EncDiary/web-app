@@ -1,6 +1,5 @@
 import React from 'react'
 import Context from './context'
-import Header from './Components/Header'
 import Swal from 'sweetalert2'
 import { AES, enc, SHA256 } from 'crypto-js'
 import EnterPassword from './Diary/EnterPassword'
@@ -161,15 +160,15 @@ function App(props) {
 
 
   return (
-    <Context.Provider value={{addNote, removeNote, editNote, enterPassword, getNotes}}>
-      <Header my_hist={props.history} />
-      <div className="container">
+    <Context.Provider value={{addNote, removeNote, editNote, enterPassword, getNotes, lockDiary}}>
+      {/* <Header my_hist={props.history} /> */}
+      {/* <div className="container"> */}
         
         {
           notesPassword
             ? <>
-                <button onClick={() => getNotes()}>Refresh!!!</button>
-                <button onClick={() => lockDiary()}>Lock!!!</button>
+                {/* <button onClick={() => getNotes()}>Refresh!!!</button>
+                <button onClick={() => lockDiary()}>Lock!!!</button> */}
                 <Diary notes={notes} />
               </>
             : <>
@@ -177,7 +176,7 @@ function App(props) {
               </>
         }
         
-      </div>
+      {/* </div> */}
     </Context.Provider>
   );
 }
