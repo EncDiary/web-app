@@ -16,7 +16,7 @@ function useInputValue(defaultValue='') {
     }
 }
 
-function EnterPassword() {
+function EnterPassword({currentBook}) {
     const {enterPassword} = useContext(Context)
 
     const input = useInputValue('')
@@ -32,6 +32,7 @@ function EnterPassword() {
 
     return (
         <section className="decryption">
+            <h1>Вход в {currentBook.title}</h1>
             <Form onSubmit={submitHandler} className="decryption__form">
                 <Form.Group className="mb-3">
                     <Form.Control {...input.bind} type="password" placeholder="Введите пароль" id="enter_password" className="input decryption__input" autoFocus />

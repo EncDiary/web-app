@@ -1,29 +1,39 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import Context from './context'
 import Swal from 'sweetalert2'
 import { AES, enc, SHA256 } from 'crypto-js'
-import EnterPassword from './Diary/EnterPassword'
 import Diary from './Diary'
+import Login from './Diary/Login'
+import { useCookies } from 'react-cookie';
 
 
 
-function App(props) {
-  const [notes, setNotes] = React.useState([])
+function App() {
+  const [notes, setNotes] = useState([])
+  
+  const [books, setBooks] = useState([])
+  
+  const [cookies, setCookie] = useCookies(["books"]);
 
-  // useEffect(() => {
-  //   fetch("https://cm42272.tmweb.ru/getNotes.php")
-  //     .then (response => response.json())
-  //     .then (response => {
-  //       response.forEach(element => {
-  //         element['year'] = new Date(element.datetime).getFullYear()
-  //       });
-        
-  //       setNotes(response)
-  //   })
-  // }, [])
+  // setCookie('books', [{id: 1, title: "admin"}])
+
+  console.log(cookies.books)
 
 
-  const [notesPassword, setNotesPassword] = React.useState("")
+  const [currentBook, setCurrentBook] = useState({id: 2, title: "hello"})
+
+  // console.log(useCookies(['books']))
+
+  useEffect(() => {
+    fetch("https://cm42272.tmweb.ru/getBooks.php")
+      .then (response => response.json())
+      .then (response => {
+        setBooks(response)
+    })
+  }, [])
+
+
+  const [notesPassword, setNotesPassword] = useState("")
 
   
 
@@ -65,7 +75,8 @@ function App(props) {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: JSON.stringify({
-          text: AES.encrypt(text, notesPassword).toString()
+          text: AES.encrypt(text, notesPassword).toString(),
+          book_id: currentBook.id
         })
       })
       .then (response => response.json())
@@ -120,24 +131,49 @@ function App(props) {
     })
   }
 
+
+
   function enterPassword(password) {
     console.log("Пароль введен")
-    if (SHA256(password).toString() === "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918") {
-      setNotesPassword(password)
-      getNotes(password)
-    } else {
-      var input_field = document.getElementById("enter_password")
-      input_field.classList.add("input-shake", "input-error")
-      setTimeout(function() {
-        input_field.classList.remove("input-shake")
-      }, 1000)
-    }
+
+
+    fetch("https://cm42272.tmweb.ru/checkPassword.php", {
+        method: "POST",
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: JSON.stringify({
+          id: currentBook.id,
+          password_hash: SHA256(password).toString()
+        })
+      })
+      .then (response => response.json())
+      .then (response => {
+        if (response['status']) {
+          setNotesPassword(password)
+          getNotes(password)
+        } else {
+          var input_field = document.getElementById("enter_password")
+          input_field.classList.add("input-shake", "input-error")
+          setTimeout(function() {
+            input_field.classList.remove("input-shake")
+          }, 1000)
+        }
+    })
   }
 
 
   function getNotes(password=notesPassword) {
     console.log("Refresh!!!")
-    fetch("https://cm42272.tmweb.ru/getNotes.php")
+    fetch("https://cm42272.tmweb.ru/getNotes.php", {
+        method: "POST",
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: JSON.stringify({
+          id: currentBook.id
+        })
+      })
       .then (response => response.json())
       .then (response => {
         response.forEach(element => {
@@ -156,11 +192,135 @@ function App(props) {
     setNotesPassword("")
     setNotes([])
   }
+
+
+
+
+// ---------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------
+
+
+
+
+
+  // function getBooks() {
+  //   console.log("Books!!!")
+  //   fetch("https://cm42272.tmweb.ru/getBooks.php")
+  //     .then (response => response.json())
+  //     .then (response => {
+  //       setBooks(response)
+  //   })
+  // }
+
+
+  function changeCurrentBook(book) {
+    console.log(book.id)
+    setCurrentBook(book)
+  }
+
+  function unsetBook(id) {
+    console.log(id)
+    setCookie('books', cookies.books.filter(book => book.id !== id))
+  }
+
+
+  function addBook(title, password) {
+    // console.log(title, password)
+    fetch("https://cm42272.tmweb.ru/addBook.php", {
+        method: "POST",
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: JSON.stringify({
+          title: title,
+          password_hash: SHA256(password).toString()
+        })
+      })
+      .then (response => response.json())
+      .then (response => {
+        var newBook = [{
+          id: response['id'],
+          title
+        }]
+
+        // Пока что это будет заблочено
+        
+        // setBooks(
+        //   books.concat(newBook)
+        // )
+
+        setCookie('books',
+          cookies.books.concat(newBook)
+        )
+
+        Swal.fire({
+          title: 'Новая книга успешно добавлена',
+          icon: 'success',
+          timer: 1000
+        })
+    })
+  }
+
+  function findBook(title) {
+    fetch("https://cm42272.tmweb.ru/findBook.php", {
+        method: "POST",
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: JSON.stringify({
+          title: title
+        })
+      })
+      .then (response => response.json())
+      .then (response => {
+        if (response['status']) {
+          
+          // Пока что это будет заблочено
+        
+          // setBooks(
+          //   books.concat(response["book"])
+          // )
+
+          // setCookie('books', [{id: 1, title: "admin"}])
+
+
+          
+          setCookie('books',
+            cookies.books.concat(response["book"])
+          )
+
+          Swal.fire({
+            title: 'Книга найдена и готова к расшифровке',
+            icon: 'success',
+            timer: 1000
+          })
+        } else {
+          Swal.fire({
+            title: 'Такой книги нет',
+            icon: 'error',
+            timer: 1000
+          })
+        }
+    })
+  }
+
+  
+
+
+
+
+
+
+// ---------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------
+
   
 
 
   return (
-    <Context.Provider value={{addNote, removeNote, editNote, enterPassword, getNotes, lockDiary}}>
+    <Context.Provider value={{addNote, removeNote, editNote, enterPassword, getNotes, lockDiary, changeCurrentBook, addBook, findBook, unsetBook}}>
       {/* <Header my_hist={props.history} /> */}
       {/* <div className="container"> */}
         
@@ -172,7 +332,7 @@ function App(props) {
                 <Diary notes={notes} />
               </>
             : <>
-                <EnterPassword />
+                <Login books={cookies.books} currentBook={currentBook} />
               </>
         }
         

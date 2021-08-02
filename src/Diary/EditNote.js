@@ -60,7 +60,7 @@ function EditNote({note}) {
                     formats={formats}
                     theme={null}
                     compatibilityMode={false}
-                    placeholder="Напишите здесь что-нибудь" />
+                    placeholder="Напишите здесь что-нибудь..." />
           
           <div className="editor__actions">
             <button onClick={submitHandler} className="editor__button editor__button-active button">Сохранить изменения</button>

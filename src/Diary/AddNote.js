@@ -1,11 +1,12 @@
 import React, { useState, useContext } from 'react'
 import Context from '../context';
 import ReactQuill from 'react-quill';
+// import 'react-quill/dist/quill.snow.css';
 
 
 
 
-import '../quill_custom_theme.scss'
+import '../styles/quill_custom_theme.scss'
 import {Container, Col} from 'react-bootstrap'
 
 function AddNote() {
