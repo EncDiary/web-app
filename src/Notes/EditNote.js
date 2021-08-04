@@ -2,6 +2,7 @@ import React, {useState, useContext} from 'react'
 import {Modal} from 'react-bootstrap'
 import Context from '../context'
 import ReactQuill from 'react-quill'
+import { EditIcon } from '../assets/SvgIcons'
 
 
 
@@ -45,7 +46,7 @@ function EditNote({note}) {
   return (
     <>
       <button className="button note__button" onClick={handleShow}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#050505" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+        {EditIcon}
       </button>
 
 

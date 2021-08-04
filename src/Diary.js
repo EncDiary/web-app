@@ -1,17 +1,18 @@
 import React from 'react'
-import NotesList from './Diary/NotesList'
+import NotesList from './Notes/NotesList'
 import Header from './Components/Header'
-import AddNote from './Diary/AddNote'
+import AddNote from './Notes/AddNote'
 import { Container, Col } from 'react-bootstrap'
 
-function Diary({notes}) {
+function Diary({notes, currentBook}) {
     return (
         <>
-            <Header />
+            <Header currentBook={currentBook} />
             
             <AddNote />
             
             <section className="notes">
+                <div className="notes__title title">Список записей</div>
                 <Container>
                     <Col md={{ span: 8, offset: 2 }} >
                         {notes.length ? <NotesList notes={notes} /> : <p>Записей пока нет</p>}

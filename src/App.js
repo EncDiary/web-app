@@ -8,29 +8,74 @@ import { useCookies } from 'react-cookie';
 
 
 
+
 function App() {
   const [notes, setNotes] = useState([])
   
-  const [books, setBooks] = useState([])
+  const [cookies, setCookie] = useCookies();
+
+  // setCookie('books', [], {maxAge: 315360000}) // Пока костыль
+
+  // setCookie('user', "idefant", {maxAge: 315360000})
+  // setCookie('hello', "hi", {maxAge: 315360000})
+
+  // console.log(cookies.hello)
+
+  if (!cookies.books) {
+    setCookie('books', [], {maxAge: 315360000})
+    console.log('hello')
+  }
+
+  // useEffect(() => {
+  //   if (!cookies.books) {
+  //     setCookie('books', [], {maxAge: 315360000})
+  //   }
+  // }, [])
+
+  const [currentBook, setCurrentBook] = useState(cookies.books[0]) // Пофиксить баг, если нет куков нужно их создать
+
+
+
+
+
+
+
+
+
+  const [openBookPanel, setOpenBookPanel] = useState(true)
+  const [addBookListPanel, setAddBookListPanel] = useState(false)
+  const [findBookPanel, setFindBookPanel] = useState(false)
+
+  function showOpenBookPanel() {
+      setOpenBookPanel(true)
+      setAddBookListPanel(false)
+      setFindBookPanel(false)
+  }
+
+  function showAddBookPanel() {
+      setOpenBookPanel(false)
+      setAddBookListPanel(true)
+      setFindBookPanel(false)
+  }
+
+  function showFindBookPanel() {
+      setOpenBookPanel(false)
+      setAddBookListPanel(false)
+      setFindBookPanel(true)
+  }
+
+
   
-  const [cookies, setCookie] = useCookies(["books"]);
-
-  // setCookie('books', [{id: 1, title: "admin"}])
-
-  console.log(cookies.books)
+  
 
 
-  const [currentBook, setCurrentBook] = useState({id: 2, title: "hello"})
 
-  // console.log(useCookies(['books']))
 
-  useEffect(() => {
-    fetch("https://cm42272.tmweb.ru/getBooks.php")
-      .then (response => response.json())
-      .then (response => {
-        setBooks(response)
-    })
-  }, [])
+
+
+  
+
+  
 
 
   const [notesPassword, setNotesPassword] = useState("")
@@ -38,13 +83,15 @@ function App() {
   
 
   function removeNote(id) {
-    fetch("https://cm42272.tmweb.ru/deleteNote.php", {
+    fetch("https://cm42272.tmweb.ru/note/deleteNote.php", {
         method: "POST",
         header: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: JSON.stringify({
-          id: id
+          id: id,
+          book_id: currentBook.id,
+          password_hash: SHA256(notesPassword).toString()
         })
       })
       .then (response => response.json())
@@ -54,8 +101,7 @@ function App() {
           Swal.fire({
             title: 'Запись успешно удалена',
             icon: 'success',
-            timer: 1000,
-            // showConfirmButton: false
+            timer: 1000
           })
         } else {
           Swal.fire({
@@ -69,14 +115,15 @@ function App() {
 
 
   function addNote(text) {
-    fetch("https://cm42272.tmweb.ru/addNote.php", {
+    fetch("https://cm42272.tmweb.ru/note/addNote.php", {
         method: "POST",
         header: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: JSON.stringify({
           text: AES.encrypt(text, notesPassword).toString(),
-          book_id: currentBook.id
+          book_id: currentBook.id,
+          password_hash: SHA256(notesPassword).toString()
         })
       })
       .then (response => response.json())
@@ -84,7 +131,6 @@ function App() {
         var newNote = [{
           text,
           id: response['id'],
-          opened: false,
           datetime: response['datetime']
         }]
         setNotes(
@@ -93,22 +139,23 @@ function App() {
         Swal.fire({
           title: 'Запись успешно добавлена',
           icon: 'success',
-          timer: 1000,
-          // showConfirmButton: false
+          timer: 1000
         })
     })
   }
 
 
   function editNote(id, text) {
-    fetch("https://cm42272.tmweb.ru/editNote.php", {
+    fetch("https://cm42272.tmweb.ru/note/editNote.php", {
         method: "POST",
         header: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: JSON.stringify({
           id: id,
-          text: AES.encrypt(text, notesPassword).toString()
+          text: AES.encrypt(text, notesPassword).toString(),
+          book_id: currentBook.id,
+          password_hash: SHA256(notesPassword).toString()
         })
       })
       .then (response => response.json())
@@ -124,8 +171,7 @@ function App() {
           Swal.fire({
             title: 'Запись успешно отредактирована',
             icon: 'success',
-            timer: 1000,
-            // showConfirmButton: false
+            timer: 1000
           })
         }
     })
@@ -134,7 +180,6 @@ function App() {
 
 
   function enterPassword(password) {
-    console.log("Пароль введен")
 
 
     fetch("https://cm42272.tmweb.ru/checkPassword.php", {
@@ -152,6 +197,7 @@ function App() {
         if (response['status']) {
           setNotesPassword(password)
           getNotes(password)
+          moveBookToTop(currentBook)
         } else {
           var input_field = document.getElementById("enter_password")
           input_field.classList.add("input-shake", "input-error")
@@ -165,30 +211,29 @@ function App() {
 
   function getNotes(password=notesPassword) {
     console.log("Refresh!!!")
-    fetch("https://cm42272.tmweb.ru/getNotes.php", {
+    fetch("https://cm42272.tmweb.ru/note/getNotes.php", {
         method: "POST",
         header: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: JSON.stringify({
-          id: currentBook.id
+          id: currentBook.id,
+          password_hash: SHA256(password).toString()
         })
       })
       .then (response => response.json())
       .then (response => {
-        response.forEach(element => {
+        response['notes'].forEach(element => {
           element['year'] = new Date(element.datetime).getFullYear()
-
 
           element['text'] = AES.decrypt(element['text'], password).toString(enc.Utf8);
         });
         
-        setNotes(response)
+        setNotes(response['notes'])
     })
   }
 
   function lockDiary() {
-    console.log("Lock!!!")
     setNotesPassword("")
     setNotes([])
   }
@@ -215,19 +260,22 @@ function App() {
 
 
   function changeCurrentBook(book) {
-    console.log(book.id)
+    console.log(book)
     setCurrentBook(book)
   }
 
   function unsetBook(id) {
-    console.log(id)
-    setCookie('books', cookies.books.filter(book => book.id !== id))
+    var newBooksList = cookies.books.filter(book => book.id !== id)
+    setCookie('books', newBooksList, {maxAge: 315360000})
+    
+    if (currentBook.id === id) {
+      setCurrentBook(newBooksList[0])
+    }
   }
 
 
   function addBook(title, password) {
-    // console.log(title, password)
-    fetch("https://cm42272.tmweb.ru/addBook.php", {
+    fetch("https://cm42272.tmweb.ru/book/addBook.php", {
         method: "POST",
         header: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -239,31 +287,27 @@ function App() {
       })
       .then (response => response.json())
       .then (response => {
-        var newBook = [{
+        var newBook = {
           id: response['id'],
           title
-        }]
-
-        // Пока что это будет заблочено
-        
-        // setBooks(
-        //   books.concat(newBook)
-        // )
+        }
 
         setCookie('books',
-          cookies.books.concat(newBook)
+          [newBook, ...cookies.books], {maxAge: 315360000}
         )
+        changeCurrentBook(newBook)
 
         Swal.fire({
           title: 'Новая книга успешно добавлена',
           icon: 'success',
           timer: 1000
         })
+        showOpenBookPanel()
     })
   }
 
   function findBook(title) {
-    fetch("https://cm42272.tmweb.ru/findBook.php", {
+    fetch("https://cm42272.tmweb.ru/book/findBook.php", {
         method: "POST",
         header: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -275,26 +319,16 @@ function App() {
       .then (response => response.json())
       .then (response => {
         if (response['status']) {
-          
-          // Пока что это будет заблочено
-        
-          // setBooks(
-          //   books.concat(response["book"])
-          // )
 
-          // setCookie('books', [{id: 1, title: "admin"}])
-
-
-          
-          setCookie('books',
-            cookies.books.concat(response["book"])
-          )
+          moveBookToTop(response['book'])
+          changeCurrentBook(response['book'])
 
           Swal.fire({
             title: 'Книга найдена и готова к расшифровке',
             icon: 'success',
             timer: 1000
           })
+          showOpenBookPanel()
         } else {
           Swal.fire({
             title: 'Такой книги нет',
@@ -303,6 +337,19 @@ function App() {
           })
         }
     })
+  }
+
+  function moveBookToTop(topBook) {
+    console.log(topBook)
+    console.log(cookies.books)
+
+    var books = cookies.books.filter(book => book.id !== topBook['id'])
+
+    console.log(books)
+
+    setCookie('books',
+      [topBook, ...books], {maxAge: 315360000}
+    )
   }
 
   
@@ -320,23 +367,19 @@ function App() {
 
 
   return (
-    <Context.Provider value={{addNote, removeNote, editNote, enterPassword, getNotes, lockDiary, changeCurrentBook, addBook, findBook, unsetBook}}>
-      {/* <Header my_hist={props.history} /> */}
-      {/* <div className="container"> */}
+    <Context.Provider value={{addNote, removeNote, editNote, enterPassword, getNotes, lockDiary, changeCurrentBook, addBook, findBook,
+    unsetBook, showOpenBookPanel, showAddBookPanel, showFindBookPanel}}>
         
         {
           notesPassword
             ? <>
-                {/* <button onClick={() => getNotes()}>Refresh!!!</button>
-                <button onClick={() => lockDiary()}>Lock!!!</button> */}
-                <Diary notes={notes} />
+                <Diary notes={notes} currentBook={currentBook} />
               </>
             : <>
-                <Login books={cookies.books} currentBook={currentBook} />
+                <Login books={cookies.books} currentBook={currentBook} openBookPanel={openBookPanel} addBookListPanel={addBookListPanel} findBookPanel={findBookPanel} />
               </>
         }
         
-      {/* </div> */}
     </Context.Provider>
   );
 }

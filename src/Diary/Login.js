@@ -1,17 +1,25 @@
-import React from 'react'
-import AddBook from './AddBook'
-import BooksList from './BooksList'
-import EnterPassword from './EnterPassword'
-import FindBook from './FindBook'
+import React, { useContext } from 'react'
+import AddBook from '../Books/AddBook'
+import FindBook from '../Books/FindBook'
+import OpenList from './OpenList'
+import OpenBook from './OpenBook'
+import Context from '../context'
 
-function Login({books, currentBook}) {
+function Login({books, currentBook, openBookPanel, addBookListPanel, findBookPanel}) {
+
+    const {showOpenBookPanel, showAddBookPanel, showFindBookPanel} = useContext(Context)
+
     return (
-        <>
-            <EnterPassword currentBook={currentBook} />
-            <AddBook />
-            <BooksList books={books} />
-            <FindBook />
-        </>
+        <section className="open">
+            <OpenList showOpenBookPanel={showOpenBookPanel} showAddBookPanel={showAddBookPanel} showFindBookPanel={showFindBookPanel} />
+            
+
+            {(openBookPanel) && <OpenBook books={books} currentBook={currentBook} />}
+            
+            {(addBookListPanel) && <AddBook />}
+            {(findBookPanel) && <FindBook />}
+
+        </section>
     )
 }
 

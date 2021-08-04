@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './styles/index.scss';
+import './assets/styles/index.scss';
 import reportWebVitals from './reportWebVitals';
 import Router from './Router'
 import { CookiesProvider } from 'react-cookie';

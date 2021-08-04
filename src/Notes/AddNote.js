@@ -6,7 +6,7 @@ import ReactQuill from 'react-quill';
 
 
 
-import '../styles/quill_custom_theme.scss'
+import '../assets/styles/quill_custom_theme.scss'
 import {Container, Col} from 'react-bootstrap'
 
 function AddNote() {
