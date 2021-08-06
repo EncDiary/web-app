@@ -1,6 +1,8 @@
 import React, {useContext, useState} from 'react'
 import Context from '../context'
 import {Form} from 'react-bootstrap'
+import Title from '../Components/Title'
+import Button from '../Components/Button'
 
 
 function AddBook() {
@@ -35,7 +37,7 @@ function AddBook() {
 
     return (
         <div className="open__add">
-            <div className="open__add-title title">Создание новой книги</div>
+            <Title text="Создание новой книги" className="open__add-title" />
 
             <Form className="open__add-form" onSubmit={submitHandler}>
                 <Form.Group className="mb-3" controlId="book_title">
@@ -54,27 +56,8 @@ function AddBook() {
                     <Form.Control className="open__add-input input form-control" type="text" onChange={(e) => onChangePasswordAgain(e.target.value)} />
                 </Form.Group>
 
-                <button type="submit" className="open__add-submit button">Добавить</button>
+                <Button text="Добавить" className="open__add-submit button button-primary" />
             </Form>
-            
-            {/* <hr />
-
-            <form className="open__add-form" onSubmit={submitHandler}>
-                <div class>
-                    <label>Название:</label>
-                    <input className="open__add-input input form-control" type="text" onChange={(e) => onChangeTitle(e.target.value)} autoFocus />
-                </div>
-                <div>
-                    <label>Пароль:</label>
-                    <input className="open__add-input input form-control" type="text" onChange={(e) => onChangePassword(e.target.value)} />
-                </div>
-                <div>
-                    <label>Повторите пароль:</label>
-                    <input className="open__add-input input form-control" type="text" onChange={(e) => onChangePassword(e.target.value)} />
-                </div>
-                
-                <button type="submit">Добавить</button>
-            </form> */}
         </div>
     )
 }

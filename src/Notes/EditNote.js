@@ -3,6 +3,7 @@ import {Modal} from 'react-bootstrap'
 import Context from '../context'
 import ReactQuill from 'react-quill'
 import { EditIcon } from '../assets/SvgIcons'
+import Button from '../Components/Button'
 
 
 
@@ -64,8 +65,8 @@ function EditNote({note}) {
                     placeholder="Напишите здесь что-нибудь..." />
           
           <div className="editor__actions">
-            <button onClick={submitHandler} className="editor__button editor__button-active button">Сохранить изменения</button>
-            <button onClick={handleClose} className="editor__button button">Отмена</button>
+            <Button onClick={submitHandler} text="Сохранить изменения" className="editor__button button-primary" />
+            <Button onClick={handleClose} text="Отмена" className="editor__button button-secondary" />
           </div>
 
         </Modal.Body>

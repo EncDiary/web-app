@@ -1,30 +1,22 @@
 import React, {useEffect, useState} from 'react'
 import Context from './context'
 import Swal from 'sweetalert2'
-import { AES, enc, SHA256 } from 'crypto-js'
+import { AES, enc } from 'crypto-js'
 import Diary from './Diary'
 import Login from './Diary/Login'
 import { useCookies } from 'react-cookie';
+import { fetchAddNote, fetchEditNote, fetchGetNotes, fetchRemoveNote, fetchEnterPassword, fetchAddBook, fetchFindBook } from './ServerRequests'
 
 
 
 
 function App() {
+  const serverUrl = "https://cm42272.tmweb.ru/"
+
   const [notes, setNotes] = useState([])
   
-  const [cookies, setCookie] = useCookies();
+  const [cookies, setCookie] = useCookies()
 
-  // setCookie('books', [], {maxAge: 315360000}) // Пока костыль
-
-  // setCookie('user', "idefant", {maxAge: 315360000})
-  // setCookie('hello', "hi", {maxAge: 315360000})
-
-  // console.log(cookies.hello)
-
-  if (!cookies.books) {
-    setCookie('books', [], {maxAge: 315360000})
-    console.log('hello')
-  }
 
   // useEffect(() => {
   //   if (!cookies.books) {
@@ -32,68 +24,30 @@ function App() {
   //   }
   // }, [])
 
-  const [currentBook, setCurrentBook] = useState(cookies.books[0]) // Пофиксить баг, если нет куков нужно их создать
-
-
-
-
-
-
-
-
-
-  const [openBookPanel, setOpenBookPanel] = useState(true)
-  const [addBookListPanel, setAddBookListPanel] = useState(false)
-  const [findBookPanel, setFindBookPanel] = useState(false)
-
-  function showOpenBookPanel() {
-      setOpenBookPanel(true)
-      setAddBookListPanel(false)
-      setFindBookPanel(false)
+  if (!cookies.books) {
+    setCookie('books', [], {maxAge: 315360000})
   }
 
-  function showAddBookPanel() {
-      setOpenBookPanel(false)
-      setAddBookListPanel(true)
-      setFindBookPanel(false)
-  }
-
-  function showFindBookPanel() {
-      setOpenBookPanel(false)
-      setAddBookListPanel(false)
-      setFindBookPanel(true)
-  }
+  const [currentBook, setCurrentBook] = useState(cookies.books && cookies.books[0]) // Пофиксить баг, если нет куков нужно их создать
 
 
-  
-  
+  const [settings, setSettings] = useState(false)
 
 
 
+  const [currentTab, setCurrentTab] = useState("open")
 
-
-
-  
 
   
 
 
   const [notesPassword, setNotesPassword] = useState("")
 
+
   
 
   function removeNote(id) {
-    fetch("https://cm42272.tmweb.ru/note/deleteNote.php", {
-        method: "POST",
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: JSON.stringify({
-          id: id,
-          book_id: currentBook.id,
-          password_hash: SHA256(notesPassword).toString()
-        })
-      })
+    fetchRemoveNote(serverUrl, currentBook.id, notesPassword, id)
       .then (response => response.json())
       .then (response => {
         if (response['status']) {
@@ -115,17 +69,7 @@ function App() {
 
 
   function addNote(text) {
-    fetch("https://cm42272.tmweb.ru/note/addNote.php", {
-        method: "POST",
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: JSON.stringify({
-          text: AES.encrypt(text, notesPassword).toString(),
-          book_id: currentBook.id,
-          password_hash: SHA256(notesPassword).toString()
-        })
-      })
+    fetchAddNote(serverUrl, currentBook.id, notesPassword, text)
       .then (response => response.json())
       .then (response => {
         var newNote = [{
@@ -146,18 +90,7 @@ function App() {
 
 
   function editNote(id, text) {
-    fetch("https://cm42272.tmweb.ru/note/editNote.php", {
-        method: "POST",
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: JSON.stringify({
-          id: id,
-          text: AES.encrypt(text, notesPassword).toString(),
-          book_id: currentBook.id,
-          password_hash: SHA256(notesPassword).toString()
-        })
-      })
+    fetchEditNote(serverUrl, currentBook.id, notesPassword, text, id)
       .then (response => response.json())
       .then (response => {
         if (response['status']) {
@@ -181,17 +114,7 @@ function App() {
 
   function enterPassword(password) {
 
-
-    fetch("https://cm42272.tmweb.ru/checkPassword.php", {
-        method: "POST",
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: JSON.stringify({
-          id: currentBook.id,
-          password_hash: SHA256(password).toString()
-        })
-      })
+    fetchEnterPassword(serverUrl, currentBook.id, password)
       .then (response => response.json())
       .then (response => {
         if (response['status']) {
@@ -210,19 +133,10 @@ function App() {
 
 
   function getNotes(password=notesPassword) {
-    console.log("Refresh!!!")
-    fetch("https://cm42272.tmweb.ru/note/getNotes.php", {
-        method: "POST",
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: JSON.stringify({
-          id: currentBook.id,
-          password_hash: SHA256(password).toString()
-        })
-      })
+    fetchGetNotes(serverUrl, currentBook, password)
       .then (response => response.json())
       .then (response => {
+
         response['notes'].forEach(element => {
           element['year'] = new Date(element.datetime).getFullYear()
 
@@ -230,6 +144,27 @@ function App() {
         });
         
         setNotes(response['notes'])
+
+        
+    })
+  }
+
+
+  function exportEncyptNotes() {
+    fetchGetNotes(serverUrl, currentBook, notesPassword)
+      .then (response => response.json())
+      .then (response => {
+        const myData = response['notes'];
+        const fileName = "file";
+        const json = JSON.stringify(myData);
+        const blob = new Blob([json],{type:'application/json'});
+        const href = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = href;
+        link.download = fileName + ".json";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     })
   }
 
@@ -260,7 +195,6 @@ function App() {
 
 
   function changeCurrentBook(book) {
-    console.log(book)
     setCurrentBook(book)
   }
 
@@ -275,16 +209,7 @@ function App() {
 
 
   function addBook(title, password) {
-    fetch("https://cm42272.tmweb.ru/book/addBook.php", {
-        method: "POST",
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: JSON.stringify({
-          title: title,
-          password_hash: SHA256(password).toString()
-        })
-      })
+    fetchAddBook(serverUrl, title, password)
       .then (response => response.json())
       .then (response => {
         var newBook = {
@@ -302,20 +227,12 @@ function App() {
           icon: 'success',
           timer: 1000
         })
-        showOpenBookPanel()
+        setCurrentTab("open")
     })
   }
 
   function findBook(title) {
-    fetch("https://cm42272.tmweb.ru/book/findBook.php", {
-        method: "POST",
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: JSON.stringify({
-          title: title
-        })
-      })
+    fetchFindBook(serverUrl, title)
       .then (response => response.json())
       .then (response => {
         if (response['status']) {
@@ -328,7 +245,7 @@ function App() {
             icon: 'success',
             timer: 1000
           })
-          showOpenBookPanel()
+          setCurrentTab("open")
         } else {
           Swal.fire({
             title: 'Такой книги нет',
@@ -340,12 +257,8 @@ function App() {
   }
 
   function moveBookToTop(topBook) {
-    console.log(topBook)
-    console.log(cookies.books)
 
     var books = cookies.books.filter(book => book.id !== topBook['id'])
-
-    console.log(books)
 
     setCookie('books',
       [topBook, ...books], {maxAge: 315360000}
@@ -368,16 +281,12 @@ function App() {
 
   return (
     <Context.Provider value={{addNote, removeNote, editNote, enterPassword, getNotes, lockDiary, changeCurrentBook, addBook, findBook,
-    unsetBook, showOpenBookPanel, showAddBookPanel, showFindBookPanel}}>
+    unsetBook, setSettings, exportEncyptNotes, setCurrentTab}}>
         
         {
           notesPassword
-            ? <>
-                <Diary notes={notes} currentBook={currentBook} />
-              </>
-            : <>
-                <Login books={cookies.books} currentBook={currentBook} openBookPanel={openBookPanel} addBookListPanel={addBookListPanel} findBookPanel={findBookPanel} />
-              </>
+            ? <Diary notes={notes} currentBook={currentBook} settings={settings} />
+            : <Login books={cookies.books || []} currentBook={currentBook} currentTab={currentTab} />
         }
         
     </Context.Provider>

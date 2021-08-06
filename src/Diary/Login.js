@@ -1,23 +1,30 @@
-import React, { useContext } from 'react'
-import AddBook from '../Books/AddBook'
-import FindBook from '../Books/FindBook'
+import React from 'react'
 import OpenList from './OpenList'
 import OpenBook from './OpenBook'
-import Context from '../context'
+import AddBook from '../Books/AddBook'
+import FindBook from '../Books/FindBook'
 
-function Login({books, currentBook, openBookPanel, addBookListPanel, findBookPanel}) {
+function Login({books, currentBook, currentTab}) {
 
-    const {showOpenBookPanel, showAddBookPanel, showFindBookPanel} = useContext(Context)
+
+    function showCurrentTab() {
+        switch(currentTab) {
+            case "open":
+                return <OpenBook books={books} currentBook={currentBook} />
+            case "add":
+                return <AddBook />
+            case "find":
+                return <FindBook />
+            default:
+                return ""
+        }
+    }
 
     return (
         <section className="open">
-            <OpenList showOpenBookPanel={showOpenBookPanel} showAddBookPanel={showAddBookPanel} showFindBookPanel={showFindBookPanel} />
-            
+            <OpenList />
 
-            {(openBookPanel) && <OpenBook books={books} currentBook={currentBook} />}
-            
-            {(addBookListPanel) && <AddBook />}
-            {(findBookPanel) && <FindBook />}
+            {showCurrentTab()}
 
         </section>
     )

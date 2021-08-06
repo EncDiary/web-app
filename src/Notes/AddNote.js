@@ -8,6 +8,7 @@ import ReactQuill from 'react-quill';
 
 import '../assets/styles/quill_custom_theme.scss'
 import {Container, Col} from 'react-bootstrap'
+import Button from '../Components/Button';
 
 function AddNote() {
   const {addNote} = useContext(Context)
@@ -48,7 +49,7 @@ function AddNote() {
                       className="writer__editor editor"
                       placeholder="Напишите здесь что-нибудь..." />
             <div className="editor__actions">
-              <button onClick={submitHandler} className="editor__button editor__button-active button">Сохранить</button>
+              <Button onClick={submitHandler} text="Сохранить" className="editor__button button-primary" />
             </div>
           </Col>
         </Container>
