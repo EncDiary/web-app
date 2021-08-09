@@ -4,6 +4,7 @@ import Context from '../context'
 import ReactQuill from 'react-quill'
 import { EditIcon } from '../assets/SvgIcons'
 import Button from '../Components/Button'
+import Title from '../Components/Title'
 
 
 
@@ -46,12 +47,12 @@ function EditNote({note}) {
 
   return (
     <>
-      <button className="button note__button" onClick={handleShow}>
+      <button className="button note__button" onClick={() => setShow(!show)}>
         {EditIcon}
       </button>
 
 
-      <Modal show={show} onHide={handleClose}>
+      {/* <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Форма редактирования</Modal.Title>
         </Modal.Header>
@@ -65,12 +66,44 @@ function EditNote({note}) {
                     placeholder="Напишите здесь что-нибудь..." />
           
           <div className="editor__actions">
-            <Button onClick={submitHandler} text="Сохранить изменения" className="editor__button button-primary" />
-            <Button onClick={handleClose} text="Отмена" className="editor__button button-secondary" />
+            <Button onClick={submitHandler} text="Сохранить изменения" className="editor__button" />
+            <Button onClick={handleClose} text="Отмена" className="editor__button" isPrimary={false} />
           </div>
 
         </Modal.Body>
-      </Modal>
+      </Modal> */}
+
+      {
+        show &&
+        (
+          <div className="modal-window editor">
+            <div className="container">
+              <div className="container-wrapper">
+                <Title text="Редактирование записи" className="editor__title" />
+                <div className="editor__close" onClick={handleClose}>&times;</div>
+                <div>
+                  <ReactQuill onChange={handleChange}
+                          value={body}
+                          modules={modules}
+                          formats={formats}
+                          theme={null}
+                          compatibilityMode={false}
+                          placeholder="Напишите здесь что-нибудь..." />
+                
+                  <div className="editor__actions">
+                    <Button onClick={submitHandler} text="Сохранить изменения" className="editor__button" />
+                    <Button onClick={handleClose} text="Отмена" className="editor__button" isPrimary={false} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      }
+      {/* <div className="modal-window">
+        Modal Window
+      </div> */}
+
     </>
   );
 }

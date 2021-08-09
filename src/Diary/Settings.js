@@ -1,21 +1,15 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import Mainbar from '../Components/Mainbar'
 import Sidebar from '../Components/Sidebar'
-import Context from '../context'
 
-function Settings({settings}) {
-    const {exportEncyptNotes} = useContext(Context)
+function Settings({settings, setting}) {
 
-    function onClickExport() {
-        exportEncyptNotes()
-    }
 
     return (
         <div className="settings">
             <Sidebar settings={settings} />
-            <Mainbar settings={settings} />
+            <Mainbar settings={settings} setting={setting} />
         </div>
-        // <button onClick={onClickExport}>Экспорт в зашифрованном виде</button>
     )
 }
 

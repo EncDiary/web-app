@@ -18,7 +18,7 @@ function useInputValue(defaultValue='') {
 }
 
 function EnterPassword({currentBook}) {
-    const {enterPassword} = useContext(Context)
+    const {unlockBook} = useContext(Context)
 
     const input = useInputValue('')
 
@@ -26,7 +26,7 @@ function EnterPassword({currentBook}) {
         event.preventDefault()
 
         if (input.value().trim()) {
-            enterPassword(input.value())
+            unlockBook(input.value())
             input.clear()
         }
     }

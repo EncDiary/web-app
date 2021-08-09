@@ -4,9 +4,6 @@ import Context from '../context'
 function SidebarItem({text, tabName, settings}) {
     const {setSettings} = useContext(Context)
 
-    // const isActive = tabName === settings && "sidebar__item_active"
-    console.log(settings)
-    console.log(tabName)
 
     function isActive() {
         

@@ -6,6 +6,7 @@ function Sidebar({settings}) {
         <div className="sidebar">
             <SidebarItem text="Основное" tabName="main" settings={settings} />
             <SidebarItem text="Горячие клавиши" tabName="hotkeys" settings={settings} />
+            <SidebarItem text="О приложении" tabName="about" settings={settings} />
         </div>
     )
 }

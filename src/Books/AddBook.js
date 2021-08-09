@@ -56,7 +56,7 @@ function AddBook() {
                     <Form.Control className="open__add-input input form-control" type="text" onChange={(e) => onChangePasswordAgain(e.target.value)} />
                 </Form.Group>
 
-                <Button text="Добавить" className="open__add-submit button button-primary" />
+                <Button text="Добавить" className="open__add-submit button" />
             </Form>
         </div>
     )

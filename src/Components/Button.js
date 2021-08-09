@@ -1,8 +1,10 @@
 import React from 'react'
 
-function Button({text, className="", onClick=function(){}}) {
+function Button({text, className="", isPrimary=true, onClick=function(){}}) {
+    const importance = isPrimary ? "button-primary" : "button-secondary"
+
     return (
-        <button onClick={onClick} type="submit" className={"button " + className}>{text}</button>
+        <button onClick={onClick} type="submit" className={importance + " button " + className}>{text}</button>
     )
 }
 

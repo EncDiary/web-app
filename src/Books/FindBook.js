@@ -29,7 +29,7 @@ function FindBook() {
                     <Form.Control className="open__find-input input form-control" type="text" onChange={(e) => onChangeTitle(e.target.value)} autoFocus />
                 </Form.Group>
 
-                <Button text="Добавить" className="open__find-submit button button-primary" />
+                <Button text="Добавить" className="open__find-submit button" />
             </Form>
         </div>
     )

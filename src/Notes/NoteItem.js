@@ -3,7 +3,7 @@ import RemoveNote from './RemoveNote'
 import EditNote from './EditNote'
 import parse from 'html-react-parser'
 
-function NoteItem({ note, index }) {
+function NoteItem({ note, setting }) {
 
 
     var note_time = new Date(note.datetime)
@@ -43,8 +43,8 @@ function NoteItem({ note, index }) {
                         </div>
                     </div>
                     <div className="note__management">
-                        <EditNote note={note} />
-                        <RemoveNote note={note} />
+                        {setting['edit'] && <EditNote note={note} />}
+                        {setting['delete'] && <RemoveNote note={note} />}
                     </div>
                 </div>
 

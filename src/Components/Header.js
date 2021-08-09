@@ -1,10 +1,10 @@
 import React, {useContext} from 'react'
 import {OverlayTrigger, Tooltip} from 'react-bootstrap'
 import Context from '../context'
-import {HelpIcon, SettingIcon, RefreshIcon, LockIcon} from '../assets/SvgIcons'
+import {InfoIcon, SettingIcon, RefreshIcon, LockIcon} from '../assets/SvgIcons'
 
 function Header({currentBook, settings}) {
-    const {getNotes, lockDiary, setSettings} = useContext(Context)
+    const {getNotes, lockBook, setSettings} = useContext(Context)
     return (
         <>
             <header className="header">
@@ -12,10 +12,10 @@ function Header({currentBook, settings}) {
 
                 <OverlayTrigger
                     placement="bottom"
-                    overlay={<Tooltip>Помощь</Tooltip>}
+                    overlay={<Tooltip>Инфо</Tooltip>}
                     >
-                    <div className="header__button header__button_help">
-                        {HelpIcon}
+                    <div className="header__button header__button_help" onClick={() => setSettings(settings === "about" ? false : "about")}>
+                        {InfoIcon}
                     </div>
                 </OverlayTrigger>
                 
@@ -43,12 +43,12 @@ function Header({currentBook, settings}) {
                     placement="bottom"
                     overlay={<Tooltip>Заблокировать</Tooltip>}
                     >
-                    <div className="header__button header__button_lock" onClick={() => lockDiary()}>
+                    <div className="header__button header__button_lock" onClick={() => lockBook()}>
                         {LockIcon}
                     </div>
                 </OverlayTrigger>
             </header>
-            <div className="header__ghost"></div>
+            {/* <div className="header__ghost"></div> */}
         </>
     )
 }
