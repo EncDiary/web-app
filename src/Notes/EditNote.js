@@ -1,5 +1,4 @@
 import React, {useState, useContext} from 'react'
-import {Modal} from 'react-bootstrap'
 import Context from '../context'
 import ReactQuill from 'react-quill'
 import { EditIcon } from '../assets/SvgIcons'
@@ -15,15 +14,6 @@ function EditNote({note}) {
 
   const [body, setBody] = useState(note.text)
 
-  const modules = {
-    toolbar: [
-      ['bold', 'italic', 'underline','strike']
-    ],
-  }
-  
-  const formats = [
-    'bold', 'italic', 'underline', 'strike'
-  ]
 
   function handleChange(value) {
     setBody(value)
@@ -47,31 +37,10 @@ function EditNote({note}) {
 
   return (
     <>
-      <button className="button note__button" onClick={() => setShow(!show)}>
+      <button className="button note__button" onClick={handleShow}>
         {EditIcon}
       </button>
 
-
-      {/* <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Форма редактирования</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <ReactQuill onChange={handleChange}
-                    value={body}
-                    modules={modules}
-                    formats={formats}
-                    theme={null}
-                    compatibilityMode={false}
-                    placeholder="Напишите здесь что-нибудь..." />
-          
-          <div className="editor__actions">
-            <Button onClick={submitHandler} text="Сохранить изменения" className="editor__button" />
-            <Button onClick={handleClose} text="Отмена" className="editor__button" isPrimary={false} />
-          </div>
-
-        </Modal.Body>
-      </Modal> */}
 
       {
         show &&
@@ -84,8 +53,8 @@ function EditNote({note}) {
                 <div>
                   <ReactQuill onChange={handleChange}
                           value={body}
-                          modules={modules}
-                          formats={formats}
+                          modules={{}}
+                          formats={['bold', 'italic', 'underline']}
                           theme={null}
                           compatibilityMode={false}
                           placeholder="Напишите здесь что-нибудь..." />
@@ -100,9 +69,6 @@ function EditNote({note}) {
           </div>
         )
       }
-      {/* <div className="modal-window">
-        Modal Window
-      </div> */}
 
     </>
   );

@@ -6,6 +6,8 @@ import { useCookies } from 'react-cookie';
 import { fetchAddNote, fetchEditNote, fetchGetNotes, fetchRemoveNote, fetchEnterPassword, fetchAddBook, fetchFindBook } from './ServerRequests'
 import {addNoteHandler, removeNoteHandler, editNoteHandler, getNotesHandler, exportEncyptNotesHandler} from './Handlers/NoteHandlers'
 import { addBookHandler, findBookHandler, lockBookHandler, unlockBookHandler } from './Handlers/BookHandlers'
+import { useIdleTimer } from 'react-idle-timer'
+import Swal from 'sweetalert2';
 
 
 function App() {
@@ -14,6 +16,23 @@ function App() {
   const [notes, setNotes] = useState([])
   
   const [cookies, setCookie] = useCookies()
+
+
+
+
+
+
+
+
+  const handleOnIdle = () => {
+    lockBookHandler(setNotesPassword, setNotes, setSettings)
+  }
+
+  const {} = useIdleTimer({
+    timeout: 1000 * 60 * 5, // 5 минут бездействия
+    onIdle: handleOnIdle,
+    debounce: 500
+  })
 
 
   // useEffect(() => {
@@ -30,38 +49,13 @@ function App() {
 
 
 
-
-
+  const returnError = () => {
+      Swal.fire({
+        title: 'Произошла ошибка при отправке',
+        icon: 'error'
+      }) 
+    }
   
-
-  // let date = new Date()
-  // date.setSeconds(date.getSeconds() + 10);
-
-  // const [time, setTime] = useState(+(date))
-
-  // function checkTime() {
-  //   if (+(new Date()) > time) {
-  //     console.log("ВРЕМЯ ВЫШЛО")
-  //   }
-  //   console.log(+(new Date()))
-  //   console.log("Начало", time)
-  // }
-
-  // useEffect(() => {
-  //   setInterval(checkTime, 1000);
-  //   // console.log(+(new Date()))
-
-
-  //   // if (seconds > 0 && timerActive) {
-  //   //   setTimeout(setSeconds, 100, seconds - 1);
-  //   // } else {
-  //   //   setTimerActive(false);
-  //   // }
-  // }, [ time ]);
-
-
-
-
 
 
 
@@ -83,13 +77,35 @@ function App() {
   //   .then(response => console.log(response))
 
 
+  
+
+
+
+
+  // console.log(document.getElementById('main-content'))
+
+  // useEffect(() => {
+  //   document.addEventListener('scroll', scrollHandler)
+  //   return function() {
+  //     document.removeEventListener('scroll', scrollHandler)
+  //   }
+  // })
+
+
+  // const scrollHandler = (e) => {
+  //   console.log("scroll")
+  // }
+
+
+
 
   function removeNote(id) {
     fetchRemoveNote(serverUrl, currentBook.id, notesPassword, id)
       .then (response => response.json())
       .then (response => {
         removeNoteHandler(response, notes, id, setNotes)
-    })
+      })
+      .catch(returnError)
   }
 
   function addNote(text) {
@@ -97,7 +113,8 @@ function App() {
       .then (response => response.json())
       .then (response => {
         addNoteHandler(response, text, notes, setNotes)
-    })
+      })
+      .catch(returnError)
   }
 
   function editNote(id, text) {
@@ -105,15 +122,20 @@ function App() {
       .then (response => response.json())
       .then (response => {
         editNoteHandler(response, notes, text, id, setNotes)
-    })
+      })
+      .catch(returnError)
   }
 
   function getNotes(password=notesPassword) {
     fetchGetNotes(serverUrl, currentBook, password)
       .then (response => response.json())
       .then (response => {
-        getNotesHandler(response, password, setNotes)
-    })
+        getNotesHandler(response, notes, password, setNotes)
+      })
+      // .finally(() => {
+      //   return true
+      // })
+      // .catch(returnError)
   }
 
   function exportEncyptNotes() {
@@ -121,7 +143,8 @@ function App() {
       .then (response => response.json())
       .then (response => {
         exportEncyptNotesHandler(response)
-    })
+      })
+      .catch(returnError)
   }
 
 
@@ -139,7 +162,8 @@ function App() {
       .then (response => response.json())
       .then (response => {
         unlockBookHandler(response, password, currentBook, setNotesPassword, getNotes, cookies, setCookie)
-    })
+      })
+      .catch(returnError)
   }
 
   function lockBook() {
@@ -169,7 +193,8 @@ function App() {
       .then (response => response.json())
       .then (response => {
         addBookHandler(response, title, cookies, setCookie, setCurrentBook, setCurrentTab)
-    })
+      })
+      .catch(returnError)
   }
 
   function findBook(title) {
@@ -177,7 +202,8 @@ function App() {
       .then (response => response.json())
       .then (response => {
         findBookHandler(response, setCurrentBook, setCurrentTab, cookies, setCookie)
-    })
+      })
+      .catch(returnError)
   }
 
   function editOptions(currentSetting) {
@@ -201,7 +227,7 @@ function App() {
         
         {
           notesPassword
-            ? <Diary notes={notes} currentBook={currentBook} settings={settings} setting={cookies.setting || {'edit': true, 'delete': true}} />
+            ? <Diary notes={notes} currentBook={currentBook} settings={settings} setting={cookies.setting || {'edit': true, 'delete': true}} notesPassword={notesPassword} serverUrl={serverUrl} setNotes={setNotes} />
             : <Login books={cookies.books || []} currentBook={currentBook} currentTab={currentTab} />
         }
         

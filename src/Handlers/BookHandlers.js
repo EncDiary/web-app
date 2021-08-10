@@ -9,7 +9,7 @@ export function lockBookHandler(setNotesPassword, setNotes, setSettings) {
 export function unlockBookHandler(response, password, currentBook, setNotesPassword, getNotes, cookies, setCookie) {
     if (response['status']) {
         setNotesPassword(password)
-        getNotes(password)
+        // getNotes(password)
 
         moveBookToTopHandler(currentBook, cookies, setCookie)
 

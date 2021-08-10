@@ -51,14 +51,15 @@ export function editNoteHandler(response, notes, text, id, setNotes) {
     }
 }
 
-export function getNotesHandler(response, password, setNotes) {
+export function getNotesHandler(response, notes, password, setNotes) {
     response['notes'].forEach(element => {
         element['year'] = new Date(element.datetime).getFullYear()
 
         element['text'] = AES.decrypt(element['text'], password).toString(enc.Utf8);
     });
-    
+    // setNotes([...notes, ...response['notes']])
     setNotes(response['notes'])
+
 }
 
 export function exportEncyptNotesHandler(response) {

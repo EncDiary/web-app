@@ -1,6 +1,6 @@
 import { SHA256, AES } from 'crypto-js'
 
-export function fetchGetNotes(serverUrl, currentBook, password) {
+export function fetchGetNotes(serverUrl, currentBook, password, limit=10, offset=0) {
     return fetch(serverUrl + "note/getNotes.php", {
         method: "POST",
         header: {
@@ -8,7 +8,8 @@ export function fetchGetNotes(serverUrl, currentBook, password) {
         },
         body: JSON.stringify({
           id: currentBook.id,
-          password_hash: SHA256(password).toString()
+          password_hash: SHA256(password).toString(),
+          notes_list: {limit: limit, offset: offset}
         })
       })
 }

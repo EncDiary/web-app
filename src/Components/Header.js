@@ -24,7 +24,7 @@ function Header({currentBook, settings}) {
                     placement="bottom"
                     overlay={<Tooltip>Настройки</Tooltip>}
                     >
-                    <div className="header__button header__button_setting" onClick={() => setSettings(settings ? false : "main")}>
+                    <div className="header__button header__button_setting" onClick={() => setSettings((settings && settings !== "about") ? false : "main")}>
                         {SettingIcon}
                     </div>
                 </OverlayTrigger>
