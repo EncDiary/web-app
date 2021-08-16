@@ -3,10 +3,11 @@ import {
   FILL_BOOKS,
   FIND_BOOK,
   HIDE_BOOK,
+  IMPORT_BOOK,
   MOVE_BOOK_TO_TOP,
   SET_CURRENT_BOOK,
 } from "../types";
-import { SHA256 } from "crypto-js";
+import { SHA256, AES } from "crypto-js";
 import Swal from "sweetalert2";
 import { setCurrentOpeningTabRedux } from "./appActions";
 
@@ -104,5 +105,50 @@ export function moveBookToTopRedux(book) {
   return {
     type: MOVE_BOOK_TO_TOP,
     payload: book,
+  };
+}
+
+export function importBookRedux(title, password, file) {
+  return async (dispatch) => {
+    const notes = file.map((note) => {
+      note.text = AES.encrypt(note.text, password).toString();
+      return note;
+    });
+
+    await fetch(serverUrl + "book/importBook.php", {
+      method: "POST",
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: JSON.stringify({
+        title: title,
+        password_hash: SHA256(password).toString(),
+        notes: notes,
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response["status"]) {
+          Swal.fire({
+            title: "Книга успешно импортирована",
+            icon: "success",
+            timer: 1000,
+          });
+          dispatch({
+            type: IMPORT_BOOK,
+            payload: {
+              id: response.book.id,
+              title: title,
+            },
+          });
+          dispatch(setCurrentOpeningTabRedux("open"));
+        } else {
+          Swal.fire({
+            title: "Произошла ошибка",
+            icon: "error",
+            timer: 1000,
+          });
+        }
+      });
   };
 }

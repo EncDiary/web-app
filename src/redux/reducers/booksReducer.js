@@ -3,6 +3,7 @@ import {
   FILL_BOOKS,
   FIND_BOOK,
   HIDE_BOOK,
+  IMPORT_BOOK,
   MOVE_BOOK_TO_TOP,
   SET_CURRENT_BOOK,
 } from "../types";
@@ -52,6 +53,12 @@ export const booksReducer = (state = initialState, action) => {
           action.payload,
           ...state.books.filter((book) => book.id !== action.payload.id),
         ],
+      };
+    case IMPORT_BOOK:
+      return {
+        ...state,
+        currentBook: action.payload,
+        books: [action.payload, ...state.books],
       };
 
     default:

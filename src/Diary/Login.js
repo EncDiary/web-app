@@ -4,6 +4,7 @@ import OpenBook from "./OpenBook";
 import AddBook from "../Books/AddBook";
 import FindBook from "../Books/FindBook";
 import { useSelector } from "react-redux";
+import ImportBook from "../Books/ImportBook";
 
 function Login() {
   const currentTab = useSelector((state) => state.app.currentOpeningTab);
@@ -16,6 +17,8 @@ function Login() {
         return <AddBook />;
       case "find":
         return <FindBook />;
+      case "import":
+        return <ImportBook />;
       default:
         return "";
     }
