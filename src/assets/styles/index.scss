@@ -125,9 +125,6 @@ body {
   height: var(--header-height);
   background-color: var(--secondary-background-color);
   display: flex;
-  // position: fixed;
-  // top: 0;
-  // width: 100%;
   border-bottom: 1px solid var(--light-border-color);
   z-index: 10;
   &__title {
@@ -138,6 +135,7 @@ body {
   &__button {
     flex: 0 0 auto;
     padding: 0.9rem 1.5rem;
+    cursor: pointer;
     &:hover {
       background-color: var(--selectable-on-secondary-item-color);
     }
@@ -145,9 +143,6 @@ body {
       width: 30px;
       height: 30px;
     }
-  }
-  &__ghost {
-    height: 60px;
   }
 }
 
@@ -409,9 +404,11 @@ body {
   height: 100%;
   min-height: calc(100vh - var(--header-height));
   width: 270px;
+  border-right: 1px solid var(--light-border-color);
   &__item {
     padding: 10px 18px;
     font-size: 1.3rem;
+    cursor: pointer;
     &:hover {
       background-color: var(--selectable-on-secondary-item-color);
     }

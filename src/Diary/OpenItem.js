@@ -1,19 +1,20 @@
-import React, {useContext} from 'react'
-import Context from '../context'
+import React from "react";
+import { useDispatch } from "react-redux";
+import { setCurrentOpeningTabRedux } from "../redux/actions/appActions";
 
-function OpenItem({icon, name, showPanel}) {
-    const {setCurrentTab} = useContext(Context)
+function OpenItem({ icon, name, showPanel }) {
+  const dispatch = useDispatch();
 
-    return (
-        <div className="open__icon" onClick={() => setCurrentTab(showPanel)}>
-            <div className="open__icon-image">
-                {icon}
-            </div>
-            <div className="open__icon-text">
-                {name}
-            </div>
-        </div>
-    )
+  function clickToChangeCurrentTab() {
+    dispatch(setCurrentOpeningTabRedux(showPanel));
+  }
+
+  return (
+    <div className="open__icon" onClick={clickToChangeCurrentTab}>
+      <div className="open__icon-image">{icon}</div>
+      <div className="open__icon-text">{name}</div>
+    </div>
+  );
 }
 
-export default OpenItem
+export default OpenItem;

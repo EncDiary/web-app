@@ -1,14 +1,14 @@
-import React from 'react'
-import EnterPassword from './EnterPassword'
-import BooksList from '../Books/BooksList'
+import React from "react";
+import EnterPassword from "./EnterPassword";
+import BooksList from "../Books/BooksList";
 
-function OpenBook({books, currentBook}) {
-    return (
-        <div className="open__pass-area">
-            <EnterPassword currentBook={currentBook} />
-            <BooksList books={books} currentBook={currentBook} />
-        </div>
-    )
+function OpenBook() {
+  return (
+    <div className="open__pass-area">
+      <EnterPassword />
+      <BooksList />
+    </div>
+  );
 }
 
-export default OpenBook
+export default OpenBook;

@@ -1,102 +1,86 @@
-import React, {useRef, useEffect, useState} from 'react'
-import NotesList from './Notes/NotesList'
-import Header from './Components/Header'
-import AddNote from './Notes/AddNote'
-import { Container } from 'react-bootstrap'
-import Settings from './Diary/Settings'
-import Title from './Components/Title'
-import { fetchGetNotes } from './ServerRequests'
-import {getNotesHandler} from './Handlers/NoteHandlers'
-import {AES, enc} from 'crypto-js'
+import React, { useRef, useEffect, useState } from "react";
+import NotesList from "./Notes/NotesList";
+import Header from "./Components/Header";
+import AddNote from "./Notes/AddNote";
+import { Container } from "react-bootstrap";
+import Settings from "./Diary/Settings";
+import Title from "./Components/Title";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchNotesRedux } from "./redux/actions/notesActions";
 
+function Diary() {
+  const notesRef = useRef(null);
+  const mainContentRef = useRef(null);
 
+  function scrollToNotes() {
+    mainContentRef.current.scrollTo({
+      top: notesRef.current.offsetTop,
+      behavior: "smooth",
+    });
+  }
 
-function Diary({notes, currentBook, settings, setting, notesPassword, serverUrl, setNotes}) {
+  const dispatch = useDispatch();
 
+  const [fetching, setFetching] = useState(true);
 
-    const notesRef = useRef(null)
-    const mainContentRef = useRef(null)
+  const currentBook = useSelector((state) => state.books.currentBook);
+  const password = useSelector((state) => state.app.password);
+  const notes = useSelector((state) => state.notes.notes);
+  const isNotesOver = useSelector((state) => state.app.notesOver);
 
-    function scrollToNotes() {
-        mainContentRef.current.scrollTo({ top: notesRef.current.offsetTop, behavior: "smooth" })
+  useEffect(() => {
+    if (fetching && !isNotesOver) {
+      dispatch(fetchNotesRedux(currentBook, password, 5, notes.length)).finally(
+        () => setFetching(false)
+      );
     }
+  }, [fetching]);
 
+  useEffect(() => {
+    mainContentRef.current.addEventListener("scroll", scrollHandler);
+  }, []);
 
-    const [fetching, setFetching] = useState(true)
-    const [notesOver, setNotesOver] = useState(false)
-
-
-    useEffect(() => {
-        if (fetching && !notesOver) {
-            fetchGetNotes(serverUrl, currentBook, notesPassword, 5, notes.length)
-                .then (response => response.json())
-                .then (response => {
-                    // getNotesHandler(response, notes, notesPassword, setNotes)
-                    
-
-                    response['notes'].forEach(element => {
-                        element['year'] = new Date(element.datetime).getFullYear()
-                
-                        element['text'] = AES.decrypt(element['text'], notesPassword).toString(enc.Utf8);
-                    });
-                    setNotes([...notes, ...response['notes']])
-                    console.log(response['notes'].length)
-                    if (response['notes'].length === 0) {
-                        console.log("hello")
-                        setNotesOver(true)
-                    }
-
-                })
-                .finally(() => setFetching(false))
-        }
-    }, [fetching])
-
-
-    useEffect(() => {
-            
-        mainContentRef.current.addEventListener('scroll', scrollHandler)
-        // Убрал потому, что исчезает сам элемент
-        // return function() {
-        //     mainContentRef.current.removeEventListener('scroll', scrollHandler)
-        // }
-    }, [])
-
-
-    const scrollHandler = (e) => {
-        if (e.target.scrollHeight - e.target.scrollTop - window.innerHeight + mainContentRef.current.offsetTop < 100) {
-            setFetching(true)
-        }
+  const scrollHandler = (e) => {
+    if (
+      e.target.scrollHeight -
+        e.target.scrollTop -
+        mainContentRef.current.offsetHeight <
+      200
+    ) {
+      setFetching(true);
     }
+  };
 
+  const notesRedux = useSelector((state) => {
+    return state.notes.notes;
+  });
 
+  const settings = useSelector((state) => state.app.showSettings);
 
+  return (
+    <>
+      <Header settings={settings} />
 
-    
-    return (
-        <>
-            <Header currentBook={currentBook} settings={settings} />
-            
-            
-            <div id="main-content" ref={mainContentRef}>
-                {
-                    <>
-                        <AddNote scrollToNotes={scrollToNotes} />
-                        <section className="notes" ref={notesRef}>
-                            <Container>
-                                <div className="container-wrapper" >
-                                    <Title text="Список записей" className="notes__title" />
-                            
-                                
-                                    {notes.length ? <NotesList notes={notes} setting={setting} /> : <p>Записей пока нет</p>}
-                                </div>
-                            </Container>
-                        </section>
-                        {settings && <Settings settings={settings} setting={setting} /> }
-                    </>
-                }
-            </div>    
-        </>
-    )
+      <div id="main-content" ref={mainContentRef}>
+        {
+          <>
+            <AddNote scrollToNotes={scrollToNotes} />
+            <section className="notes" ref={notesRef}>
+              <Container>
+                <div className="container-wrapper">
+                  <Title text="Список записей" className="notes__title" />
+
+                  {notesRedux.length ? <NotesList /> : <p>Записей пока нет</p>}
+                </div>
+                {isNotesOver && <div>Записей больше нет!</div>}
+              </Container>
+            </section>
+            {settings && <Settings />}
+          </>
+        }
+      </div>
+    </>
+  );
 }
 
-export default Diary
+export default Diary;

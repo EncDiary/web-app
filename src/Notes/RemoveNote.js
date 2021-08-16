@@ -1,48 +1,50 @@
-import React, {useContext} from 'react'
-import Swal from 'sweetalert2'
-import { DeleteIcon } from '../assets/SvgIcons'
-import Context from '../context'
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
+import { DeleteIcon } from "../assets/SvgIcons";
+import { deleteNoteRedux } from "../redux/actions/notesActions";
 
-
-function RemoveNote({note}) {
-    const {removeNote} = useContext(Context)
-
-    function getSlicedText(text) {
-        var sliced = text.slice(0,100)
-        if (sliced.length < text.length) {
-            sliced += '...'
-        }
-        return sliced
+function RemoveNote({ note }) {
+  function getSlicedText(text) {
+    var sliced = text.slice(0, 100);
+    if (sliced.length < text.length) {
+      sliced += "...";
     }
+    return sliced;
+  }
 
+  const dispatch = useDispatch();
 
-    function getModalWindow() {
-        Swal.fire({
-            title: 'Удалить запись',
-            text: getSlicedText(note.text.replace(/<[^>]+>/g, '')),
-            icon: 'error',
-            showCloseButton: true,
-            
-            confirmButtonText: "Да",
-            confirmButtonColor: "#51ac00",
+  const password = useSelector((state) => state.app.password);
 
-            cancelButtonText: "Нет, не надо",
-            cancelButtonColor: '#d33',
-            showCancelButton: true,
-            focusCancel: true
-        }).then((result) => {
-            if (result.isConfirmed)
-                removeNote(note.id)
-        })
-    }
+  function getModalWindow() {
+    Swal.fire({
+      title: "Удалить запись",
+      text: getSlicedText(note.text.replace(/<[^>]+>/g, "")),
+      icon: "error",
+      showCloseButton: true,
 
-    return (
-        <>
-            <button className="button note__button" onClick={getModalWindow}>
-                {DeleteIcon}
-            </button>
-        </>
-    )
+      confirmButtonText: "Да",
+      confirmButtonColor: "#51ac00",
+
+      cancelButtonText: "Нет, не надо",
+      cancelButtonColor: "#d33",
+      showCancelButton: true,
+      focusCancel: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteNoteRedux(note.id, password));
+      }
+    });
+  }
+
+  return (
+    <>
+      <button className="button note__button" onClick={getModalWindow}>
+        {DeleteIcon}
+      </button>
+    </>
+  );
 }
 
-export default RemoveNote
+export default RemoveNote;

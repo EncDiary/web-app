@@ -1,14 +1,14 @@
-import React from 'react'
-import SidebarItem from './SidebarItem'
+import React from "react";
+import SidebarItem from "./SidebarItem";
 
-function Sidebar({settings}) {
-    return (
-        <div className="sidebar">
-            <SidebarItem text="Основное" tabName="main" settings={settings} />
-            <SidebarItem text="Горячие клавиши" tabName="hotkeys" settings={settings} />
-            <SidebarItem text="О приложении" tabName="about" settings={settings} />
-        </div>
-    )
+function Sidebar() {
+  return (
+    <div className="sidebar">
+      <SidebarItem text="Основное" tabName="main" />
+      <SidebarItem text="Горячие клавиши" tabName="hotkeys" />
+      <SidebarItem text="О приложении" tabName="about" />
+    </div>
+  );
 }
 
-export default Sidebar
+export default Sidebar;

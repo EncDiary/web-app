@@ -1,21 +1,39 @@
-import React, {useContext} from 'react'
-import { CrossIcon } from '../assets/SvgIcons'
-import Context from '../context'
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { CrossIcon } from "../assets/SvgIcons";
+import {
+  hideBookRedux,
+  setCurrentBookRedux,
+} from "../redux/actions/booksActions";
 
-function BookItem({book, isActive}) {
-    const {setCurrentBook, unsetBook} = useContext(Context)
+function BookItem({ book }) {
+  const dispatch = useDispatch();
 
-    var classItem = "open__last-item"
-    if (isActive) {
-        classItem += " open__last-item-active"
-    }
+  const isActiveRedux = useSelector((state) => state.books.currentBook);
 
-    return (
-        <div className={classItem}>
-            <div className="open__last-item-text" onClick={() => setCurrentBook(book)}>{book.title}</div>
-            <div className="open__last-item-remove" onClick={() => unsetBook(book.id)}>{CrossIcon}</div>
-        </div>
-    )
+  var classItem = "open__last-item";
+  if (isActiveRedux.id === book.id) {
+    classItem += " open__last-item-active";
+  }
+
+  function clickToClose() {
+    dispatch(hideBookRedux(book.id));
+  }
+
+  function clickToSetCurrentBook() {
+    dispatch(setCurrentBookRedux(book));
+  }
+
+  return (
+    <div className={classItem}>
+      <div className="open__last-item-text" onClick={clickToSetCurrentBook}>
+        {book.title}
+      </div>
+      <div className="open__last-item-remove" onClick={clickToClose}>
+        {CrossIcon}
+      </div>
+    </div>
+  );
 }
 
-export default BookItem
+export default BookItem;
