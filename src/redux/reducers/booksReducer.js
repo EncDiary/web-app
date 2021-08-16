@@ -41,7 +41,6 @@ export const booksReducer = (state = initialState, action) => {
             : state.currentBook,
         books: booksWithoutHidden,
       };
-    // }
     case FILL_BOOKS:
       return { ...state, books: action.payload };
     case SET_CURRENT_BOOK:

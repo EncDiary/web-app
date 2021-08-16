@@ -4,6 +4,7 @@ import {
   SET_CURRENT_OPENING_TAB,
   SET_NOTES_OVER,
   SET_SHOWING_SETTINGS,
+  CHANGE_PASSWORD,
 } from "../types";
 
 const initialState = {
@@ -26,6 +27,8 @@ export const appReducer = (state = initialState, action) => {
       return { ...state, currentOpeningTab: action.payload };
     case SET_NOTES_OVER:
       return { ...state, notesOver: action.payload };
+    case CHANGE_PASSWORD:
+      return { ...state, password: action.payload };
     default:
       return state;
   }

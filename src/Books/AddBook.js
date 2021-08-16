@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { createBookRedux } from "../redux/actions/booksActions";
 
 function AddBook() {
-  // const { addBook } = useContext(Context);
   const [title, setTitle] = useState("");
   const [password, setPassword] = useState("");
   const [passwordAgain, setPasswordAgain] = useState("");
@@ -33,7 +32,7 @@ function AddBook() {
         return;
       }
 
-      dispatch(createBookRedux(title, password)); // Заменить на хук
+      dispatch(createBookRedux(title, password));
     } else {
       console.log("Пароли отличаются");
     }

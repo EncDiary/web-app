@@ -20,9 +20,3 @@ const rootReducer = combineReducers({
 });
 
 export default persistReducer(persistConfig, rootReducer);
-
-// export const rootReducer = combineReducers({
-//   books: booksReducer,
-//   notes: notesReducer,
-//   app: appReducer,
-// });

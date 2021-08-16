@@ -93,43 +93,6 @@ export function fillBooksRedux(books) {
   };
 }
 
-// export function unlockBookRedux(password, currentBook_id) {
-//   return async (dispatch) => {
-//     await fetch(serverUrl + "checkPassword.php", {
-//       method: "POST",
-//       header: {
-//         "Content-Type": "application/x-www-form-urlencoded",
-//       },
-//       body: JSON.stringify({
-//         id: currentBook_id,
-//         password_hash: SHA256(password).toString(),
-//       }),
-//     })
-//       .then((response) => response.json())
-//       .then((response) => {
-//         if (response["status"]) {
-//           dispatch({
-//             type: ENTER_PASSWORD,
-//             payload: password,
-//           });
-//           console.log("login");
-//         } else {
-//           var input_field = document.getElementById("enter_password");
-//           input_field.classList.add("input-shake", "input-error");
-//           setTimeout(function () {
-//             input_field.classList.remove("input-shake");
-//           }, 1000);
-//         }
-//       });
-//   };
-// }
-
-// export function lockBookRedux() {
-//   return {
-//     type: LOCK_BOOK,
-//   };
-// }
-
 export function setCurrentBookRedux(book) {
   return {
     type: SET_CURRENT_BOOK,

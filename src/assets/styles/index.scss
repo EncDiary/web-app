@@ -424,6 +424,8 @@ body {
 .mainbar {
   width: calc(100vw - 270px);
   padding: 16px 20px;
+  height: calc(100vh - var(--header-height));
+  overflow-y: auto;
 }
 
 .hotkey {

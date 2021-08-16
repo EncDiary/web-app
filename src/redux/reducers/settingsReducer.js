@@ -10,7 +10,6 @@ const initialState = {
 export const settingsReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_EDIT_ACTION:
-      // const abc = { ...state.displaying, editAction: action.payload };
       return {
         ...state,
         displaying: { ...state.displaying, editAction: action.payload },
