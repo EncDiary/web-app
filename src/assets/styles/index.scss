@@ -70,6 +70,10 @@ body {
   }
 }
 
+svg {
+  stroke: var(--text-color);
+}
+
 .button {
   border: none;
   font: inherit;
