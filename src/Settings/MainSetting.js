@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "../Components/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { SHA256 } from "crypto-js";
+import { SHA256, AES, enc } from "crypto-js";
 import {
   setDeleteActionRedux,
   setEditActionRedux,
@@ -25,15 +25,11 @@ function MainSetting() {
     dispatch(setDeleteActionRedux(!deleteAction));
   }
 
-  function onClickExport() {
-    exportEncyptNotes();
-  }
-
   const serverUrl = "https://cj38001.tmweb.ru/";
   const currentBook = useSelector((state) => state.books.currentBook);
   const password = useSelector((state) => state.app.password);
 
-  function exportEncyptNotes() {
+  function exportEncryptedNotes() {
     fetch(serverUrl + "note/getAllNotes.php", {
       method: "POST",
       header: {
@@ -47,16 +43,39 @@ function MainSetting() {
       .then((response) => response.json())
       .then((response) => {
         const myData = response["notes"];
-        const fileName = "file";
         const json = JSON.stringify(myData);
         const blob = new Blob([json], { type: "application/json" });
-        const href = URL.createObjectURL(blob);
         const link = document.createElement("a");
-        link.href = href;
-        link.download = fileName + ".json";
-        document.body.appendChild(link);
+        link.href = URL.createObjectURL(blob);
+        link.download = "file.json";
         link.click();
-        document.body.removeChild(link);
+      });
+  }
+
+  function exportDecryptedNotes() {
+    fetch(serverUrl + "note/getAllNotes.php", {
+      method: "POST",
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: JSON.stringify({
+        id: currentBook.id,
+        password_hash: SHA256(password).toString(),
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        response["notes"].forEach((note) => {
+          return (note.text = AES.decrypt(note.text, password).toString(
+            enc.Utf8
+          ));
+        });
+        const json = JSON.stringify(response["notes"]);
+        const blob = new Blob([json], { type: "application/json" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "file.json";
+        link.click();
       });
   }
 
@@ -72,7 +91,7 @@ function MainSetting() {
         <li>
           Экспорт в зашифрованном виде
           <Button
-            onClick={onClickExport}
+            onClick={exportEncryptedNotes}
             text="Скачать"
             className="button settings__button_inline"
           />
@@ -80,7 +99,7 @@ function MainSetting() {
         <li>
           Экспорт в чистом виде (небезопасно)
           <Button
-            onClick={onClickExport}
+            onClick={exportDecryptedNotes}
             text="Скачать"
             className="button settings__button_inline"
           />
