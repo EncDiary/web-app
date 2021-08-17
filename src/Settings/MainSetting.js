@@ -42,13 +42,19 @@ function MainSetting() {
     })
       .then((response) => response.json())
       .then((response) => {
-        const myData = response["notes"];
-        const json = JSON.stringify(myData);
-        const blob = new Blob([json], { type: "application/json" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "file.json";
-        link.click();
+        const notes_data = response["notes"].map((note) => {
+          delete note.id;
+          return note;
+        });
+
+        const data = {
+          title: currentBook.title,
+          is_encrypted: true,
+          password_hash: SHA256(password).toString(),
+          backup_date: new Date().toLocaleString(),
+          notes: notes_data,
+        };
+        downloadJson(data);
       });
   }
 
@@ -65,18 +71,29 @@ function MainSetting() {
     })
       .then((response) => response.json())
       .then((response) => {
-        response["notes"].forEach((note) => {
-          return (note.text = AES.decrypt(note.text, password).toString(
-            enc.Utf8
-          ));
+        const notes_data = response["notes"].map((note) => {
+          delete note.id;
+          note.text = AES.decrypt(note.text, password).toString(enc.Utf8);
+          return note;
         });
-        const json = JSON.stringify(response["notes"]);
-        const blob = new Blob([json], { type: "application/json" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "file.json";
-        link.click();
+
+        const data = {
+          title: currentBook.title,
+          is_encrypted: false,
+          backup_date: new Date().toLocaleString(),
+          notes: notes_data,
+        };
+        downloadJson(data);
       });
+  }
+
+  function downloadJson(data) {
+    const json = JSON.stringify(data);
+    const blob = new Blob([json], { type: "application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "file.json";
+    link.click();
   }
 
   return (
