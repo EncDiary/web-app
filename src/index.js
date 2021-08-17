@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import "./assets/styles/index.scss";
 import reportWebVitals from "./reportWebVitals";
 import Router from "./Router";
-import { CookiesProvider } from "react-cookie";
 import { applyMiddleware, compose, createStore } from "redux";
 import rootReducer from "./redux/reducers/rootReducer";
 import { Provider } from "react-redux";
@@ -25,9 +24,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <CookiesProvider>
-          <Router />
-        </CookiesProvider>
+        <Router />
       </PersistGate>
     </Provider>
   </React.StrictMode>,
