@@ -1,10 +1,11 @@
 import React from "react";
 import { useActions } from "../redux/hooks/useActions";
 import { useTypedSelector } from "../redux/hooks/useTypedSelector";
+import { settingsTabTypes } from "../redux/types/app";
 
 interface SidebarItemProps {
   text: string;
-  tabName: string;
+  tabName: settingsTabTypes;
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ text, tabName }) => {

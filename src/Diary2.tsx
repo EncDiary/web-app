@@ -7,6 +7,7 @@ import Settings from "./Diary/Settings";
 import Title from "./Components/Title";
 import { useTypedSelector } from "./redux/hooks/useTypedSelector";
 import { useActions } from "./redux/hooks/useActions";
+import { settingsTabTypes } from "./redux/types/app";
 
 const Diary2: React.FC = () => {
   const notesRef = useRef<HTMLElement>(null);
@@ -74,7 +75,7 @@ const Diary2: React.FC = () => {
                 {isNotesOver && <div>Записей больше нет!</div>}
               </Container>
             </section>
-            {settings && <Settings />}
+            {settings !== settingsTabTypes.None && <Settings />}
           </>
         }
       </div>

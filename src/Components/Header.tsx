@@ -2,6 +2,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { InfoIcon, SettingIcon, LockIcon } from "../assets/SvgIcons";
 import { useTypedSelector } from "../redux/hooks/useTypedSelector";
 import { useActions } from "../redux/hooks/useActions";
+import { settingsTabTypes } from "../redux/types/app";
 
 const Header: React.FC = () => {
   const { lockBookRedux, setShowingSettingsRedux } = useActions();
@@ -10,7 +11,7 @@ const Header: React.FC = () => {
     lockBookRedux();
   }
 
-  function clickToSettings(tab: string | boolean) {
+  function clickToSettings(tab: settingsTabTypes) {
     setShowingSettingsRedux(tab);
   }
 
@@ -40,7 +41,11 @@ const Header: React.FC = () => {
           <div
             className="header__button header__button_help"
             onClick={() =>
-              clickToSettings(settingsRedux === "about" ? false : "about")
+              clickToSettings(
+                settingsRedux === settingsTabTypes.About
+                  ? settingsTabTypes.None
+                  : settingsTabTypes.About
+              )
             }
           >
             {InfoIcon}
@@ -55,7 +60,9 @@ const Header: React.FC = () => {
             className="header__button header__button_setting"
             onClick={() =>
               clickToSettings(
-                settingsRedux && settingsRedux !== "about" ? false : "main"
+                settingsRedux && settingsRedux !== settingsTabTypes.About
+                  ? settingsTabTypes.None
+                  : settingsTabTypes.Main
               )
             }
           >

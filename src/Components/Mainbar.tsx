@@ -1,4 +1,5 @@
 import { useTypedSelector } from "../redux/hooks/useTypedSelector";
+import { settingsTabTypes } from "../redux/types/app";
 import AboutSetting from "../Settings/AboutSetting";
 import HotkeysSetting from "../Settings/HotkeysSetting";
 import MainSetting from "../Settings/MainSetting";
@@ -9,13 +10,13 @@ const Mainbar: React.FC = () => {
 
   function showCurrentSetting() {
     switch (settings) {
-      case "main":
+      case settingsTabTypes.Main:
         return <MainSetting />;
-      case "secure":
+      case settingsTabTypes.Secure:
         return <SecureSetting />;
-      case "hotkeys":
+      case settingsTabTypes.Hotkeys:
         return <HotkeysSetting />;
-      case "about":
+      case settingsTabTypes.About:
         return <AboutSetting />;
       default:
         return "";

@@ -5,9 +5,17 @@ export enum currentOpeningTabTypes {
   Import = "Import",
 }
 
+export enum settingsTabTypes {
+  None = "None",
+  Main = "Main",
+  Secure = "Secure",
+  Hotkeys = "Hotkeys",
+  About = "About",
+}
+
 export interface AppState {
   password: string;
-  showSettings: boolean | string;
+  showSettings: settingsTabTypes;
   currentOpeningTab: currentOpeningTabTypes;
   isNotesOver: boolean;
 }
@@ -32,7 +40,7 @@ interface LockBookAction {
 
 interface SetShowingSettingsAction {
   type: AppActionTypes.SET_SHOWING_SETTINGS;
-  payload: boolean | string;
+  payload: settingsTabTypes;
 }
 
 interface SetCurrentTabAction {
