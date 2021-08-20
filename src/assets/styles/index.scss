@@ -21,7 +21,7 @@
 #root {
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
 
   position: fixed;
   width: 100%;
@@ -235,7 +235,7 @@ svg {
   }
   &__management {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
   }
   &__button {
     padding: 10px;
