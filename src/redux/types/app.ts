@@ -1,7 +1,14 @@
+export enum currentOpeningTabTypes {
+  Open = "Open",
+  Create = "Create",
+  Find = "Find",
+  Import = "Import",
+}
+
 export interface AppState {
   password: string;
   showSettings: boolean | string;
-  currentOpeningTab: string;
+  currentOpeningTab: currentOpeningTabTypes;
   isNotesOver: boolean;
 }
 
@@ -30,7 +37,7 @@ interface SetShowingSettingsAction {
 
 interface SetCurrentTabAction {
   type: AppActionTypes.SET_CURRENT_OPENING_TAB;
-  payload: string;
+  payload: currentOpeningTabTypes;
 }
 
 interface SetNotesOverAction {

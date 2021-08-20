@@ -1,9 +1,14 @@
-import { AppState, AppActionTypes, AppAction } from "../../types/app";
+import {
+  AppState,
+  AppActionTypes,
+  AppAction,
+  currentOpeningTabTypes,
+} from "../../types/app";
 
 const initialState: AppState = {
   password: "",
   showSettings: false,
-  currentOpeningTab: "open",
+  currentOpeningTab: currentOpeningTabTypes.Open,
   isNotesOver: false,
 };
 

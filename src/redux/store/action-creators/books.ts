@@ -2,7 +2,7 @@ import { SHA256, AES } from "crypto-js";
 import Swal from "sweetalert2";
 import { Dispatch } from "redux";
 import { Book, BooksActionTypes } from "../../types/books";
-import { AppActionTypes } from "../../types/app";
+import { AppActionTypes, currentOpeningTabTypes } from "../../types/app";
 import { Note } from "../../types/notes";
 import { Actions } from "../../types";
 
@@ -37,7 +37,7 @@ export function createBookRedux(title: string, password: string) {
         });
         dispatch({
           type: AppActionTypes.SET_CURRENT_OPENING_TAB,
-          payload: "open",
+          payload: currentOpeningTabTypes.Open,
         });
       });
   };
@@ -68,7 +68,7 @@ export function findBookRedux(title: string) {
           });
           dispatch({
             type: AppActionTypes.SET_CURRENT_OPENING_TAB,
-            payload: "open",
+            payload: currentOpeningTabTypes.Open,
           });
         } else {
           Swal.fire({
@@ -137,7 +137,7 @@ export function importBookRedux(title: string, password: string, file: Note[]) {
           });
           dispatch({
             type: AppActionTypes.SET_CURRENT_OPENING_TAB,
-            payload: "open",
+            payload: currentOpeningTabTypes.Open,
           });
         } else {
           Swal.fire({

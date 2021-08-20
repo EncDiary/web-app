@@ -5,19 +5,20 @@ import AddBook from "../Books/AddBook";
 import FindBook from "../Books/FindBook";
 import ImportBook from "../Books/ImportBook";
 import { useTypedSelector } from "../redux/hooks/useTypedSelector";
+import { currentOpeningTabTypes } from "../redux/types/app";
 
 const Login: React.FC = () => {
   const currentTab = useTypedSelector((state) => state.app.currentOpeningTab);
 
   function showCurrentTab() {
     switch (currentTab) {
-      case "open":
+      case currentOpeningTabTypes.Open:
         return <OpenBook />;
-      case "add":
+      case currentOpeningTabTypes.Create:
         return <AddBook />;
-      case "find":
+      case currentOpeningTabTypes.Find:
         return <FindBook />;
-      case "import":
+      case currentOpeningTabTypes.Import:
         return <ImportBook />;
       default:
         return "";
