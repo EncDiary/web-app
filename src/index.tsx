@@ -3,13 +3,13 @@ import ReactDOM from "react-dom";
 import "./assets/styles/index.scss";
 import reportWebVitals from "./reportWebVitals";
 import { applyMiddleware, createStore } from "redux";
-import rootReducer from "./redux/store/reducers";
+import rootReducer from "./store/reducers";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import { composeWithDevTools } from "redux-devtools-extension";
-import App from "./App";
+import App from "./components/App";
 
 const store = createStore(
   rootReducer,
