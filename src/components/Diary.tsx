@@ -27,7 +27,9 @@ const Diary: React.FC = () => {
   const [fetching, setFetching] = useState(true);
 
   const currentBook = useTypedSelector((state) => state.books.currentBook);
-  const { password, isNotesOver } = useTypedSelector((state) => state.app);
+  const { password, isNotesOver, showSettings } = useTypedSelector(
+    (state) => state.app
+  );
   const notes = useTypedSelector((state) => state.notes.notes);
 
   useEffect(() => {
@@ -51,12 +53,6 @@ const Diary: React.FC = () => {
     }
   };
 
-  const notesRedux = useTypedSelector((state) => {
-    return state.notes.notes;
-  });
-
-  const settings = useTypedSelector((state) => state.app.showSettings);
-
   return (
     <>
       <Header />
@@ -70,12 +66,12 @@ const Diary: React.FC = () => {
                 <div className="container-wrapper">
                   <Title text="Список записей" className="notes__title" />
 
-                  {notesRedux.length ? <NoteList /> : <p>Записей пока нет</p>}
+                  {notes.length ? <NoteList /> : <p>Записей пока нет</p>}
                 </div>
                 {isNotesOver && <div>Записей больше нет!</div>}
               </Container>
             </section>
-            {settings !== settingsTabTypes.None && <Setting />}
+            {showSettings !== settingsTabTypes.None && <Setting />}
           </>
         }
       </div>
