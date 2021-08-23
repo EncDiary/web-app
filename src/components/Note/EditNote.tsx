@@ -50,7 +50,7 @@ const EditNote: React.FC<EditNoteProps> = ({ note }) => {
                   onChange={handleChange}
                   value={body}
                   modules={{}}
-                  formats={["bold", "italic", "underline"]}
+                  formats={["bold", "italic"]}
                   placeholder="Напишите здесь что-нибудь..."
                 />
 

@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { Actions } from "../../types";
 import { AppActionTypes } from "../../types/app";
 import { Book } from "../../types/books";
-import { NotesActionTypes } from "../../types/notes";
+import { Note, NotesActionTypes } from "../../types/notes";
 
 const serverUrl = "https://cs53547.tmweb.ru/";
 
@@ -29,13 +29,11 @@ export function fetchNotesRedux(
     })
       .then((response) => response.json())
       .then((response) => {
-        response["notes"].forEach(
-          (element: { [x: string]: string | CryptoJS.lib.CipherParams }) => {
-            element["text"] = AES.decrypt(element["text"], password).toString(
-              enc.Utf8
-            );
-          }
-        );
+        response["notes"].forEach((element: Note) => {
+          element["text"] = AES.decrypt(element["text"], password).toString(
+            enc.Utf8
+          );
+        });
         dispatch({
           type: NotesActionTypes.FETCH_NOTES,
           payload: response["notes"],

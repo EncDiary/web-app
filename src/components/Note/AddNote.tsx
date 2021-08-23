@@ -40,7 +40,7 @@ const AddNote: React.FC<AddNoteProps> = ({ scrollToNotes }) => {
               onChange={handleChange}
               value={body}
               modules={{}}
-              formats={["bold", "italic", "underline"]}
+              formats={["bold", "italic"]}
               placeholder="Напишите здесь что-нибудь..."
             />
             <div className="editor__actions">

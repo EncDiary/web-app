@@ -1,7 +1,7 @@
 import { SHA256, AES, enc } from "crypto-js";
 import Swal from "sweetalert2";
 import { Dispatch } from "redux";
-import { AppActionTypes } from "../../types/app";
+import { AppActionTypes, settingsTabTypes } from "../../types/app";
 import { Book, BooksActionTypes } from "../../types/books";
 import { Note, NotesActionTypes } from "../../types/notes";
 import { Actions } from "../../types";
@@ -49,6 +49,10 @@ export function lockBookRedux() {
     });
     dispatch({
       type: NotesActionTypes.CLEAR_NOTES,
+    });
+    dispatch({
+      type: AppActionTypes.SET_SHOWING_SETTINGS,
+      payload: settingsTabTypes.None,
     });
     dispatch({
       type: AppActionTypes.SET_NOTES_OVER,
