@@ -11,7 +11,7 @@ const serverUrl = "https://cs53547.tmweb.ru/";
 
 export function createBookRedux(title: string, password: string) {
   return async (dispatch: Dispatch<Actions>) => {
-    await axios({
+    const response = await axios({
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -21,31 +21,31 @@ export function createBookRedux(title: string, password: string) {
         title: title,
         password_hash: SHA256(password).toString(),
       },
-    }).then((response) => {
-      var newBook = {
-        id: response.data.id,
-        title,
-      };
-      Swal.fire({
-        title: "Новая книга успешно добавлена",
-        icon: "success",
-        timer: 1000,
-      });
-      dispatch({
-        type: BooksActionTypes.CREATE_BOOK,
-        payload: newBook,
-      });
-      dispatch({
-        type: AppActionTypes.SET_CURRENT_OPENING_TAB,
-        payload: currentOpeningTabTypes.Open,
-      });
+    });
+
+    var newBook = {
+      id: response.data.id,
+      title,
+    };
+    Swal.fire({
+      title: "Новая книга успешно добавлена",
+      icon: "success",
+      timer: 1000,
+    });
+    dispatch({
+      type: BooksActionTypes.CREATE_BOOK,
+      payload: newBook,
+    });
+    dispatch({
+      type: AppActionTypes.SET_CURRENT_OPENING_TAB,
+      payload: currentOpeningTabTypes.Open,
     });
   };
 }
 
 export function findBookRedux(title: string) {
   return async (dispatch: Dispatch<Actions>) => {
-    await axios({
+    const response = await axios({
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -54,29 +54,29 @@ export function findBookRedux(title: string) {
       data: {
         title: title,
       },
-    }).then((response) => {
-      if (response.data.status) {
-        Swal.fire({
-          title: "Книга найдена и готова к расшифровке",
-          icon: "success",
-          timer: 1000,
-        });
-        dispatch({
-          type: BooksActionTypes.FIND_BOOK,
-          payload: response.data.book,
-        });
-        dispatch({
-          type: AppActionTypes.SET_CURRENT_OPENING_TAB,
-          payload: currentOpeningTabTypes.Open,
-        });
-      } else {
-        Swal.fire({
-          title: "Такой книги нет",
-          icon: "error",
-          timer: 1000,
-        });
-      }
     });
+
+    if (response.data.status) {
+      Swal.fire({
+        title: "Книга найдена и готова к расшифровке",
+        icon: "success",
+        timer: 1000,
+      });
+      dispatch({
+        type: BooksActionTypes.FIND_BOOK,
+        payload: response.data.book,
+      });
+      dispatch({
+        type: AppActionTypes.SET_CURRENT_OPENING_TAB,
+        payload: currentOpeningTabTypes.Open,
+      });
+    } else {
+      Swal.fire({
+        title: "Такой книги нет",
+        icon: "error",
+        timer: 1000,
+      });
+    }
   };
 }
 
@@ -108,7 +108,7 @@ export function importBookRedux(title: string, password: string, file: Note[]) {
       return note;
     });
 
-    await axios({
+    const response = await axios({
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -119,31 +119,31 @@ export function importBookRedux(title: string, password: string, file: Note[]) {
         password_hash: SHA256(password).toString(),
         notes: notes,
       },
-    }).then((response) => {
-      if (response.data.status) {
-        Swal.fire({
-          title: "Книга успешно импортирована",
-          icon: "success",
-          timer: 1000,
-        });
-        dispatch({
-          type: BooksActionTypes.IMPORT_BOOK,
-          payload: {
-            id: response.data.book.id,
-            title: title,
-          },
-        });
-        dispatch({
-          type: AppActionTypes.SET_CURRENT_OPENING_TAB,
-          payload: currentOpeningTabTypes.Open,
-        });
-      } else {
-        Swal.fire({
-          title: "Произошла ошибка",
-          icon: "error",
-          timer: 1000,
-        });
-      }
     });
+
+    if (response.data.status) {
+      Swal.fire({
+        title: "Книга успешно импортирована",
+        icon: "success",
+        timer: 1000,
+      });
+      dispatch({
+        type: BooksActionTypes.IMPORT_BOOK,
+        payload: {
+          id: response.data.book.id,
+          title: title,
+        },
+      });
+      dispatch({
+        type: AppActionTypes.SET_CURRENT_OPENING_TAB,
+        payload: currentOpeningTabTypes.Open,
+      });
+    } else {
+      Swal.fire({
+        title: "Произошла ошибка",
+        icon: "error",
+        timer: 1000,
+      });
+    }
   };
 }

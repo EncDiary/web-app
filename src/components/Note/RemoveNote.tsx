@@ -22,8 +22,8 @@ const RemoveNote: React.FC<RemoveNoteProps> = ({ note }) => {
 
   const password = useTypedSelector((state) => state.app.password);
 
-  function getModalWindow() {
-    Swal.fire({
+  async function getModalWindow() {
+    const result = await Swal.fire({
       title: "Удалить запись",
       text: getSlicedText(note.text.replace(/<[^>]+>/g, "")),
       icon: "error",
@@ -36,11 +36,11 @@ const RemoveNote: React.FC<RemoveNoteProps> = ({ note }) => {
       cancelButtonColor: "#d33",
       showCancelButton: true,
       focusCancel: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteNoteRedux(note.id, password);
-      }
     });
+
+    if (result.isConfirmed) {
+      deleteNoteRedux(note.id, password);
+    }
   }
 
   return (

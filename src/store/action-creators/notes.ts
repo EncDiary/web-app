@@ -17,7 +17,7 @@ export function fetchNotesRedux(
   unsetFetching: () => void
 ) {
   return async (dispatch: Dispatch<Actions>) => {
-    await axios({
+    const response = await axios({
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -28,24 +28,24 @@ export function fetchNotesRedux(
         password_hash: SHA256(password).toString(),
         notes_list: { limit: limit, offset: offset },
       },
-    }).then((response) => {
-      response.data.notes.forEach((element: Note) => {
-        element["text"] = AES.decrypt(element["text"], password).toString(
-          enc.Utf8
-        );
-      });
-      dispatch({
-        type: NotesActionTypes.FETCH_NOTES,
-        payload: response.data.notes,
-      });
-
-      if (response.data.notes.length < limit) {
-        dispatch({
-          type: AppActionTypes.SET_NOTES_OVER,
-          payload: true,
-        });
-      }
     });
+
+    const notes = await response.data.notes.map((note: Note) => {
+      note["text"] = AES.decrypt(note["text"], password).toString(enc.Utf8);
+      return note;
+    });
+
+    dispatch({
+      type: NotesActionTypes.FETCH_NOTES,
+      payload: notes,
+    });
+
+    if (notes.length < limit) {
+      dispatch({
+        type: AppActionTypes.SET_NOTES_OVER,
+        payload: true,
+      });
+    }
     unsetFetching();
   };
 }
@@ -57,7 +57,7 @@ export function createNoteRedux(
   clearForm: () => void
 ) {
   return async (dispatch: Dispatch<Actions>) => {
-    await axios({
+    const response = await axios({
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -68,25 +68,25 @@ export function createNoteRedux(
         book_id: currentBook_id,
         password_hash: SHA256(password).toString(),
       },
-    }).then((response) => {
-      var newNote = {
-        text,
-        id: response.data.id,
-        datetime: response.data.datetime,
-      };
-
-      dispatch({
-        type: NotesActionTypes.CREATE_NOTE,
-        payload: newNote,
-      });
-
-      Swal.fire({
-        title: "Запись успешно добавлена",
-        icon: "success",
-        timer: 1000,
-      });
-      clearForm();
     });
+
+    var newNote = {
+      text,
+      id: response.data.id,
+      datetime: response.data.datetime,
+    };
+
+    dispatch({
+      type: NotesActionTypes.CREATE_NOTE,
+      payload: newNote,
+    });
+
+    Swal.fire({
+      title: "Запись успешно добавлена",
+      icon: "success",
+      timer: 1000,
+    });
+    clearForm();
   };
 }
 
@@ -97,7 +97,7 @@ export function editNoteRedux(
   handleClose: () => void
 ) {
   return async (dispatch: Dispatch<Actions>) => {
-    await axios({
+    const response = await axios({
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -108,30 +108,30 @@ export function editNoteRedux(
         text: AES.encrypt(text, password).toString(),
         password_hash: SHA256(password).toString(),
       },
-    }).then((response) => {
-      if (response.data.status) {
-        dispatch({
-          type: NotesActionTypes.EDIT_NOTE,
-          payload: {
-            id: note_id,
-            text,
-          },
-        });
-
-        Swal.fire({
-          title: "Запись успешно отредактирована",
-          icon: "success",
-          timer: 1000,
-        });
-        handleClose();
-      }
     });
+
+    if (response.data.status) {
+      dispatch({
+        type: NotesActionTypes.EDIT_NOTE,
+        payload: {
+          id: note_id,
+          text,
+        },
+      });
+
+      Swal.fire({
+        title: "Запись успешно отредактирована",
+        icon: "success",
+        timer: 1000,
+      });
+      handleClose();
+    }
   };
 }
 
 export function deleteNoteRedux(note_id: number, password: string) {
   return async (dispatch: Dispatch<Actions>) => {
-    await axios({
+    const response = await axios({
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -141,25 +141,25 @@ export function deleteNoteRedux(note_id: number, password: string) {
         id: note_id,
         password_hash: SHA256(password).toString(),
       },
-    }).then((response) => {
-      if (response.data.status) {
-        dispatch({
-          type: NotesActionTypes.DELETE_NOTE,
-          payload: note_id,
-        });
-        Swal.fire({
-          title: "Запись успешно удалена",
-          icon: "success",
-          timer: 1000,
-        });
-      } else {
-        Swal.fire({
-          title: "Что-то пошло не так",
-          icon: "error",
-          timer: 1000,
-        });
-      }
     });
+
+    if (response.data.status) {
+      dispatch({
+        type: NotesActionTypes.DELETE_NOTE,
+        payload: note_id,
+      });
+      Swal.fire({
+        title: "Запись успешно удалена",
+        icon: "success",
+        timer: 1000,
+      });
+    } else {
+      Swal.fire({
+        title: "Что-то пошло не так",
+        icon: "error",
+        timer: 1000,
+      });
+    }
   };
 }
 

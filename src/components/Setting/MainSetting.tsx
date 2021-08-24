@@ -37,8 +37,8 @@ const MainSetting: React.FC = () => {
   const currentBook = useTypedSelector((state) => state.books.currentBook);
   const password = useTypedSelector((state) => state.app.password);
 
-  function exportEncryptedNotes() {
-    axios({
+  async function exportEncryptedNotes() {
+    const response = await axios({
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -48,27 +48,27 @@ const MainSetting: React.FC = () => {
         id: currentBook.id,
         password_hash: SHA256(password).toString(),
       },
-    }).then((response) => {
-      const notes_data: NoteInfo[] = response.data.notes.map((note: Note) => {
-        return {
-          text: note.text,
-          datetime: note.datetime,
-        };
-      });
-
-      const data = {
-        title: currentBook.title,
-        is_encrypted: true,
-        password_hash: SHA256(password).toString(),
-        backup_date: new Date().toLocaleString(),
-        notes: notes_data,
-      };
-      downloadJson(data);
     });
+
+    const notes_data: NoteInfo[] = response.data.notes.map((note: Note) => {
+      return {
+        text: note.text,
+        datetime: note.datetime,
+      };
+    });
+
+    const data = {
+      title: currentBook.title,
+      is_encrypted: true,
+      password_hash: SHA256(password).toString(),
+      backup_date: new Date().toLocaleString(),
+      notes: notes_data,
+    };
+    downloadJson(data);
   }
 
-  function exportDecryptedNotes() {
-    axios({
+  async function exportDecryptedNotes() {
+    const response = await axios({
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -78,22 +78,21 @@ const MainSetting: React.FC = () => {
         id: currentBook.id,
         password_hash: SHA256(password).toString(),
       },
-    }).then((response) => {
-      const notes_data: NoteInfo[] = response.data.notes.map((note: Note) => {
-        return {
-          text: AES.decrypt(note.text, password).toString(enc.Utf8),
-          datetime: note.datetime,
-        };
-      });
-
-      const data = {
-        title: currentBook.title,
-        is_encrypted: false,
-        backup_date: new Date().toLocaleString(),
-        notes: notes_data,
-      };
-      downloadJson(data);
     });
+    const notes_data: NoteInfo[] = response.data.notes.map((note: Note) => {
+      return {
+        text: AES.decrypt(note.text, password).toString(enc.Utf8),
+        datetime: note.datetime,
+      };
+    });
+
+    const data = {
+      title: currentBook.title,
+      is_encrypted: false,
+      backup_date: new Date().toLocaleString(),
+      notes: notes_data,
+    };
+    downloadJson(data);
   }
 
   function downloadJson(data: IExportData) {
