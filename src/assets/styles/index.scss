@@ -543,3 +543,33 @@ svg {
 .switcher {
   margin: 12px 0;
 }
+
+// ==================================
+
+.wysiwyg {
+  &__menu {
+    display: flex;
+    justify-content: center;
+    &-group {
+      display: flex;
+      margin: 10px 7px;
+    }
+    &-item {
+      margin: 0 3px;
+    }
+  }
+  &__editor .ProseMirror {
+    min-height: 50vh;
+    border: 3px solid var(--light-border-color);
+    border-radius: 1rem;
+    padding: 20px;
+
+    & p.is-editor-empty:first-child::before {
+      content: "Напишите здесь что-нибудь...";
+      color: rgba(0, 0, 0, 0.6);
+      float: left;
+      pointer-events: none;
+      height: 0;
+    }
+  }
+}

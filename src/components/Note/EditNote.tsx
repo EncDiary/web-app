@@ -1,35 +1,33 @@
 import React, { useState } from "react";
-import ReactQuill from "react-quill";
 import { EditIcon } from "../../assets/SvgIcons";
 import Button from "../Generic/Button";
 import Title from "../Generic/Title";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { Note } from "../../types/notes";
 import { useActions } from "../../hooks/useActions";
+import { EditorContent } from "@tiptap/react";
+import { MenuBar, SetEditor } from "../Generic/Editor";
 
 interface EditNoteProps {
   note: Note;
 }
 
 const EditNote: React.FC<EditNoteProps> = ({ note }) => {
-  const [body, setBody] = useState(note.text);
-
-  function handleChange(value: string) {
-    setBody(value);
-  }
-
   const { editNoteRedux } = useActions();
 
   const password = useTypedSelector((state) => state.app.password);
 
   function submitHandler() {
-    editNoteRedux(body, note.id, password, handleClose);
+    const text = editor?.getHTML() ?? "";
+    editNoteRedux(text, note.id, password, handleClose);
   }
 
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const editor = SetEditor(note.text);
 
   return (
     <>
@@ -46,13 +44,8 @@ const EditNote: React.FC<EditNoteProps> = ({ note }) => {
                 &times;
               </div>
               <div>
-                <ReactQuill
-                  onChange={handleChange}
-                  value={body}
-                  modules={{}}
-                  formats={["bold", "italic"]}
-                  placeholder="Напишите здесь что-нибудь..."
-                />
+                <MenuBar editor={editor} />
+                <EditorContent editor={editor} className="wysiwyg__editor" />
 
                 <div className="editor__actions">
                   <Button
