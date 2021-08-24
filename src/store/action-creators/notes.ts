@@ -5,6 +5,7 @@ import { Actions } from "../../types";
 import { AppActionTypes } from "../../types/app";
 import { Book } from "../../types/books";
 import { Note, NotesActionTypes } from "../../types/notes";
+import axios from "axios";
 
 const serverUrl = "https://cs53547.tmweb.ru/";
 
@@ -16,36 +17,35 @@ export function fetchNotesRedux(
   unsetFetching: () => void
 ) {
   return async (dispatch: Dispatch<Actions>) => {
-    await fetch(serverUrl + "note/getNotes.php", {
-      method: "POST",
+    await axios({
+      method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: JSON.stringify({
+      url: serverUrl + "note/getNotes.php",
+      data: {
         id: currentBook.id,
         password_hash: SHA256(password).toString(),
         notes_list: { limit: limit, offset: offset },
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        response["notes"].forEach((element: Note) => {
-          element["text"] = AES.decrypt(element["text"], password).toString(
-            enc.Utf8
-          );
-        });
-        dispatch({
-          type: NotesActionTypes.FETCH_NOTES,
-          payload: response["notes"],
-        });
-
-        if (response["notes"].length < limit) {
-          dispatch({
-            type: AppActionTypes.SET_NOTES_OVER,
-            payload: true,
-          });
-        }
+      },
+    }).then((response) => {
+      response.data.notes.forEach((element: Note) => {
+        element["text"] = AES.decrypt(element["text"], password).toString(
+          enc.Utf8
+        );
       });
+      dispatch({
+        type: NotesActionTypes.FETCH_NOTES,
+        payload: response.data.notes,
+      });
+
+      if (response.data.notes.length < limit) {
+        dispatch({
+          type: AppActionTypes.SET_NOTES_OVER,
+          payload: true,
+        });
+      }
+    });
     unsetFetching();
   };
 }
@@ -57,37 +57,36 @@ export function createNoteRedux(
   clearForm: () => void
 ) {
   return async (dispatch: Dispatch<Actions>) => {
-    await fetch(serverUrl + "note/addNote.php", {
-      method: "POST",
+    await axios({
+      method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: JSON.stringify({
+      url: serverUrl + "note/addNote.php",
+      data: {
         text: AES.encrypt(text, password).toString(),
         book_id: currentBook_id,
         password_hash: SHA256(password).toString(),
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        var newNote = {
-          text,
-          id: response["id"],
-          datetime: response["datetime"],
-        };
+      },
+    }).then((response) => {
+      var newNote = {
+        text,
+        id: response.data.id,
+        datetime: response.data.datetime,
+      };
 
-        dispatch({
-          type: NotesActionTypes.CREATE_NOTE,
-          payload: newNote,
-        });
-
-        Swal.fire({
-          title: "Запись успешно добавлена",
-          icon: "success",
-          timer: 1000,
-        });
-        clearForm();
+      dispatch({
+        type: NotesActionTypes.CREATE_NOTE,
+        payload: newNote,
       });
+
+      Swal.fire({
+        title: "Запись успешно добавлена",
+        icon: "success",
+        timer: 1000,
+      });
+      clearForm();
+    });
   };
 }
 
@@ -98,71 +97,69 @@ export function editNoteRedux(
   handleClose: () => void
 ) {
   return async (dispatch: Dispatch<Actions>) => {
-    fetch(serverUrl + "note/editNote.php", {
-      method: "POST",
+    await axios({
+      method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: JSON.stringify({
+      url: serverUrl + "note/editNote.php",
+      data: {
         id: note_id,
         text: AES.encrypt(text, password).toString(),
         password_hash: SHA256(password).toString(),
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        if (response["status"]) {
-          dispatch({
-            type: NotesActionTypes.EDIT_NOTE,
-            payload: {
-              id: note_id,
-              text,
-            },
-          });
+      },
+    }).then((response) => {
+      if (response.data.status) {
+        dispatch({
+          type: NotesActionTypes.EDIT_NOTE,
+          payload: {
+            id: note_id,
+            text,
+          },
+        });
 
-          Swal.fire({
-            title: "Запись успешно отредактирована",
-            icon: "success",
-            timer: 1000,
-          });
-          handleClose();
-        }
-      });
+        Swal.fire({
+          title: "Запись успешно отредактирована",
+          icon: "success",
+          timer: 1000,
+        });
+        handleClose();
+      }
+    });
   };
 }
 
 export function deleteNoteRedux(note_id: number, password: string) {
   return async (dispatch: Dispatch<Actions>) => {
-    await fetch(serverUrl + "note/deleteNote.php", {
-      method: "POST",
+    await axios({
+      method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: JSON.stringify({
+      url: serverUrl + "note/deleteNote.php",
+      data: {
         id: note_id,
         password_hash: SHA256(password).toString(),
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        if (response["status"]) {
-          dispatch({
-            type: NotesActionTypes.DELETE_NOTE,
-            payload: note_id,
-          });
-          Swal.fire({
-            title: "Запись успешно удалена",
-            icon: "success",
-            timer: 1000,
-          });
-        } else {
-          Swal.fire({
-            title: "Что-то пошло не так",
-            icon: "error",
-            timer: 1000,
-          });
-        }
-      });
+      },
+    }).then((response) => {
+      if (response.data.status) {
+        dispatch({
+          type: NotesActionTypes.DELETE_NOTE,
+          payload: note_id,
+        });
+        Swal.fire({
+          title: "Запись успешно удалена",
+          icon: "success",
+          timer: 1000,
+        });
+      } else {
+        Swal.fire({
+          title: "Что-то пошло не так",
+          icon: "error",
+          timer: 1000,
+        });
+      }
+    });
   };
 }
 

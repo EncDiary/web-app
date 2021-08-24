@@ -3,6 +3,7 @@ import { SHA256, AES, enc } from "crypto-js";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { Note, NoteInfo } from "../../types/notes";
 import { useActions } from "../../hooks/useActions";
+import axios from "axios";
 
 interface IExportData {
   title: string;
@@ -35,64 +36,62 @@ const MainSetting: React.FC = () => {
   const password = useTypedSelector((state) => state.app.password);
 
   function exportEncryptedNotes() {
-    fetch(serverUrl + "note/getAllNotes.php", {
-      method: "POST",
+    axios({
+      method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: JSON.stringify({
+      url: serverUrl + "note/getAllNotes.php",
+      data: {
         id: currentBook.id,
         password_hash: SHA256(password).toString(),
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        const notes_data: NoteInfo[] = response["notes"].map((note: Note) => {
-          return {
-            text: note.text,
-            datetime: note.datetime,
-          };
-        });
-
-        const data = {
-          title: currentBook.title,
-          is_encrypted: true,
-          password_hash: SHA256(password).toString(),
-          backup_date: new Date().toLocaleString(),
-          notes: notes_data,
+      },
+    }).then((response) => {
+      const notes_data: NoteInfo[] = response.data.notes.map((note: Note) => {
+        return {
+          text: note.text,
+          datetime: note.datetime,
         };
-        downloadJson(data);
       });
+
+      const data = {
+        title: currentBook.title,
+        is_encrypted: true,
+        password_hash: SHA256(password).toString(),
+        backup_date: new Date().toLocaleString(),
+        notes: notes_data,
+      };
+      downloadJson(data);
+    });
   }
 
   function exportDecryptedNotes() {
-    fetch(serverUrl + "note/getAllNotes.php", {
-      method: "POST",
+    axios({
+      method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: JSON.stringify({
+      url: serverUrl + "note/getAllNotes.php",
+      data: {
         id: currentBook.id,
         password_hash: SHA256(password).toString(),
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        const notes_data: NoteInfo[] = response["notes"].map((note: Note) => {
-          return {
-            text: AES.decrypt(note.text, password).toString(enc.Utf8),
-            datetime: note.datetime,
-          };
-        });
-
-        const data = {
-          title: currentBook.title,
-          is_encrypted: false,
-          backup_date: new Date().toLocaleString(),
-          notes: notes_data,
+      },
+    }).then((response) => {
+      const notes_data: NoteInfo[] = response.data.notes.map((note: Note) => {
+        return {
+          text: AES.decrypt(note.text, password).toString(enc.Utf8),
+          datetime: note.datetime,
         };
-        downloadJson(data);
       });
+
+      const data = {
+        title: currentBook.title,
+        is_encrypted: false,
+        backup_date: new Date().toLocaleString(),
+        notes: notes_data,
+      };
+      downloadJson(data);
+    });
   }
 
   function downloadJson(data: IExportData) {
