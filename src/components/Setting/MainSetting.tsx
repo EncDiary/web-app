@@ -4,6 +4,7 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { Note, NoteInfo } from "../../types/notes";
 import { useActions } from "../../hooks/useActions";
 import axios from "axios";
+import Switcher from "../Generic/Switcher";
 
 interface IExportData {
   title: string;
@@ -133,28 +134,17 @@ const MainSetting: React.FC = () => {
       <h2 className="title settings__title settings__title_secondary">
         Действия над записями
       </h2>
-      <div className="switcher">
-        <label className="checkbox-ios">
-          <input
-            type="checkbox"
-            checked={editAction}
-            onChange={handleCheckEdit}
-          />
-          <span className="checkbox-ios-switch"></span>
-        </label>
-        Редактирование
-      </div>
-      <div className="switcher">
-        <label className="checkbox-ios">
-          <input
-            type="checkbox"
-            checked={deleteAction}
-            onChange={handleCheckDelete}
-          />
-          <span className="checkbox-ios-switch"></span>
-        </label>
-        Удаление
-      </div>
+
+      <Switcher
+        name="Редактирование"
+        isEnabled={editAction}
+        handleChange={handleCheckEdit}
+      />
+      <Switcher
+        name="Удаление"
+        isEnabled={deleteAction}
+        handleChange={handleCheckDelete}
+      />
     </>
   );
 };
