@@ -5,6 +5,7 @@ import { Note, NoteInfo } from "../../types/notes";
 import { useActions } from "../../hooks/useActions";
 import axios from "axios";
 import Switcher from "../Generic/Switcher";
+import SettingsTitle from "../Generic/SettingsTitle";
 
 interface IExportData {
   title: string;
@@ -106,12 +107,8 @@ const MainSetting: React.FC = () => {
 
   return (
     <>
-      <h1 className="title settings__title settings__title_primary">
-        Основные настройки
-      </h1>
-      <h2 className="title settings__title settings__title_secondary">
-        Экспорт записей
-      </h2>
+      <SettingsTitle text="Основные настройки" level={1} />
+      <SettingsTitle text="Экспорт записей" level={2} />
       <ul>
         <li>
           Экспорт в зашифрованном виде
@@ -131,9 +128,7 @@ const MainSetting: React.FC = () => {
         </li>
       </ul>
 
-      <h2 className="title settings__title settings__title_secondary">
-        Действия над записями
-      </h2>
+      <SettingsTitle text="Действия над записями" level={2} />
 
       <Switcher
         name="Редактирование"

@@ -1,11 +1,10 @@
 import React from "react";
+import SettingsTitle from "../Generic/SettingsTitle";
 
 const AboutSetting: React.FC = () => {
   return (
     <>
-      <h1 className="title settings__title settings__title_primary">
-        О проекте
-      </h1>
+      <SettingsTitle text="О проекте" level={1} />
       <p>
         Web Diary - приложение с открытым исходным кодом. Создано idefant.
         Исходный код на Github

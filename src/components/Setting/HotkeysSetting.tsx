@@ -1,12 +1,11 @@
 import React from "react";
+import SettingsTitle from "../Generic/SettingsTitle";
 import HotkeyItem from "./HotkeyItem";
 
 const HotkeysSetting: React.FC = () => {
   return (
     <>
-      <h1 className="title settings__title settings__title_primary">
-        Горячие клавиши
-      </h1>
+      <SettingsTitle text="Горячие клавиши" level={1} />
       <div className="hotkey__list">
         <HotkeyItem combination="Ctrl + S" description="Жирный текст" />
         <HotkeyItem combination="Ctrl + I" description="Курсивный текст" />

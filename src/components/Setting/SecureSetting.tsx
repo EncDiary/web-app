@@ -1,6 +1,7 @@
 import { Formik, Field, Form } from "formik";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
+import SettingsTitle from "../Generic/SettingsTitle";
 
 interface IFormValues {
   old_password: string;
@@ -28,12 +29,8 @@ const SecureSetting: React.FC = () => {
 
   return (
     <>
-      <h1 className="title settings__title settings__title_primary">
-        Безопасность
-      </h1>
-      <h2 className="title settings__title settings__title_secondary">
-        Изменение пароля
-      </h2>
+      <SettingsTitle text="Безопасность" level={1} />
+      <SettingsTitle text="Изменение пароля" level={2} />
       <div>
         Во избежание потерь перед изменением пароля сохраните бэкап всех записей
       </div>
