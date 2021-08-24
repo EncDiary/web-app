@@ -70,7 +70,7 @@ export function createNoteRedux(
       },
     });
 
-    var newNote = {
+    const newNote = {
       text,
       id: response.data.id,
       datetime: response.data.datetime,

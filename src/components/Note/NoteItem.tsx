@@ -17,7 +17,7 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
     (state) => state.settings.displaying.deleteAction
   );
 
-  var note_time = new Date(note.datetime);
+  const note_time = new Date(note.datetime);
 
   function getDate() {
     return note_time.toLocaleString("ru", {

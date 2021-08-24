@@ -13,7 +13,7 @@ const BookItem: React.FC<BookItemProps> = ({ book }) => {
 
   const isActiveRedux = useTypedSelector((state) => state.books.currentBook);
 
-  var classItem = "open__last-item";
+  let classItem = "open__last-item";
   if (isActiveRedux.id === book.id) {
     classItem += " open__last-item-active";
   }

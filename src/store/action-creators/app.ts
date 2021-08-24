@@ -33,7 +33,7 @@ export function unlockBookRedux(password: string, currentBook: Book) {
         payload: currentBook,
       });
     } else {
-      var input_field = document.getElementById("enter_password");
+      const input_field = document.getElementById("enter_password");
       input_field?.classList.add("input-shake", "input-error");
       setTimeout(function () {
         input_field?.classList.remove("input-shake");
@@ -100,7 +100,7 @@ export function changePasswordRedux(
       },
     });
 
-    var notesWithNewPassword = await responseFetch.data.notes.map(
+    const notesWithNewPassword = await responseFetch.data.notes.map(
       (note: Note) => {
         const decryptedText = AES.decrypt(note.text, password).toString(
           enc.Utf8

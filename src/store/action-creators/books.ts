@@ -23,7 +23,7 @@ export function createBookRedux(title: string, password: string) {
       },
     });
 
-    var newBook = {
+    const newBook = {
       id: response.data.id,
       title,
     };

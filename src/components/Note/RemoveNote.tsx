@@ -11,7 +11,7 @@ interface RemoveNoteProps {
 
 const RemoveNote: React.FC<RemoveNoteProps> = ({ note }) => {
   function getSlicedText(text: string) {
-    var sliced = text.slice(0, 100);
+    let sliced = text.slice(0, 100);
     if (sliced.length < text.length) {
       sliced += "...";
     }
