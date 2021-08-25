@@ -18,6 +18,7 @@ export interface AppState {
   showSettings: settingsTabTypes;
   currentOpeningTab: currentOpeningTabTypes;
   isNotesOver: boolean;
+  isLoading: boolean;
 }
 
 export enum AppActionTypes {
@@ -27,6 +28,7 @@ export enum AppActionTypes {
   SET_CURRENT_OPENING_TAB = "APP/SET_CURRENT_OPENING_TAB",
   SET_NOTES_OVER = "APP/SET_NOTES_OVER",
   CHANGE_PASSWORD = "APP/CHANGE_PASSWORD",
+  SET_PRELOADER = "APP/SET_PRELOADER",
 }
 
 interface EnterPasswordAction {
@@ -58,10 +60,16 @@ interface ChangePasswordAction {
   payload: string;
 }
 
+interface SetPreloaderAction {
+  type: AppActionTypes.SET_PRELOADER;
+  payload: boolean;
+}
+
 export type AppAction =
   | EnterPasswordAction
   | LockBookAction
   | SetShowingSettingsAction
   | SetCurrentTabAction
   | SetNotesOverAction
-  | ChangePasswordAction;
+  | ChangePasswordAction
+  | SetPreloaderAction;

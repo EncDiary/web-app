@@ -11,6 +11,7 @@ const initialState: AppState = {
   showSettings: settingsTabTypes.None,
   currentOpeningTab: currentOpeningTabTypes.Open,
   isNotesOver: false,
+  isLoading: false,
 };
 
 export const appReducer = (
@@ -35,6 +36,9 @@ export const appReducer = (
 
     case AppActionTypes.CHANGE_PASSWORD:
       return { ...state, password: action.payload };
+
+    case AppActionTypes.SET_PRELOADER:
+      return { ...state, isLoading: action.payload };
 
     default:
       return state;

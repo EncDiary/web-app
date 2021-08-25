@@ -6,6 +6,7 @@ import { AppActionTypes } from "../../types/app";
 import { Book } from "../../types/books";
 import { Note, NotesActionTypes } from "../../types/notes";
 import axios from "axios";
+import { setLoading } from "./app";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -57,36 +58,45 @@ export function createNoteRedux(
   clearForm: () => void
 ) {
   return async (dispatch: Dispatch<Actions>) => {
-    const response = await axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      url: serverUrl + "note/addNote.php",
-      data: {
-        text: AES.encrypt(text, password).toString(),
-        book_id: currentBook_id,
-        password_hash: SHA256(password).toString(),
-      },
-    });
+    dispatch(setLoading(true) as Actions);
 
-    const newNote = {
-      text,
-      id: response.data.id,
-      datetime: response.data.datetime,
-    };
+    try {
+      const response = await axios({
+        method: "post",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        url: serverUrl + "note/addNote.php",
+        data: {
+          text: AES.encrypt(text, password).toString(),
+          book_id: currentBook_id,
+          password_hash: SHA256(password).toString(),
+        },
+      });
 
-    dispatch({
-      type: NotesActionTypes.CREATE_NOTE,
-      payload: newNote,
-    });
+      const newNote = {
+        text,
+        id: response.data.id,
+        datetime: response.data.datetime,
+      };
 
-    Swal.fire({
-      title: "Запись успешно добавлена",
-      icon: "success",
-      timer: 1000,
-    });
-    clearForm();
+      dispatch({
+        type: NotesActionTypes.CREATE_NOTE,
+        payload: newNote,
+      });
+
+      Swal.fire({
+        title: "Запись успешно добавлена",
+        icon: "success",
+        timer: 1000,
+      });
+      clearForm();
+    } catch (error) {
+      console.log("Сервер не доступен");
+      console.log(error);
+    } finally {
+      dispatch(setLoading(false) as Actions);
+    }
   };
 }
 
@@ -97,68 +107,86 @@ export function editNoteRedux(
   handleClose: () => void
 ) {
   return async (dispatch: Dispatch<Actions>) => {
-    const response = await axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      url: serverUrl + "note/editNote.php",
-      data: {
-        id: note_id,
-        text: AES.encrypt(text, password).toString(),
-        password_hash: SHA256(password).toString(),
-      },
-    });
+    dispatch(setLoading(true) as Actions);
 
-    if (response.data.status) {
-      dispatch({
-        type: NotesActionTypes.EDIT_NOTE,
-        payload: {
+    try {
+      const response = await axios({
+        method: "post",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        url: serverUrl + "note/editNote.php",
+        data: {
           id: note_id,
-          text,
+          text: AES.encrypt(text, password).toString(),
+          password_hash: SHA256(password).toString(),
         },
       });
 
-      Swal.fire({
-        title: "Запись успешно отредактирована",
-        icon: "success",
-        timer: 1000,
-      });
-      handleClose();
+      if (response.data.status) {
+        dispatch({
+          type: NotesActionTypes.EDIT_NOTE,
+          payload: {
+            id: note_id,
+            text,
+          },
+        });
+
+        Swal.fire({
+          title: "Запись успешно отредактирована",
+          icon: "success",
+          timer: 1000,
+        });
+        handleClose();
+      }
+    } catch (error) {
+      console.log("Сервер не доступен");
+      console.log(error);
+    } finally {
+      dispatch(setLoading(false) as Actions);
     }
   };
 }
 
 export function deleteNoteRedux(note_id: number, password: string) {
   return async (dispatch: Dispatch<Actions>) => {
-    const response = await axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      url: serverUrl + "note/deleteNote.php",
-      data: {
-        id: note_id,
-        password_hash: SHA256(password).toString(),
-      },
-    });
+    dispatch(setLoading(true) as Actions);
 
-    if (response.data.status) {
-      dispatch({
-        type: NotesActionTypes.DELETE_NOTE,
-        payload: note_id,
+    try {
+      const response = await axios({
+        method: "post",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        url: serverUrl + "note/deleteNote.php",
+        data: {
+          id: note_id,
+          password_hash: SHA256(password).toString(),
+        },
       });
-      Swal.fire({
-        title: "Запись успешно удалена",
-        icon: "success",
-        timer: 1000,
-      });
-    } else {
-      Swal.fire({
-        title: "Что-то пошло не так",
-        icon: "error",
-        timer: 1000,
-      });
+
+      if (response.data.status) {
+        dispatch({
+          type: NotesActionTypes.DELETE_NOTE,
+          payload: note_id,
+        });
+        Swal.fire({
+          title: "Запись успешно удалена",
+          icon: "success",
+          timer: 1000,
+        });
+      } else {
+        Swal.fire({
+          title: "Что-то пошло не так",
+          icon: "error",
+          timer: 1000,
+        });
+      }
+    } catch (error) {
+      console.log("Сервер не доступен");
+      console.log(error);
+    } finally {
+      dispatch(setLoading(false) as Actions);
     }
   };
 }

@@ -27,7 +27,7 @@ const Diary: React.FC = () => {
   const [fetching, setFetching] = useState(true);
 
   const currentBook = useTypedSelector((state) => state.books.currentBook);
-  const { password, isNotesOver, showSettings } = useTypedSelector(
+  const { password, isNotesOver, showSettings, isLoading } = useTypedSelector(
     (state) => state.app
   );
   const notes = useTypedSelector((state) => state.notes.notes);
@@ -54,12 +54,14 @@ const Diary: React.FC = () => {
   };
 
   return (
+    //div className="diary"
     <>
       <Header />
 
       <div id="main-content" ref={mainContentRef}>
         {
           <>
+            {/* <div className="lds-dual-ring"></div> */}
             <AddNote scrollToNotes={scrollToNotes} />
             <section className="notes" ref={notesRef}>
               <Container>

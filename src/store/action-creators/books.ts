@@ -6,76 +6,95 @@ import { AppActionTypes, currentOpeningTabTypes } from "../../types/app";
 import { Note } from "../../types/notes";
 import { Actions } from "../../types";
 import axios from "axios";
+import { setLoading } from "./app";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 export function createBookRedux(title: string, password: string) {
   return async (dispatch: Dispatch<Actions>) => {
-    const response = await axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      url: serverUrl + "book/addBook.php",
-      data: {
-        title: title,
-        password_hash: SHA256(password).toString(),
-      },
-    });
+    dispatch(setLoading(true) as Actions);
 
-    const newBook = {
-      id: response.data.id,
-      title,
-    };
-    Swal.fire({
-      title: "Новая книга успешно добавлена",
-      icon: "success",
-      timer: 1000,
-    });
-    dispatch({
-      type: BooksActionTypes.CREATE_BOOK,
-      payload: newBook,
-    });
-    dispatch({
-      type: AppActionTypes.SET_CURRENT_OPENING_TAB,
-      payload: currentOpeningTabTypes.Open,
-    });
-  };
-}
+    try {
+      const response = await axios({
+        method: "post",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        url: serverUrl + "book/addBook.php",
+        data: {
+          title: title,
+          password_hash: SHA256(password).toString(),
+        },
+      });
 
-export function findBookRedux(title: string) {
-  return async (dispatch: Dispatch<Actions>) => {
-    const response = await axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      url: serverUrl + "book/findBook.php",
-      data: {
-        title: title,
-      },
-    });
-
-    if (response.data.status) {
+      const newBook = {
+        id: response.data.id,
+        title,
+      };
       Swal.fire({
-        title: "Книга найдена и готова к расшифровке",
+        title: "Новая книга успешно добавлена",
         icon: "success",
         timer: 1000,
       });
       dispatch({
-        type: BooksActionTypes.FIND_BOOK,
-        payload: response.data.book,
+        type: BooksActionTypes.CREATE_BOOK,
+        payload: newBook,
       });
       dispatch({
         type: AppActionTypes.SET_CURRENT_OPENING_TAB,
         payload: currentOpeningTabTypes.Open,
       });
-    } else {
-      Swal.fire({
-        title: "Такой книги нет",
-        icon: "error",
-        timer: 1000,
+    } catch (error) {
+      console.log("Сервер не доступен");
+      console.log(error);
+    } finally {
+      dispatch(setLoading(false) as Actions);
+    }
+  };
+}
+
+export function findBookRedux(title: string) {
+  return async (dispatch: Dispatch<Actions>) => {
+    dispatch(setLoading(true) as Actions);
+
+    try {
+      const response = await axios({
+        method: "post",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        url: serverUrl + "book/findBook.php",
+        data: {
+          title: title,
+        },
       });
+
+      if (response.data.status) {
+        Swal.fire({
+          title: "Книга найдена и готова к расшифровке",
+          icon: "success",
+          timer: 1000,
+        });
+        dispatch({
+          type: BooksActionTypes.FIND_BOOK,
+          payload: response.data.book,
+        });
+        dispatch({
+          type: AppActionTypes.SET_CURRENT_OPENING_TAB,
+          payload: currentOpeningTabTypes.Open,
+        });
+      } else {
+        Swal.fire({
+          title: "Такой книги нет",
+          icon: "error",
+          timer: 1000,
+        });
+      }
+    } catch (error) {
+      console.log("Сервер не доступен");
+      console.log(error);
+    } finally {
+      dispatch(setLoading(false) as Actions);
     }
   };
 }
@@ -103,47 +122,56 @@ export function moveBookToTopRedux(book: Book) {
 
 export function importBookRedux(title: string, password: string, file: Note[]) {
   return async (dispatch: Dispatch<Actions>) => {
-    const notes = file.map((note) => {
-      note.text = AES.encrypt(note.text, password).toString();
-      return note;
-    });
+    dispatch(setLoading(true) as Actions);
 
-    const response = await axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      url: serverUrl + "book/importBook.php",
-      data: {
-        title: title,
-        password_hash: SHA256(password).toString(),
-        notes: notes,
-      },
-    });
-
-    if (response.data.status) {
-      Swal.fire({
-        title: "Книга успешно импортирована",
-        icon: "success",
-        timer: 1000,
+    try {
+      const notes = file.map((note) => {
+        note.text = AES.encrypt(note.text, password).toString();
+        return note;
       });
-      dispatch({
-        type: BooksActionTypes.IMPORT_BOOK,
-        payload: {
-          id: response.data.book.id,
+
+      const response = await axios({
+        method: "post",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        url: serverUrl + "book/importBook.php",
+        data: {
           title: title,
+          password_hash: SHA256(password).toString(),
+          notes: notes,
         },
       });
-      dispatch({
-        type: AppActionTypes.SET_CURRENT_OPENING_TAB,
-        payload: currentOpeningTabTypes.Open,
-      });
-    } else {
-      Swal.fire({
-        title: "Произошла ошибка",
-        icon: "error",
-        timer: 1000,
-      });
+
+      if (response.data.status) {
+        Swal.fire({
+          title: "Книга успешно импортирована",
+          icon: "success",
+          timer: 1000,
+        });
+        dispatch({
+          type: BooksActionTypes.IMPORT_BOOK,
+          payload: {
+            id: response.data.book.id,
+            title: title,
+          },
+        });
+        dispatch({
+          type: AppActionTypes.SET_CURRENT_OPENING_TAB,
+          payload: currentOpeningTabTypes.Open,
+        });
+      } else {
+        Swal.fire({
+          title: "Произошла ошибка",
+          icon: "error",
+          timer: 1000,
+        });
+      }
+    } catch (error) {
+      console.log("Сервер не доступен");
+      console.log(error);
+    } finally {
+      dispatch(setLoading(false) as Actions);
     }
   };
 }

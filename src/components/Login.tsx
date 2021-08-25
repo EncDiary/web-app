@@ -9,10 +9,12 @@ import BooksList from "./Book/BookList";
 import OpenBook from "./Book/OpenBook";
 
 const Login: React.FC = () => {
-  const currentTab = useTypedSelector((state) => state.app.currentOpeningTab);
+  const { currentOpeningTab, isLoading } = useTypedSelector(
+    (state) => state.app
+  );
 
   function showCurrentTab() {
-    switch (currentTab) {
+    switch (currentOpeningTab) {
       case currentOpeningTabTypes.Open:
         return (
           <div className="open__pass-area">
@@ -31,7 +33,10 @@ const Login: React.FC = () => {
     }
   }
 
+  console.log(isLoading);
+
   return (
+    // <section className={(isLoading ? "blur " : "") + "open"}>
     <section className="open">
       <BookActionList />
 

@@ -4,6 +4,7 @@ import Login from "./Login";
 import { useIdleTimer } from "react-idle-timer";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useActions } from "../hooks/useActions";
+import Loader from "./Generic/Loader";
 
 const App: React.FC = () => {
   const { lockBookRedux } = useActions();
@@ -18,9 +19,16 @@ const App: React.FC = () => {
     debounce: 500,
   });
 
-  const passwordRedux = useTypedSelector((state) => state.app.password);
+  const { password, isLoading } = useTypedSelector((state) => state.app);
 
-  return passwordRedux ? <Diary /> : <Login />;
+  return (
+    <>
+      {isLoading && <Loader />}
+      <div className={(isLoading ? "blur" : "") + " app"}>
+        {password ? <Diary /> : <Login />}
+      </div>
+    </>
+  );
 };
 
 export default App;

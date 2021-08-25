@@ -9,35 +9,51 @@ import axios from "axios";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
+export function setLoading(isLoading: boolean) {
+  return {
+    type: AppActionTypes.SET_PRELOADER,
+    payload: isLoading,
+  };
+}
+
 export function unlockBookRedux(password: string, currentBook: Book) {
   return async (dispatch: Dispatch<Actions>) => {
-    const response = await axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      url: serverUrl + "checkPassword.php",
-      data: {
-        id: currentBook.id,
-        password_hash: SHA256(password).toString(),
-      },
-    });
+    dispatch(setLoading(true) as Actions);
 
-    if (response.data.status) {
-      dispatch({
-        type: AppActionTypes.ENTER_PASSWORD,
-        payload: password,
+    try {
+      const response = await axios({
+        method: "post",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        url: serverUrl + "checkPassword.php",
+        data: {
+          id: currentBook.id,
+          password_hash: SHA256(password).toString(),
+        },
       });
-      dispatch({
-        type: BooksActionTypes.MOVE_BOOK_TO_TOP,
-        payload: currentBook,
-      });
-    } else {
-      const input_field = document.getElementById("enter_password");
-      input_field?.classList.add("input-shake", "input-error");
-      setTimeout(function () {
-        input_field?.classList.remove("input-shake");
-      }, 1000);
+
+      if (response.data.status) {
+        dispatch({
+          type: AppActionTypes.ENTER_PASSWORD,
+          payload: password,
+        });
+        dispatch({
+          type: BooksActionTypes.MOVE_BOOK_TO_TOP,
+          payload: currentBook,
+        });
+      } else {
+        const input_field = document.getElementById("enter_password");
+        input_field?.classList.add("input-shake", "input-error");
+        setTimeout(function () {
+          input_field?.classList.remove("input-shake");
+        }, 1000);
+      }
+    } catch (error) {
+      console.log("Сервер не доступен");
+      console.log(error);
+    } finally {
+      dispatch(setLoading(false) as Actions);
     }
   };
 }
@@ -88,65 +104,74 @@ export function changePasswordRedux(
   formFields: { new_password: string }
 ) {
   return async (dispatch: Dispatch<Actions>) => {
-    const responseFetch = await axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      url: serverUrl + "note/getAllNotes.php",
-      data: {
-        id: currentBook.id,
-        password_hash: SHA256(password).toString(),
-      },
-    });
+    dispatch(setLoading(true) as Actions);
 
-    const notesWithNewPassword = await responseFetch.data.notes.map(
-      (note: Note) => {
-        const decryptedText = AES.decrypt(note.text, password).toString(
-          enc.Utf8
-        );
-        const encryptedText = AES.encrypt(
-          decryptedText,
-          formFields.new_password
-        ).toString();
+    try {
+      const responseFetch = await axios({
+        method: "post",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        url: serverUrl + "note/getAllNotes.php",
+        data: {
+          id: currentBook.id,
+          password_hash: SHA256(password).toString(),
+        },
+      });
 
-        return {
-          id: note.id,
-          text: encryptedText,
-        };
+      const notesWithNewPassword = await responseFetch.data.notes.map(
+        (note: Note) => {
+          const decryptedText = AES.decrypt(note.text, password).toString(
+            enc.Utf8
+          );
+          const encryptedText = AES.encrypt(
+            decryptedText,
+            formFields.new_password
+          ).toString();
+
+          return {
+            id: note.id,
+            text: encryptedText,
+          };
+        }
+      );
+
+      const responseAdd = await axios({
+        method: "post",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        url: serverUrl + "changePassword.php",
+        data: {
+          book_id: currentBook.id,
+          old_password_hash: SHA256(password).toString(),
+          new_password_hash: SHA256(formFields.new_password).toString(),
+          notes: notesWithNewPassword,
+        },
+      });
+
+      if (responseAdd.data.status) {
+        Swal.fire({
+          title: "Пароль успешно изменен",
+          icon: "success",
+          timer: 1000,
+        });
+        dispatch({
+          type: AppActionTypes.CHANGE_PASSWORD,
+          payload: formFields.new_password,
+        });
+      } else {
+        Swal.fire({
+          title: "Ошибка смены пароля",
+          icon: "error",
+          timer: 1000,
+        });
       }
-    );
-
-    const responseAdd = await axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      url: serverUrl + "changePassword.php",
-      data: {
-        book_id: currentBook.id,
-        old_password_hash: SHA256(password).toString(),
-        new_password_hash: SHA256(formFields.new_password).toString(),
-        notes: notesWithNewPassword,
-      },
-    });
-
-    if (responseAdd.data.status) {
-      Swal.fire({
-        title: "Пароль успешно изменен",
-        icon: "success",
-        timer: 1000,
-      });
-      dispatch({
-        type: AppActionTypes.CHANGE_PASSWORD,
-        payload: formFields.new_password,
-      });
-    } else {
-      Swal.fire({
-        title: "Ошибка смены пароля",
-        icon: "error",
-        timer: 1000,
-      });
+    } catch (error) {
+      console.log("Сервер не доступен");
+      console.log(error);
+    } finally {
+      dispatch(setLoading(false) as Actions);
     }
   };
 }
