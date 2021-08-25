@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { EditIcon } from "../../assets/SvgIcons";
+import { EditIcon } from "../../assets/svg/AppIcons";
 import Button from "../Generic/Button";
 import Title from "../Generic/Title";
 import { useTypedSelector } from "../../hooks/useTypedSelector";

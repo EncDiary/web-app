@@ -5,7 +5,7 @@ import {
   LockIcon,
   MoreIcon,
   SearchIcon,
-} from "../../assets/SvgIcons";
+} from "../../assets/svg/AppIcons";
 import BookActionItem from "./BookActionItem";
 import { currentOpeningTabTypes } from "../../types/app";
 import { useActions } from "../../hooks/useActions";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
-import { EnterIcon } from "../../assets/SvgIcons";
+import { EnterIcon } from "../../assets/svg/AppIcons";
 import { useActions } from "../../hooks/useActions";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 

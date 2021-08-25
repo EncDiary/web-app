@@ -70,7 +70,7 @@ body {
   }
 }
 
-svg {
+svg:not(.wysiwyg__menu-item svg) {
   stroke: var(--text-color);
 }
 
@@ -552,10 +552,15 @@ svg {
     justify-content: center;
     &-group {
       display: flex;
-      margin: 10px 7px;
+      margin: 10px 7px 15px;
     }
     &-item {
       margin: 0 3px;
+      padding: 5px 8px;
+      svg {
+        width: 24px;
+        height: 24px;
+      }
     }
   }
   &__editor .ProseMirror {

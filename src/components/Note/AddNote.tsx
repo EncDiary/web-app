@@ -1,7 +1,7 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import Button from "../Generic/Button";
-import { GoDownIcon } from "../../assets/SvgIcons";
+import { GoDownIcon } from "../../assets/svg/AppIcons";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { EditorContent } from "@tiptap/react";

@@ -11,6 +11,14 @@ import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
 import ListItem from "@tiptap/extension-list-item";
 import Placeholder from "@tiptap/extension-placeholder";
+import {
+  BoldIcon,
+  BulletListIcon,
+  ItalicIcon,
+  OrderedListIcon,
+  RedoIcon,
+  UndoIcon,
+} from "../../assets/svg/EditorIcons";
 
 export const SetEditor = (text: string) => {
   return useEditor({
@@ -45,7 +53,7 @@ export const MenuBar: React.FC<{ editor: Editor | null }> = ({ editor }) => {
             " button wysiwyg__menu-item"
           }
         >
-          bold
+          {BoldIcon}
         </button>
         <button
           onClick={() => editor.chain().focus().toggleItalic().run()}
@@ -55,7 +63,7 @@ export const MenuBar: React.FC<{ editor: Editor | null }> = ({ editor }) => {
               : "button-secondary") + " button wysiwyg__menu-item"
           }
         >
-          italic
+          {ItalicIcon}
         </button>
       </div>
 
@@ -68,7 +76,7 @@ export const MenuBar: React.FC<{ editor: Editor | null }> = ({ editor }) => {
               : "button-secondary") + " button wysiwyg__menu-item"
           }
         >
-          bullet list
+          {BulletListIcon}
         </button>
         <button
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
@@ -78,7 +86,7 @@ export const MenuBar: React.FC<{ editor: Editor | null }> = ({ editor }) => {
               : "button-secondary") + " button wysiwyg__menu-item"
           }
         >
-          ordered list
+          {OrderedListIcon}
         </button>
       </div>
 
@@ -87,13 +95,13 @@ export const MenuBar: React.FC<{ editor: Editor | null }> = ({ editor }) => {
           onClick={() => editor.chain().focus().undo().run()}
           className="button-secondary button wysiwyg__menu-item"
         >
-          undo
+          {UndoIcon}
         </button>
         <button
           onClick={() => editor.chain().focus().redo().run()}
           className="button-secondary button wysiwyg__menu-item"
         >
-          redo
+          {RedoIcon}
         </button>
       </div>
     </div>

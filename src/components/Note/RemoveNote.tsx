@@ -1,6 +1,6 @@
 import React from "react";
 import Swal from "sweetalert2";
-import { DeleteIcon } from "../../assets/SvgIcons";
+import { DeleteIcon } from "../../assets/svg/AppIcons";
 import { useActions } from "../../hooks/useActions";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { Note } from "../../types/notes";

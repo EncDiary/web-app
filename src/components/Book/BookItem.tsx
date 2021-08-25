@@ -1,5 +1,5 @@
 import React from "react";
-import { CrossIcon } from "../../assets/SvgIcons";
+import { CrossIcon } from "../../assets/svg/AppIcons";
 import { useActions } from "../../hooks/useActions";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { Book } from "../../types/books";

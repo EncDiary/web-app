@@ -1,5 +1,5 @@
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { InfoIcon, SettingIcon, LockIcon } from "../../assets/SvgIcons";
+import { InfoIcon, SettingIcon, LockIcon } from "../../assets/svg/AppIcons";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { settingsTabTypes } from "../../types/app";
