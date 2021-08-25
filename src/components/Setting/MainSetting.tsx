@@ -1,12 +1,8 @@
 import Button from "../Generic/Button";
-import { SHA256, AES, enc } from "crypto-js";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { Note, NoteInfo } from "../../types/notes";
 import { useActions } from "../../hooks/useActions";
-import axios from "axios";
 import Switcher from "../Generic/Switcher";
 import SettingsTitle from "../Generic/SettingsTitle";
-import { Book } from "../../types/books";
 import { confirmationAlert } from "../Generic/SweetAlert";
 
 const MainSetting: React.FC = () => {
@@ -27,76 +23,10 @@ const MainSetting: React.FC = () => {
     setDeleteActionRedux(!deleteAction);
   }
 
-  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const currentBook = useTypedSelector((state) => state.books.currentBook);
   const password = useTypedSelector((state) => state.app.password);
 
-  const getEncryptedData = (notes: Note[]) => {
-    const notes_data = notes.map((note: Note) => {
-      return {
-        text: note.text,
-        datetime: note.datetime,
-      };
-    });
-
-    return {
-      title: currentBook.title,
-      is_encrypted: true,
-      password_hash: SHA256(password).toString(),
-      backup_date: new Date().toLocaleString(),
-      notes: notes_data,
-    };
-  };
-
-  const getDecryptedData = (notes: Note[]) => {
-    const notes_data = notes.map((note: Note) => {
-      return {
-        text: AES.decrypt(note.text, password).toString(enc.Utf8),
-        datetime: note.datetime,
-      };
-    });
-
-    return {
-      title: currentBook.title,
-      is_encrypted: false,
-      backup_date: new Date().toLocaleString(),
-      notes: notes_data,
-    };
-  };
-
-  function fetchAllNotes(currentBook: Book, password: string) {
-    return axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      url: serverUrl + "note/getAllNotes.php",
-      data: {
-        id: currentBook.id,
-        password_hash: SHA256(password).toString(),
-      },
-    });
-  }
-
-  async function exportNotes(isEncrypted: boolean) {
-    const response = await fetchAllNotes(currentBook, password);
-
-    const data = isEncrypted
-      ? getEncryptedData(response.data.notes)
-      : getDecryptedData(response.data.notes);
-
-    const filename =
-      (isEncrypted ? "Encrypt" : "Decrypt") +
-      " - Web Diary - " +
-      data.backup_date;
-
-    const json = JSON.stringify(data);
-    const blob = new Blob([json], { type: "application/json" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `${filename}.json`;
-    link.click();
-  }
+  const { exportNotesRedux } = useActions();
 
   const confirmGetDecryptedBackup = async () => {
     const result = await confirmationAlert({
@@ -104,7 +34,7 @@ const MainSetting: React.FC = () => {
       text: "Хранение такого файла может быть не безопасно",
     });
     if (result.isConfirmed) {
-      exportNotes(false);
+      exportNotesRedux(currentBook, password, false);
     }
   };
 
@@ -116,7 +46,7 @@ const MainSetting: React.FC = () => {
         <li>
           Экспорт в зашифрованном виде
           <Button
-            onClick={() => exportNotes(true)}
+            onClick={() => exportNotesRedux(currentBook, password, true)}
             text="Скачать"
             className="button settings__button_inline"
           />
