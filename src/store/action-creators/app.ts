@@ -1,12 +1,15 @@
 import { SHA256, AES, enc } from "crypto-js";
-import Swal from "sweetalert2";
 import { Dispatch } from "redux";
 import { AppActionTypes, settingsTabTypes } from "../../types/app";
 import { Book, BooksActionTypes } from "../../types/books";
 import { Note, NotesActionTypes } from "../../types/notes";
 import { Actions } from "../../types";
 import axios from "axios";
-import { serverError } from "../../components/Generic/SweetAlert";
+import {
+  errorAlert,
+  serverErrorAlert,
+  successAlert,
+} from "../../components/Generic/SweetAlert";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -51,7 +54,7 @@ export function unlockBookRedux(password: string, currentBook: Book) {
         }, 1000);
       }
     } catch {
-      Swal.fire(serverError);
+      serverErrorAlert();
     } finally {
       dispatch(setLoading(false) as Actions);
     }
@@ -151,24 +154,16 @@ export function changePasswordRedux(
       });
 
       if (responseAdd.data.status) {
-        Swal.fire({
-          title: "Пароль успешно изменен",
-          icon: "success",
-          timer: 1000,
-        });
+        successAlert("Пароль успешно изменен");
         dispatch({
           type: AppActionTypes.CHANGE_PASSWORD,
           payload: formFields.new_password,
         });
       } else {
-        Swal.fire({
-          title: "Ошибка смены пароля",
-          icon: "error",
-          timer: 1000,
-        });
+        errorAlert("Ошибка смены пароля");
       }
     } catch (error) {
-      Swal.fire(serverError);
+      serverErrorAlert();
     } finally {
       dispatch(setLoading(false) as Actions);
     }

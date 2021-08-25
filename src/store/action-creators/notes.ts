@@ -1,13 +1,16 @@
 import { SHA256, AES, enc } from "crypto-js";
 import { Dispatch } from "redux";
-import Swal from "sweetalert2";
 import { Actions } from "../../types";
 import { AppActionTypes } from "../../types/app";
 import { Book } from "../../types/books";
 import { Note, NotesActionTypes } from "../../types/notes";
 import axios from "axios";
 import { setLoading } from "./app";
-import { serverError } from "../../components/Generic/SweetAlert";
+import {
+  errorAlert,
+  serverErrorAlert,
+  successAlert,
+} from "../../components/Generic/SweetAlert";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -85,15 +88,10 @@ export function createNoteRedux(
         type: NotesActionTypes.CREATE_NOTE,
         payload: newNote,
       });
-
-      Swal.fire({
-        title: "Запись успешно добавлена",
-        icon: "success",
-        timer: 1000,
-      });
+      successAlert("Запись успешно добавлена");
       clearForm();
     } catch (error) {
-      Swal.fire(serverError);
+      serverErrorAlert();
     } finally {
       dispatch(setLoading(false) as Actions);
     }
@@ -131,16 +129,11 @@ export function editNoteRedux(
             text,
           },
         });
-
-        Swal.fire({
-          title: "Запись успешно отредактирована",
-          icon: "success",
-          timer: 1000,
-        });
+        successAlert("Запись успешно отредактирована");
         handleClose();
       }
     } catch (error) {
-      Swal.fire(serverError);
+      serverErrorAlert();
     } finally {
       dispatch(setLoading(false) as Actions);
     }
@@ -169,20 +162,12 @@ export function deleteNoteRedux(note_id: number, password: string) {
           type: NotesActionTypes.DELETE_NOTE,
           payload: note_id,
         });
-        Swal.fire({
-          title: "Запись успешно удалена",
-          icon: "success",
-          timer: 1000,
-        });
+        successAlert("Запись успешно удалена");
       } else {
-        Swal.fire({
-          title: "Что-то пошло не так",
-          icon: "error",
-          timer: 1000,
-        });
+        errorAlert("Что-то пошло не так");
       }
     } catch (error) {
-      Swal.fire(serverError);
+      serverErrorAlert();
     } finally {
       dispatch(setLoading(false) as Actions);
     }

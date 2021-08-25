@@ -1,9 +1,9 @@
 import React from "react";
-import Swal from "sweetalert2";
 import { DeleteIcon } from "../../assets/svg/AppIcons";
 import { useActions } from "../../hooks/useActions";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { Note } from "../../types/notes";
+import { confirmationAlert } from "../Generic/SweetAlert";
 
 interface RemoveNoteProps {
   note: Note;
@@ -23,20 +23,10 @@ const RemoveNote: React.FC<RemoveNoteProps> = ({ note }) => {
   const password = useTypedSelector((state) => state.app.password);
 
   async function getModalWindow() {
-    const result = await Swal.fire({
-      title: "Удалить запись",
-      text: getSlicedText(note.text.replace(/<[^>]+>/g, "")),
-      icon: "error",
-      showCloseButton: true,
-
-      confirmButtonText: "Да",
-      confirmButtonColor: "#51ac00",
-
-      cancelButtonText: "Нет, не надо",
-      cancelButtonColor: "#d33",
-      showCancelButton: true,
-      focusCancel: true,
-    });
+    const result = await confirmationAlert(
+      "Удалить запись",
+      getSlicedText(note.text.replace(/<[^>]+>/g, " "))
+    );
 
     if (result.isConfirmed) {
       deleteNoteRedux(note.id, password);

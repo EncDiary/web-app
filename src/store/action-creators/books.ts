@@ -1,5 +1,4 @@
 import { SHA256, AES } from "crypto-js";
-import Swal from "sweetalert2";
 import { Dispatch } from "redux";
 import { Book, BooksActionTypes } from "../../types/books";
 import { AppActionTypes, currentOpeningTabTypes } from "../../types/app";
@@ -7,7 +6,11 @@ import { Note } from "../../types/notes";
 import { Actions } from "../../types";
 import axios from "axios";
 import { setLoading } from "./app";
-import { serverError } from "../../components/Generic/SweetAlert";
+import {
+  errorAlert,
+  serverErrorAlert,
+  successAlert,
+} from "../../components/Generic/SweetAlert";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -32,11 +35,7 @@ export function createBookRedux(title: string, password: string) {
         id: response.data.id,
         title,
       };
-      Swal.fire({
-        title: "Новая книга успешно добавлена",
-        icon: "success",
-        timer: 1000,
-      });
+      successAlert("Новая книга успешно добавлена");
       dispatch({
         type: BooksActionTypes.CREATE_BOOK,
         payload: newBook,
@@ -46,7 +45,7 @@ export function createBookRedux(title: string, password: string) {
         payload: currentOpeningTabTypes.Open,
       });
     } catch (error) {
-      Swal.fire(serverError);
+      serverErrorAlert();
     } finally {
       dispatch(setLoading(false) as Actions);
     }
@@ -70,11 +69,7 @@ export function findBookRedux(title: string) {
       });
 
       if (response.data.status) {
-        Swal.fire({
-          title: "Книга найдена и готова к расшифровке",
-          icon: "success",
-          timer: 1000,
-        });
+        successAlert("Книга найдена и готова к расшифровке");
         dispatch({
           type: BooksActionTypes.FIND_BOOK,
           payload: response.data.book,
@@ -84,14 +79,10 @@ export function findBookRedux(title: string) {
           payload: currentOpeningTabTypes.Open,
         });
       } else {
-        Swal.fire({
-          title: "Такой книги нет",
-          icon: "error",
-          timer: 1000,
-        });
+        errorAlert("Такой книги нет");
       }
     } catch (error) {
-      Swal.fire(serverError);
+      serverErrorAlert();
     } finally {
       dispatch(setLoading(false) as Actions);
     }
@@ -143,11 +134,7 @@ export function importBookRedux(title: string, password: string, file: Note[]) {
       });
 
       if (response.data.status) {
-        Swal.fire({
-          title: "Книга успешно импортирована",
-          icon: "success",
-          timer: 1000,
-        });
+        successAlert("Книга успешно импортирована");
         dispatch({
           type: BooksActionTypes.IMPORT_BOOK,
           payload: {
@@ -160,14 +147,10 @@ export function importBookRedux(title: string, password: string, file: Note[]) {
           payload: currentOpeningTabTypes.Open,
         });
       } else {
-        Swal.fire({
-          title: "Произошла ошибка",
-          icon: "error",
-          timer: 1000,
-        });
+        errorAlert("Произошла ошибка");
       }
     } catch (error) {
-      Swal.fire(serverError);
+      serverErrorAlert();
     } finally {
       dispatch(setLoading(false) as Actions);
     }
