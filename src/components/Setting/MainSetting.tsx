@@ -7,6 +7,7 @@ import axios from "axios";
 import Switcher from "../Generic/Switcher";
 import SettingsTitle from "../Generic/SettingsTitle";
 import { Book } from "../../types/books";
+import { confirmationAlert } from "../Generic/SweetAlert";
 
 const MainSetting: React.FC = () => {
   const { setEditActionRedux, setDeleteActionRedux } = useActions();
@@ -97,6 +98,16 @@ const MainSetting: React.FC = () => {
     link.click();
   }
 
+  const confirmGetDecryptedBackup = async () => {
+    const result = await confirmationAlert({
+      title: "Создать незашифрованный бэкап",
+      text: "Хранение такого файла может быть не безопасно",
+    });
+    if (result.isConfirmed) {
+      exportNotes(false);
+    }
+  };
+
   return (
     <>
       <SettingsTitle text="Основные настройки" level={1} />
@@ -113,7 +124,8 @@ const MainSetting: React.FC = () => {
         <li>
           Экспорт в чистом виде (небезопасно)
           <Button
-            onClick={() => exportNotes(false)}
+            onClick={() => confirmGetDecryptedBackup()}
+            // onClick={() => exportNotes(false)}
             text="Скачать"
             className="button settings__button_inline"
           />

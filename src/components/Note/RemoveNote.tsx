@@ -23,10 +23,10 @@ const RemoveNote: React.FC<RemoveNoteProps> = ({ note }) => {
   const password = useTypedSelector((state) => state.app.password);
 
   async function getModalWindow() {
-    const result = await confirmationAlert(
-      "Удалить запись",
-      getSlicedText(note.text.replace(/<[^>]+>/g, " "))
-    );
+    const result = await confirmationAlert({
+      title: "Удалить запись",
+      text: getSlicedText(note.text.replace(/<[^>]+>/g, " ")),
+    });
 
     if (result.isConfirmed) {
       deleteNoteRedux(note.id, password);

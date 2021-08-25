@@ -24,11 +24,17 @@ export const errorAlert = (title: string) => {
   });
 };
 
-export const confirmationAlert = (title: string, text: string) => {
+export const confirmationAlert = ({
+  title,
+  text,
+}: {
+  title: string;
+  text: string;
+}) => {
   return Swal.fire({
     title,
     text,
-    icon: "error",
+    icon: "warning",
 
     confirmButtonText: "Да",
     confirmButtonColor: "#51ac00",
