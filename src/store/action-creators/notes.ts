@@ -7,7 +7,7 @@ import { Book } from "../../types/books";
 import { Note, NotesActionTypes } from "../../types/notes";
 import axios from "axios";
 
-const serverUrl = "https://cs53547.tmweb.ru/";
+const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 export function fetchNotesRedux(
   currentBook: Book,

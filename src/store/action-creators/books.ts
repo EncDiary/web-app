@@ -7,7 +7,7 @@ import { Note } from "../../types/notes";
 import { Actions } from "../../types";
 import axios from "axios";
 
-const serverUrl = "https://cs53547.tmweb.ru/";
+const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 export function createBookRedux(title: string, password: string) {
   return async (dispatch: Dispatch<Actions>) => {

@@ -7,7 +7,7 @@ import { Note, NotesActionTypes } from "../../types/notes";
 import { Actions } from "../../types";
 import axios from "axios";
 
-const serverUrl = "https://cs53547.tmweb.ru/";
+const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 export function unlockBookRedux(password: string, currentBook: Book) {
   return async (dispatch: Dispatch<Actions>) => {

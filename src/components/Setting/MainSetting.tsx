@@ -26,7 +26,7 @@ const MainSetting: React.FC = () => {
     setDeleteActionRedux(!deleteAction);
   }
 
-  const serverUrl = "https://cs53547.tmweb.ru/";
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const currentBook = useTypedSelector((state) => state.books.currentBook);
   const password = useTypedSelector((state) => state.app.password);
 
