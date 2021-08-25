@@ -7,6 +7,7 @@ import { Book } from "../../types/books";
 import { Note, NotesActionTypes } from "../../types/notes";
 import axios from "axios";
 import { setLoading } from "./app";
+import { serverError } from "../../components/Generic/SweetAlert";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -92,8 +93,7 @@ export function createNoteRedux(
       });
       clearForm();
     } catch (error) {
-      console.log("Сервер не доступен");
-      console.log(error);
+      Swal.fire(serverError);
     } finally {
       dispatch(setLoading(false) as Actions);
     }
@@ -140,8 +140,7 @@ export function editNoteRedux(
         handleClose();
       }
     } catch (error) {
-      console.log("Сервер не доступен");
-      console.log(error);
+      Swal.fire(serverError);
     } finally {
       dispatch(setLoading(false) as Actions);
     }
@@ -183,8 +182,7 @@ export function deleteNoteRedux(note_id: number, password: string) {
         });
       }
     } catch (error) {
-      console.log("Сервер не доступен");
-      console.log(error);
+      Swal.fire(serverError);
     } finally {
       dispatch(setLoading(false) as Actions);
     }

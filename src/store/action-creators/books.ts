@@ -7,6 +7,7 @@ import { Note } from "../../types/notes";
 import { Actions } from "../../types";
 import axios from "axios";
 import { setLoading } from "./app";
+import { serverError } from "../../components/Generic/SweetAlert";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -45,8 +46,7 @@ export function createBookRedux(title: string, password: string) {
         payload: currentOpeningTabTypes.Open,
       });
     } catch (error) {
-      console.log("Сервер не доступен");
-      console.log(error);
+      Swal.fire(serverError);
     } finally {
       dispatch(setLoading(false) as Actions);
     }
@@ -91,8 +91,7 @@ export function findBookRedux(title: string) {
         });
       }
     } catch (error) {
-      console.log("Сервер не доступен");
-      console.log(error);
+      Swal.fire(serverError);
     } finally {
       dispatch(setLoading(false) as Actions);
     }
@@ -168,8 +167,7 @@ export function importBookRedux(title: string, password: string, file: Note[]) {
         });
       }
     } catch (error) {
-      console.log("Сервер не доступен");
-      console.log(error);
+      Swal.fire(serverError);
     } finally {
       dispatch(setLoading(false) as Actions);
     }

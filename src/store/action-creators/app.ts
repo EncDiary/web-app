@@ -6,6 +6,7 @@ import { Book, BooksActionTypes } from "../../types/books";
 import { Note, NotesActionTypes } from "../../types/notes";
 import { Actions } from "../../types";
 import axios from "axios";
+import { serverError } from "../../components/Generic/SweetAlert";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -49,9 +50,8 @@ export function unlockBookRedux(password: string, currentBook: Book) {
           input_field?.classList.remove("input-shake");
         }, 1000);
       }
-    } catch (error) {
-      console.log("Сервер не доступен");
-      console.log(error);
+    } catch {
+      Swal.fire(serverError);
     } finally {
       dispatch(setLoading(false) as Actions);
     }
@@ -168,8 +168,7 @@ export function changePasswordRedux(
         });
       }
     } catch (error) {
-      console.log("Сервер не доступен");
-      console.log(error);
+      Swal.fire(serverError);
     } finally {
       dispatch(setLoading(false) as Actions);
     }

@@ -33,13 +33,9 @@ const Login: React.FC = () => {
     }
   }
 
-  console.log(isLoading);
-
   return (
-    // <section className={(isLoading ? "blur " : "") + "open"}>
     <section className="open">
       <BookActionList />
-
       {showCurrentTab()}
     </section>
   );
