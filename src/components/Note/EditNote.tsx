@@ -5,8 +5,7 @@ import Title from "../Generic/Title";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { Note } from "../../types/notes";
 import { useActions } from "../../hooks/useActions";
-import { EditorContent } from "@tiptap/react";
-import { MenuBar, SetEditor } from "../Generic/Editor";
+import { EditorPanel, SetEditor } from "../Generic/Editor";
 
 interface EditNoteProps {
   note: Note;
@@ -44,9 +43,7 @@ const EditNote: React.FC<EditNoteProps> = ({ note }) => {
                 &times;
               </div>
               <div>
-                <MenuBar editor={editor} />
-                <EditorContent editor={editor} className="wysiwyg__editor" />
-
+                <EditorPanel editor={editor} />
                 <div className="editor__actions">
                   <Button
                     onClick={submitHandler}

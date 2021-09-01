@@ -1,4 +1,4 @@
-import { Editor, useEditor } from "@tiptap/react";
+import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import React from "react";
 
 import Document from "@tiptap/extension-document";
@@ -19,6 +19,7 @@ import {
   RedoIcon,
   UndoIcon,
 } from "../../assets/svg/EditorIcons";
+import { FC } from "react";
 
 export const SetEditor = (text: string) => {
   return useEditor({
@@ -38,7 +39,7 @@ export const SetEditor = (text: string) => {
   });
 };
 
-export const MenuBar: React.FC<{ editor: Editor | null }> = ({ editor }) => {
+const MenuBar: React.FC<{ editor: Editor | null }> = ({ editor }) => {
   if (!editor) {
     return null;
   }
@@ -105,5 +106,14 @@ export const MenuBar: React.FC<{ editor: Editor | null }> = ({ editor }) => {
         </button>
       </div>
     </div>
+  );
+};
+
+export const EditorPanel: FC<{ editor: Editor | null }> = ({ editor }) => {
+  return (
+    <>
+      <MenuBar editor={editor} />
+      <EditorContent editor={editor} className="wysiwyg__editor" />
+    </>
   );
 };

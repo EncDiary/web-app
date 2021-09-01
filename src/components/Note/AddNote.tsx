@@ -4,8 +4,7 @@ import Button from "../Generic/Button";
 import { GoDownIcon } from "../../assets/svg/AppIcons";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
-import { EditorContent } from "@tiptap/react";
-import { MenuBar, SetEditor } from "../Generic/Editor";
+import { EditorPanel, SetEditor } from "../Generic/Editor";
 
 interface AddNoteProps {
   scrollToNotes: () => void;
@@ -33,9 +32,7 @@ const AddNote: React.FC<AddNoteProps> = ({ scrollToNotes }) => {
       <section className="writer">
         <Container>
           <div className="container-wrapper writer__wrapper">
-            <MenuBar editor={editor} />
-            <EditorContent editor={editor} className="wysiwyg__editor" />
-
+            <EditorPanel editor={editor} />
             <div className="editor__actions">
               <Button
                 onClick={submitHandler}
