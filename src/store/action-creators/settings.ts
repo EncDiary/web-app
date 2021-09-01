@@ -25,6 +25,13 @@ export function setDeleteActionRedux(isEnabled: boolean) {
   };
 }
 
+export function setGoDownArrowAddNote(isEnabled: boolean) {
+  return {
+    type: SettingsActionTypes.SET_GO_DOWN_ARRAY,
+    payload: isEnabled,
+  };
+}
+
 export function exportNotesRedux(
   currentBook: Book,
   password: string,

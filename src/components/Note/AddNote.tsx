@@ -15,6 +15,9 @@ const AddNote: React.FC<AddNoteProps> = ({ scrollToNotes }) => {
 
   const password = useTypedSelector((state) => state.app.password);
   const currentBook = useTypedSelector((state) => state.books.currentBook);
+  const goDownArrowAddNote = useTypedSelector(
+    (state) => state.settings.additional.goDownArrowAddNote
+  );
 
   function submitHandler() {
     const text = editor?.getHTML() ?? "";
@@ -40,9 +43,11 @@ const AddNote: React.FC<AddNoteProps> = ({ scrollToNotes }) => {
                 className="editor__button button"
               />
             </div>
-            <div className="writer__go-down-icon" onClick={scrollToNotes}>
-              {GoDownIcon}
-            </div>
+            {goDownArrowAddNote && (
+              <div className="writer__go-down-icon" onClick={scrollToNotes}>
+                {GoDownIcon}
+              </div>
+            )}
           </div>
         </Container>
       </section>

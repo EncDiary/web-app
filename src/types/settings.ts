@@ -1,13 +1,17 @@
 export interface SettingsState {
-  displaying: {
+  noteActions: {
     editAction: boolean;
     deleteAction: boolean;
+  };
+  additional: {
+    goDownArrowAddNote: boolean;
   };
 }
 
 export enum SettingsActionTypes {
   SET_EDIT_ACTION = "SETTING/SET_EDIT_ACTION",
   SET_DELETE_ACTION = "SETTING/SET_DELETE_ACTION",
+  SET_GO_DOWN_ARRAY = "SETTING/SET_GO_DOWN_ARRAY",
 }
 
 interface SetEditAction {
@@ -20,4 +24,12 @@ interface SetDeleteAction {
   payload: boolean;
 }
 
-export type SettingAction = SetEditAction | SetDeleteAction;
+interface SetGoDownArrowAddNote {
+  type: SettingsActionTypes.SET_GO_DOWN_ARRAY;
+  payload: boolean;
+}
+
+export type SettingAction =
+  | SetEditAction
+  | SetDeleteAction
+  | SetGoDownArrowAddNote;

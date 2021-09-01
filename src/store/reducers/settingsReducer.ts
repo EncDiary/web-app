@@ -5,9 +5,12 @@ import {
 } from "../../types/settings";
 
 const initialState: SettingsState = {
-  displaying: {
+  noteActions: {
     editAction: true,
     deleteAction: true,
+  },
+  additional: {
+    goDownArrowAddNote: true,
   },
 };
 
@@ -19,13 +22,19 @@ export const settingsReducer = (
     case SettingsActionTypes.SET_EDIT_ACTION:
       return {
         ...state,
-        displaying: { ...state.displaying, editAction: action.payload },
+        noteActions: { ...state.noteActions, editAction: action.payload },
       };
 
     case SettingsActionTypes.SET_DELETE_ACTION:
       return {
         ...state,
-        displaying: { ...state.displaying, deleteAction: action.payload },
+        noteActions: { ...state.noteActions, deleteAction: action.payload },
+      };
+
+    case SettingsActionTypes.SET_GO_DOWN_ARRAY:
+      return {
+        ...state,
+        additional: { ...state.additional, goDownArrowAddNote: action.payload },
       };
 
     default:

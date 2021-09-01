@@ -6,14 +6,18 @@ import SettingsTitle from "../Generic/SettingsTitle";
 import { confirmationAlert } from "../Generic/SweetAlert";
 
 const MainSetting: React.FC = () => {
-  const { setEditActionRedux, setDeleteActionRedux } = useActions();
+  const { setEditActionRedux, setDeleteActionRedux, setGoDownArrowAddNote } =
+    useActions();
 
   const editAction = useTypedSelector(
-    (state) => state.settings.displaying.editAction
+    (state) => state.settings.noteActions.editAction
   );
   const deleteAction = useTypedSelector(
-    (state) => state.settings.displaying.deleteAction
+    (state) => state.settings.noteActions.deleteAction
   );
+  const {
+    additional: { goDownArrowAddNote },
+  } = useTypedSelector((state) => state.settings);
 
   function handleCheckEdit() {
     setEditActionRedux(!editAction);
@@ -72,6 +76,13 @@ const MainSetting: React.FC = () => {
         name="Удаление"
         isEnabled={deleteAction}
         handleChange={handleCheckDelete}
+      />
+
+      <SettingsTitle text="Дополнительно" level={2} />
+      <Switcher
+        name="Стрелка под формой добавления записи"
+        isEnabled={goDownArrowAddNote}
+        handleChange={() => setGoDownArrowAddNote(!goDownArrowAddNote)}
       />
     </>
   );
