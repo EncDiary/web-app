@@ -55,7 +55,6 @@ const MainSetting: React.FC = () => {
           Экспорт в чистом виде (небезопасно)
           <Button
             onClick={() => confirmGetDecryptedBackup()}
-            // onClick={() => exportNotes(false)}
             text="Скачать"
             className="button settings__button_inline"
           />

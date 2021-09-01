@@ -1,5 +1,6 @@
 import axios from "axios";
 import { AES, enc, SHA256 } from "crypto-js";
+import qs from "qs";
 import { Dispatch } from "redux";
 import { serverErrorAlert } from "../../components/Generic/SweetAlert";
 import { Actions } from "../../types";
@@ -37,11 +38,11 @@ export function exportNotesRedux(
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        url: serverUrl + "note/getAllNotes.php",
-        data: {
-          id: currentBook.id,
+        url: serverUrl + "note",
+        data: qs.stringify({
+          book_id: currentBook.id,
           password_hash: SHA256(password).toString(),
-        },
+        }),
       });
 
       const data = isEncrypted

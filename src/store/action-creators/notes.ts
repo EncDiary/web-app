@@ -11,6 +11,7 @@ import {
   serverErrorAlert,
   successAlert,
 } from "../../components/Generic/SweetAlert";
+import qs from "qs";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -24,34 +25,42 @@ export function fetchNotesRedux(
   return async (dispatch: Dispatch<Actions>) => {
     const response = await axios({
       method: "post",
+      url: serverUrl + "note",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      url: serverUrl + "note/getNotes.php",
-      data: {
-        id: currentBook.id,
+      data: qs.stringify({
+        book_id: currentBook.id,
         password_hash: SHA256(password).toString(),
-        notes_list: { limit: limit, offset: offset },
+      }),
+      params: {
+        limit: limit,
+        offset: offset,
       },
     });
 
-    const notes = await response.data.notes.map((note: Note) => {
-      note["text"] = AES.decrypt(note["text"], password).toString(enc.Utf8);
-      return note;
-    });
-
-    dispatch({
-      type: NotesActionTypes.FETCH_NOTES,
-      payload: notes,
-    });
-
-    if (notes.length < limit) {
-      dispatch({
-        type: AppActionTypes.SET_NOTES_OVER,
-        payload: true,
+    if (response.data.status) {
+      const notes = await response.data.notes.map((note: Note) => {
+        note["text"] = AES.decrypt(note["text"], password).toString(enc.Utf8);
+        note.datetime = note.datetime * 1000;
+        return note;
       });
+
+      dispatch({
+        type: NotesActionTypes.FETCH_NOTES,
+        payload: notes,
+      });
+
+      if (notes.length < limit) {
+        dispatch({
+          type: AppActionTypes.SET_NOTES_OVER,
+          payload: true,
+        });
+      }
+      unsetFetching();
+    } else {
+      errorAlert(response.data.message);
     }
-    unsetFetching();
   };
 }
 
@@ -67,21 +76,21 @@ export function createNoteRedux(
     try {
       const response = await axios({
         method: "post",
+        url: serverUrl + "note/create",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        url: serverUrl + "note/addNote.php",
-        data: {
+        data: qs.stringify({
           text: AES.encrypt(text, password).toString(),
           book_id: currentBook_id,
           password_hash: SHA256(password).toString(),
-        },
+        }),
       });
 
       const newNote = {
         text,
-        id: response.data.id,
-        datetime: response.data.datetime,
+        id: response.data.note.id,
+        datetime: response.data.note.datetime,
       };
 
       dispatch({
@@ -113,12 +122,11 @@ export function editNoteRedux(
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        url: serverUrl + "note/editNote.php",
-        data: {
-          id: note_id,
+        url: serverUrl + `note/edit/${note_id}`,
+        data: qs.stringify({
           text: AES.encrypt(text, password).toString(),
           password_hash: SHA256(password).toString(),
-        },
+        }),
       });
 
       if (response.data.status) {
@@ -131,6 +139,8 @@ export function editNoteRedux(
         });
         successAlert("Запись успешно отредактирована");
         handleClose();
+      } else {
+        errorAlert(response.data.message);
       }
     } catch (error) {
       serverErrorAlert();
@@ -147,14 +157,13 @@ export function deleteNoteRedux(note_id: number, password: string) {
     try {
       const response = await axios({
         method: "post",
+        url: serverUrl + `note/delete/${note_id}`,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        url: serverUrl + "note/deleteNote.php",
-        data: {
-          id: note_id,
+        data: qs.stringify({
           password_hash: SHA256(password).toString(),
-        },
+        }),
       });
 
       if (response.data.status) {
@@ -164,7 +173,7 @@ export function deleteNoteRedux(note_id: number, password: string) {
         });
         successAlert("Запись успешно удалена");
       } else {
-        errorAlert("Что-то пошло не так");
+        errorAlert(response.data.message);
       }
     } catch (error) {
       serverErrorAlert();

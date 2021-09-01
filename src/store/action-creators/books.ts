@@ -11,6 +11,7 @@ import {
   serverErrorAlert,
   successAlert,
 } from "../../components/Generic/SweetAlert";
+import qs from "qs";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -21,29 +22,30 @@ export function createBookRedux(title: string, password: string) {
     try {
       const response = await axios({
         method: "post",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        url: serverUrl + "book/addBook.php",
-        data: {
+        url: serverUrl + "book",
+        data: qs.stringify({
           title: title,
           password_hash: SHA256(password).toString(),
-        },
+        }),
       });
 
-      const newBook = {
-        id: response.data.id,
-        title,
-      };
-      successAlert("Новая книга успешно добавлена");
-      dispatch({
-        type: BooksActionTypes.CREATE_BOOK,
-        payload: newBook,
-      });
-      dispatch({
-        type: AppActionTypes.SET_CURRENT_OPENING_TAB,
-        payload: currentOpeningTabTypes.Open,
-      });
+      if (response.data.status) {
+        const newBook = {
+          id: response.data.book_id,
+          title,
+        };
+        successAlert("Новая книга успешно добавлена");
+        dispatch({
+          type: BooksActionTypes.CREATE_BOOK,
+          payload: newBook,
+        });
+        dispatch({
+          type: AppActionTypes.SET_CURRENT_OPENING_TAB,
+          payload: currentOpeningTabTypes.Open,
+        });
+      } else {
+        errorAlert(response.data.message);
+      }
     } catch (error) {
       serverErrorAlert();
     } finally {
@@ -58,14 +60,8 @@ export function findBookRedux(title: string) {
 
     try {
       const response = await axios({
-        method: "post",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        url: serverUrl + "book/findBook.php",
-        data: {
-          title: title,
-        },
+        method: "get",
+        url: serverUrl + `book/${title}`,
       });
 
       if (response.data.status) {
@@ -79,7 +75,7 @@ export function findBookRedux(title: string) {
           payload: currentOpeningTabTypes.Open,
         });
       } else {
-        errorAlert("Такой книги нет");
+        errorAlert(response.data.message);
       }
     } catch (error) {
       serverErrorAlert();

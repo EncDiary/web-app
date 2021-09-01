@@ -5,6 +5,8 @@ import { Book, BooksActionTypes } from "../../types/books";
 import { Note, NotesActionTypes } from "../../types/notes";
 import { Actions } from "../../types";
 import axios from "axios";
+import qs from "qs";
+
 import {
   errorAlert,
   serverErrorAlert,
@@ -27,14 +29,13 @@ export function unlockBookRedux(password: string, currentBook: Book) {
     try {
       const response = await axios({
         method: "post",
+        url: serverUrl + `book/${currentBook.id}`,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        url: serverUrl + "checkPassword.php",
-        data: {
-          id: currentBook.id,
+        data: qs.stringify({
           password_hash: SHA256(password).toString(),
-        },
+        }),
       });
 
       if (response.data.status) {
@@ -115,11 +116,11 @@ export function changePasswordRedux(
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        url: serverUrl + "note/getAllNotes.php",
-        data: {
-          id: currentBook.id,
+        url: serverUrl + "note",
+        data: qs.stringify({
+          book_id: currentBook.id,
           password_hash: SHA256(password).toString(),
-        },
+        }),
       });
 
       const notesWithNewPassword = await responseFetch.data.notes.map(
@@ -144,13 +145,12 @@ export function changePasswordRedux(
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        url: serverUrl + "changePassword.php",
-        data: {
-          book_id: currentBook.id,
+        url: serverUrl + `book/changePassword/${currentBook.id}`,
+        data: qs.stringify({
           old_password_hash: SHA256(password).toString(),
           new_password_hash: SHA256(formFields.new_password).toString(),
           notes: notesWithNewPassword,
-        },
+        }),
       });
 
       if (responseAdd.data.status) {

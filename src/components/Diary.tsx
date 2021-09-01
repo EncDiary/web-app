@@ -54,7 +54,6 @@ const Diary: React.FC = () => {
   };
 
   return (
-    //div className="diary"
     <>
       <Header />
 
