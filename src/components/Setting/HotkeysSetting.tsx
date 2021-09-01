@@ -1,8 +1,12 @@
-import React from "react";
+import { FC } from "react";
 import SettingsTitle from "../Generic/SettingsTitle";
-import HotkeyItem from "./HotkeyItem";
 
-const HotkeysSetting: React.FC = () => {
+interface HotkeyItemProps {
+  combination: string;
+  description: string;
+}
+
+const HotkeysSetting: FC = () => {
   return (
     <>
       <SettingsTitle text="Горячие клавиши" level={1} />
@@ -12,6 +16,15 @@ const HotkeysSetting: React.FC = () => {
         <HotkeyItem combination="Ctrl + U" description="Подчеркнутый текст" />
       </div>
     </>
+  );
+};
+
+const HotkeyItem: FC<HotkeyItemProps> = ({ combination, description }) => {
+  return (
+    <div className="hotkey__item">
+      <span className="hotkey__combination">{combination}</span>
+      <span className="hotkey__description">{description}</span>
+    </div>
   );
 };
 
