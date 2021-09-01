@@ -9,16 +9,6 @@ const MainSetting: React.FC = () => {
   const { setEditActionRedux, setDeleteActionRedux, setGoDownArrowAddNote } =
     useActions();
 
-  const editAction = useTypedSelector(
-    (state) => state.settings.noteActions.editAction
-  );
-  const deleteAction = useTypedSelector(
-    (state) => state.settings.noteActions.deleteAction
-  );
-  const {
-    additional: { goDownArrowAddNote },
-  } = useTypedSelector((state) => state.settings);
-
   function handleCheckEdit() {
     setEditActionRedux(!editAction);
   }
@@ -27,8 +17,14 @@ const MainSetting: React.FC = () => {
     setDeleteActionRedux(!deleteAction);
   }
 
-  const currentBook = useTypedSelector((state) => state.books.currentBook);
-  const password = useTypedSelector((state) => state.app.password);
+  const {
+    settings: {
+      noteActions: { editAction, deleteAction },
+      additional: { goDownArrowAddNote },
+    },
+    books: { currentBook },
+    app: { password },
+  } = useTypedSelector((state) => state);
 
   const { exportNotesRedux } = useActions();
 

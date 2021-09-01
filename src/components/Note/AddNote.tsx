@@ -13,11 +13,13 @@ interface AddNoteProps {
 const AddNote: React.FC<AddNoteProps> = ({ scrollToNotes }) => {
   const { createNoteRedux } = useActions();
 
-  const password = useTypedSelector((state) => state.app.password);
-  const currentBook = useTypedSelector((state) => state.books.currentBook);
-  const goDownArrowAddNote = useTypedSelector(
-    (state) => state.settings.additional.goDownArrowAddNote
-  );
+  const {
+    app: { password },
+    books: { currentBook },
+    settings: {
+      additional: { goDownArrowAddNote },
+    },
+  } = useTypedSelector((state) => state);
 
   function submitHandler() {
     const text = editor?.getHTML() ?? "";

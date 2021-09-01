@@ -9,9 +9,7 @@ import BooksList from "./Book/BookList";
 import OpenBook from "./Book/OpenBook";
 
 const Login: React.FC = () => {
-  const { currentOpeningTab, isLoading } = useTypedSelector(
-    (state) => state.app
-  );
+  const { currentOpeningTab } = useTypedSelector((state) => state.app);
 
   function showCurrentTab() {
     switch (currentOpeningTab) {

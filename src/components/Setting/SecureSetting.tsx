@@ -10,8 +10,10 @@ interface IFormValues {
 }
 
 const SecureSetting: React.FC = () => {
-  const password = useTypedSelector((state) => state.app.password);
-  const currentBook = useTypedSelector((state) => state.books.currentBook);
+  const {
+    app: { password },
+    books: { currentBook },
+  } = useTypedSelector((state) => state);
 
   const { changePasswordRedux } = useActions();
 

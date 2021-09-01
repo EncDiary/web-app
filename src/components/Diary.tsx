@@ -26,11 +26,11 @@ const Diary: React.FC = () => {
 
   const [fetching, setFetching] = useState(true);
 
-  const currentBook = useTypedSelector((state) => state.books.currentBook);
-  const { password, isNotesOver, showSettings, isLoading } = useTypedSelector(
-    (state) => state.app
-  );
-  const notes = useTypedSelector((state) => state.notes.notes);
+  const {
+    books: { currentBook },
+    app: { password, isNotesOver, showSettings },
+    notes: { notes },
+  } = useTypedSelector((state) => state);
 
   useEffect(() => {
     async function fetchData() {
@@ -60,7 +60,6 @@ const Diary: React.FC = () => {
       <div id="main-content" ref={mainContentRef}>
         {
           <>
-            {/* <div className="lds-dual-ring"></div> */}
             <AddNote scrollToNotes={scrollToNotes} />
             <section className="notes" ref={notesRef}>
               <Container>

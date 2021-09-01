@@ -15,20 +15,21 @@ const Header: React.FC = () => {
     setShowingSettingsRedux(tab);
   }
 
-  const settingsRedux = useTypedSelector((state) => state.app.showSettings);
-
-  const currentBookRedux = useTypedSelector((state) => state.books.currentBook);
+  const {
+    app: { showSettings },
+    books: { currentBook },
+  } = useTypedSelector((state) => state);
 
   return (
     <>
       <header className="header">
-        <div className="header__title">{currentBookRedux.title}</div>
+        <div className="header__title">{currentBook.title}</div>
 
         <div
           className="header__button header__button_help"
           onClick={() =>
             clickToSettings(
-              settingsRedux === settingsTabTypes.About
+              showSettings === settingsTabTypes.About
                 ? settingsTabTypes.None
                 : settingsTabTypes.About
             )
@@ -40,8 +41,8 @@ const Header: React.FC = () => {
           className="header__button header__button_setting"
           onClick={() =>
             clickToSettings(
-              settingsRedux !== settingsTabTypes.None &&
-                settingsRedux !== settingsTabTypes.About
+              showSettings !== settingsTabTypes.None &&
+                showSettings !== settingsTabTypes.About
                 ? settingsTabTypes.None
                 : settingsTabTypes.Main
             )

@@ -10,11 +10,8 @@ interface NoteItemProps {
 }
 
 const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
-  const editAction = useTypedSelector(
-    (state) => state.settings.noteActions.editAction
-  );
-  const deleteAction = useTypedSelector(
-    (state) => state.settings.noteActions.deleteAction
+  const { deleteAction, editAction } = useTypedSelector(
+    (state) => state.settings.noteActions
   );
 
   const note_time = new Date(note.datetime);
