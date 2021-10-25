@@ -1,0 +1,21 @@
+@import "/src/assets/styles/colors.scss";
+
+.button {
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.button__primary {
+  @extend .button;
+  border-radius: 12px;
+  border: 3px solid $dark-gray;
+  background-color: $lightest-gray;
+  padding: 10px 20px;
+  font-size: 20px;
+  margin: 20px;
+  &:hover {
+    background-color: $light-gray;
+  }
+}

@@ -1,29 +1,12 @@
-import React from "react";
+import { FC } from "react";
+import "./Button.scss";
 
 interface ButtonProps {
   text: string;
-  className?: string;
-  isPrimary?: boolean;
-  onClick?: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({
-  text,
-  className = "",
-  isPrimary = true,
-  onClick = function () {},
-}) => {
-  const importance = isPrimary ? "button-primary" : "button-secondary";
-
-  return (
-    <button
-      onClick={onClick}
-      type="submit"
-      className={importance + " button " + className}
-    >
-      {text}
-    </button>
-  );
+const Button: FC<ButtonProps> = ({ text }) => {
+  return <button className="button__primary">{text}</button>;
 };
 
 export default Button;

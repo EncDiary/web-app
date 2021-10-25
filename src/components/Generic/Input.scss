@@ -1,0 +1,53 @@
+@import "/src/assets/styles/colors.scss";
+
+.input {
+  display: block;
+  width: 100%;
+  font-size: 24px;
+  box-sizing: border-box;
+}
+
+.text-input {
+  @extend .input;
+  border: 2px solid transparent;
+  border-bottom: 2px solid $medium-gray;
+  margin: 10px 0;
+  background-color: transparent;
+  padding: 5px;
+  color: $dark-gray;
+  &:hover {
+    box-shadow: inset 0px -1px 0px $medium-gray;
+    border-bottom: 2px solid $medium-gray;
+    color: $light-black;
+  }
+  &:focus {
+    outline: none !important;
+    box-shadow: inset 0px -1px 0px $dark-gray;
+    border-bottom: 2px solid $dark-gray;
+    color: $black;
+  }
+}
+
+.file-input {
+  @extend .input;
+  display: flex;
+  margin: 30px 0 20px;
+  &__field {
+    display: none;
+  }
+  &__description {
+    width: 50%;
+    padding: 12px;
+    border-right: 3px solid $dark-gray;
+    background-color: $light-gray;
+    border-radius: 20px 0 0 20px;
+    border: 3px solid $dark-gray;
+  }
+  &__file-name {
+    padding: 12px;
+    width: 50%;
+    border-radius: 0 20px 20px 0;
+    border: 3px solid $dark-gray;
+    border-left: 0;
+  }
+}

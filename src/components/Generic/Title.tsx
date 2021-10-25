@@ -1,12 +1,12 @@
-import React from "react";
+import { FC } from "react";
+import "./Title.scss";
 
 interface TitleProps {
   text: string;
-  className?: string;
 }
 
-const Title: React.FC<TitleProps> = ({ text, className = "" }) => {
-  return <h2 className={"title " + className}>{text}</h2>;
+export const Title: FC<TitleProps> = ({ text }) => {
+  return <h1 className="title">{text}</h1>;
 };
 
 export default Title;
