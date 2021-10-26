@@ -3,10 +3,21 @@ import "./Button.scss";
 
 interface ButtonProps {
   text: string;
+  clickHandler?: () => void;
 }
 
-const Button: FC<ButtonProps> = ({ text }) => {
-  return <button className="button__primary">{text}</button>;
+export const PrimaryButton: FC<ButtonProps> = ({ text, clickHandler }) => {
+  return (
+    <button className="button__primary" onClick={clickHandler}>
+      {text}
+    </button>
+  );
 };
 
-export default Button;
+export const SecondaryButton: FC<ButtonProps> = ({ text, clickHandler }) => {
+  return (
+    <button className="button__secondary" onClick={clickHandler}>
+      {text}
+    </button>
+  );
+};

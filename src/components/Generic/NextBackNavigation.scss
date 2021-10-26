@@ -1,0 +1,13 @@
+%navigation {
+  display: flex;
+}
+
+.navigation__next-back {
+  @extend %navigation;
+  justify-content: space-between;
+}
+
+.navigation__next {
+  @extend %navigation;
+  justify-content: end;
+}

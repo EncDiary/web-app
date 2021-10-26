@@ -3,16 +3,17 @@ import "./Input.scss";
 
 interface TextInputProps {
   placeholder: string;
+  type: string;
 }
 
 interface FileInputProps {
   description: string;
 }
 
-export const TextInput: FC<TextInputProps> = ({ placeholder }) => {
+export const TextInput: FC<TextInputProps> = ({ placeholder, type }) => {
   return (
     <input
-      type="text"
+      type={type}
       className="text-input"
       autoComplete="off"
       placeholder={placeholder}

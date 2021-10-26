@@ -1,12 +1,8 @@
 import { FC } from "react";
 import "./Explanation.scss";
 
-interface ExplanationProps {
-  text: string;
-}
-
-const Explanation: FC<ExplanationProps> = ({ text }) => {
-  return <div className="explanation">{text}</div>;
+const Explanation: FC = ({ children }) => {
+  return <div className="explanation">{children}</div>;
 };
 
 export default Explanation;

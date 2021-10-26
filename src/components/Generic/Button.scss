@@ -5,6 +5,7 @@
   padding: 0;
   margin: 0;
   border: none;
+  cursor: pointer;
 }
 
 .button__primary {
@@ -17,5 +18,24 @@
   margin: 20px;
   &:hover {
     background-color: $light-gray;
+  }
+  &:focus {
+    background-color: $light-gray;
+  }
+}
+
+.button__secondary {
+  @extend .button;
+  border-radius: 12px;
+  border: 3px solid $dark-gray;
+  background-color: $background-color;
+  padding: 10px 20px;
+  font-size: 20px;
+  margin: 20px;
+  &:hover {
+    background-color: $lightest-gray;
+  }
+  &:focus {
+    background-color: $lightest-gray;
   }
 }

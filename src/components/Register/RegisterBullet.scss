@@ -1,0 +1,19 @@
+@import "/src/assets/styles/colors.scss";
+
+.bullets {
+  display: flex;
+  justify-content: center;
+}
+
+.bullet {
+  background-color: $background-color;
+  border-radius: 50%;
+  border: 3px solid $dark-gray;
+  width: 27px;
+  height: 27px;
+  margin: 7px;
+  &__checked {
+    @extend .bullet;
+    background-color: $medium-gray;
+  }
+}

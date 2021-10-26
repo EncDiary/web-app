@@ -1,6 +1,7 @@
-import Button from "../Generic/Button";
+import { Link } from "react-router-dom";
+import { PrimaryButton } from "../Generic/Button";
 import Explanation from "../Generic/Explanation";
-import { TextInput, FileInput } from "../Generic/Input";
+import { TextInput } from "../Generic/Input";
 import Title from "../Generic/Title";
 import UnauthorizedWrapper from "../Generic/UnauthorizedWrapper";
 
@@ -8,12 +9,16 @@ const Login = () => {
   return (
     <UnauthorizedWrapper>
       <Title text="Login" />
-      <TextInput placeholder="Username" />
-      <FileInput description="Private Key" />
-      <Explanation text="Your private key won't be uploaded to the servers." />
-      <Button text="Login" />
+      <TextInput placeholder="Username" type="text" />
+      <TextInput placeholder="Password" type="password" />
+      <Explanation>
+        Your private key won't be uploaded to the servers.
+      </Explanation>
+      <PrimaryButton text="Login" />
       <hr />
-      <Explanation text="Don't have account? Register" />
+      <Explanation>
+        Don't have account? <Link to="/register">Register</Link>
+      </Explanation>
     </UnauthorizedWrapper>
   );
 };
