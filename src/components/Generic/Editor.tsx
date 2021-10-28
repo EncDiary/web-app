@@ -21,12 +21,6 @@ import {
 import "./Editor.scss";
 import Button from "./Button";
 
-interface MenuBarButtonProps {
-  style: "primary" | "secondary";
-  onClick: () => {};
-  icon: JSX.Element;
-}
-
 export const SetEditor = (text: string) => {
   return useEditor({
     extensions: [
@@ -43,19 +37,6 @@ export const SetEditor = (text: string) => {
     ],
     content: text,
   });
-};
-
-const MenuBarButton: FC<MenuBarButtonProps> = ({ style, onClick, icon }) => {
-  return (
-    <>
-      <Button
-        text={icon}
-        className="wysiwyg__menu-group-item"
-        style={style}
-        clickHandler={onClick}
-      />
-    </>
-  );
 };
 
 const MenuBarGroup: FC = ({ children }) => {
@@ -77,13 +58,13 @@ const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
         <Button
           text={<BoldIcon />}
           className="wysiwyg__menu-group-item"
-          style={checkOptionEnabled("bold")}
+          colorTheme={checkOptionEnabled("bold")}
           clickHandler={() => editor.chain().focus().toggleBold().run()}
         />
         <Button
           text={<ItalicIcon />}
           className="wysiwyg__menu-group-item"
-          style={checkOptionEnabled("italic")}
+          colorTheme={checkOptionEnabled("italic")}
           clickHandler={() => editor.chain().focus().toggleItalic().run()}
         />
       </MenuBarGroup>
@@ -92,13 +73,13 @@ const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
         <Button
           text={<UnorderedListIcon />}
           className="wysiwyg__menu-group-item"
-          style={checkOptionEnabled("bulletList")}
+          colorTheme={checkOptionEnabled("bulletList")}
           clickHandler={() => editor.chain().focus().toggleBulletList().run()}
         />
         <Button
           text={<OrderedListIcon />}
           className="wysiwyg__menu-group-item"
-          style={checkOptionEnabled("orderedList")}
+          colorTheme={checkOptionEnabled("orderedList")}
           clickHandler={() => editor.chain().focus().toggleOrderedList().run()}
         />
       </MenuBarGroup>
@@ -107,13 +88,13 @@ const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
         <Button
           text={<UndoIcon />}
           className="wysiwyg__menu-group-item"
-          style={"secondary"}
+          colorTheme={"secondary"}
           clickHandler={() => editor.chain().focus().undo().run()}
         />
         <Button
           text={<RedoIcon />}
           className="wysiwyg__menu-group-item"
-          style={"secondary"}
+          colorTheme={"secondary"}
           clickHandler={() => editor.chain().focus().redo().run()}
         />
       </MenuBarGroup>

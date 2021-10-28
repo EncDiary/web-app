@@ -32,7 +32,7 @@ const RegisterDonate: FC<RegisterDonateProps> = ({
       <NextBackNavigation>
         <Button
           text="Back"
-          style="secondary"
+          colorTheme="secondary"
           size="large"
           clickHandler={() => setCurrentRegisterPanel(registerPanelEnum.secret)}
         />

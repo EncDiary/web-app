@@ -37,7 +37,7 @@ const RegisterSecret: FC<RegisterSecretProps> = ({
       <NextBackNavigation>
         <Button
           text="Back"
-          style="secondary"
+          colorTheme="secondary"
           size="large"
           clickHandler={() =>
             setCurrentRegisterPanel(registerPanelEnum.username)
