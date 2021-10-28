@@ -2,12 +2,12 @@
   display: flex;
 }
 
-.navigation__next-back {
+.navigation_next-back {
   @extend %navigation;
   justify-content: space-between;
 }
 
-.navigation__next {
+.navigation_next {
   @extend %navigation;
   justify-content: end;
 }

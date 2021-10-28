@@ -1,0 +1,131 @@
+import { Editor, EditorContent, useEditor } from "@tiptap/react";
+import Document from "@tiptap/extension-document";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
+import Bold from "@tiptap/extension-bold";
+import Italic from "@tiptap/extension-italic";
+import History from "@tiptap/extension-history";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
+import ListItem from "@tiptap/extension-list-item";
+import Placeholder from "@tiptap/extension-placeholder";
+import { FC } from "react";
+import {
+  BoldIcon,
+  ItalicIcon,
+  OrderedListIcon,
+  RedoIcon,
+  UndoIcon,
+  UnorderedListIcon,
+} from "../../assets/svg-icons";
+import "./Editor.scss";
+import Button from "./Button";
+
+interface MenuBarButtonProps {
+  style: "primary" | "secondary";
+  onClick: () => {};
+  icon: JSX.Element;
+}
+
+export const SetEditor = (text: string) => {
+  return useEditor({
+    extensions: [
+      Document,
+      Paragraph,
+      Text,
+      Bold,
+      Italic,
+      History,
+      BulletList,
+      OrderedList,
+      ListItem,
+      Placeholder,
+    ],
+    content: text,
+  });
+};
+
+const MenuBarButton: FC<MenuBarButtonProps> = ({ style, onClick, icon }) => {
+  return (
+    <>
+      <Button
+        text={icon}
+        className="wysiwyg__menu-group-item"
+        style={style}
+        clickHandler={onClick}
+      />
+    </>
+  );
+};
+
+const MenuBarGroup: FC = ({ children }) => {
+  return <div className="wysiwyg__menu-group">{children}</div>;
+};
+
+const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
+  if (!editor) {
+    return null;
+  }
+
+  const checkOptionEnabled = (option: string) => {
+    return editor.isActive(option) ? "primary" : "secondary";
+  };
+
+  return (
+    <div className="wysiwyg__menu">
+      <MenuBarGroup>
+        <Button
+          text={<BoldIcon />}
+          className="wysiwyg__menu-group-item"
+          style={checkOptionEnabled("bold")}
+          clickHandler={() => editor.chain().focus().toggleBold().run()}
+        />
+        <Button
+          text={<ItalicIcon />}
+          className="wysiwyg__menu-group-item"
+          style={checkOptionEnabled("italic")}
+          clickHandler={() => editor.chain().focus().toggleItalic().run()}
+        />
+      </MenuBarGroup>
+
+      <MenuBarGroup>
+        <Button
+          text={<UnorderedListIcon />}
+          className="wysiwyg__menu-group-item"
+          style={checkOptionEnabled("bulletList")}
+          clickHandler={() => editor.chain().focus().toggleBulletList().run()}
+        />
+        <Button
+          text={<OrderedListIcon />}
+          className="wysiwyg__menu-group-item"
+          style={checkOptionEnabled("orderedList")}
+          clickHandler={() => editor.chain().focus().toggleOrderedList().run()}
+        />
+      </MenuBarGroup>
+
+      <MenuBarGroup>
+        <Button
+          text={<UndoIcon />}
+          className="wysiwyg__menu-group-item"
+          style={"secondary"}
+          clickHandler={() => editor.chain().focus().undo().run()}
+        />
+        <Button
+          text={<RedoIcon />}
+          className="wysiwyg__menu-group-item"
+          style={"secondary"}
+          clickHandler={() => editor.chain().focus().redo().run()}
+        />
+      </MenuBarGroup>
+    </div>
+  );
+};
+
+export const EditorPanel: FC<{ editor: Editor | null }> = ({ editor }) => {
+  return (
+    <>
+      <MenuBar editor={editor} />
+      <EditorContent editor={editor} className="wysiwyg__editor" />
+    </>
+  );
+};

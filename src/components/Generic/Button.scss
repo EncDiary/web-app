@@ -6,36 +6,42 @@
   margin: 0;
   border: none;
   cursor: pointer;
-}
+  display: block;
 
-.button__primary {
-  @extend .button;
-  border-radius: 12px;
-  border: 3px solid $dark-gray;
-  background-color: $lightest-gray;
-  padding: 10px 20px;
-  font-size: 20px;
-  margin: 20px;
-  &:hover {
-    background-color: $light-gray;
+  &_primary {
+    @extend .button;
+    border: 3px solid $dark-gray;
+    background-color: $lightest-gray;
+    &:hover {
+      background-color: $light-gray;
+    }
+    &:focus {
+      background-color: $light-gray;
+    }
   }
-  &:focus {
-    background-color: $light-gray;
-  }
-}
 
-.button__secondary {
-  @extend .button;
-  border-radius: 12px;
-  border: 3px solid $dark-gray;
-  background-color: $background-color;
-  padding: 10px 20px;
-  font-size: 20px;
-  margin: 20px;
-  &:hover {
-    background-color: $lightest-gray;
+  &_secondary {
+    @extend .button;
+    border: 3px solid $dark-gray;
+    background-color: $background-color;
+    &:hover {
+      background-color: $lightest-gray;
+    }
+    &:focus {
+      background-color: $lightest-gray;
+    }
   }
-  &:focus {
-    background-color: $lightest-gray;
+
+  &_large {
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 20px;
+    margin: 20px;
+  }
+  &_medium {
+    border-radius: 10px;
+    padding: 7px 14px;
+    font-size: 17px;
+    margin: 5px;
   }
 }

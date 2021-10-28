@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import { registerPanelEnum } from "../../types/register";
-import { PrimaryButton, SecondaryButton } from "../Generic/Button";
+import Button from "../Generic/Button";
 import { NextBackNavigation } from "../Generic/NextBackNavigation";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
@@ -30,11 +30,13 @@ const RegisterDonate: FC<RegisterDonateProps> = ({
         донатам. Вы можете не платить, если вы не хотите
       </TextBlock>
       <NextBackNavigation>
-        <SecondaryButton
+        <Button
           text="Back"
+          style="secondary"
+          size="large"
           clickHandler={() => setCurrentRegisterPanel(registerPanelEnum.secret)}
         />
-        <PrimaryButton text="Create" />
+        <Button text="Create" size="large" />
       </NextBackNavigation>
     </>
   );

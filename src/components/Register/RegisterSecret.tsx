@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import { registerPanelEnum } from "../../types/register";
-import { PrimaryButton, SecondaryButton } from "../Generic/Button";
+import Button from "../Generic/Button";
 import Explanation from "../Generic/Explanation";
 import { TextInput } from "../Generic/Input";
 import { NextBackNavigation } from "../Generic/NextBackNavigation";
@@ -35,14 +35,17 @@ const RegisterSecret: FC<RegisterSecretProps> = ({
         ответственно. При утере пароля невозможно восстановить ваши заметки.
       </Explanation>
       <NextBackNavigation>
-        <SecondaryButton
+        <Button
           text="Back"
+          style="secondary"
+          size="large"
           clickHandler={() =>
             setCurrentRegisterPanel(registerPanelEnum.username)
           }
         />
-        <PrimaryButton
+        <Button
           text="Next"
+          size="large"
           clickHandler={() => setCurrentRegisterPanel(registerPanelEnum.donate)}
         />
       </NextBackNavigation>

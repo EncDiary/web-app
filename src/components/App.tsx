@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Switch } from "react-router";
 import Login from "./Routes/Login";
-import "./App.scss";
 import Register from "./Routes/Register";
+import Write from "./Routes/Write";
 
 const App: React.FC = () => {
   return (
@@ -15,6 +15,9 @@ const App: React.FC = () => {
       </Route>
       <Route path="/register" exact>
         <Register />
+      </Route>
+      <Route path="/write" exact>
+        <Write />
       </Route>
     </Switch>
   );

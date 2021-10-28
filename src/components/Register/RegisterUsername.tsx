@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import { registerPanelEnum } from "../../types/register";
-import { PrimaryButton } from "../Generic/Button";
+import Button from "../Generic/Button";
 import Explanation from "../Generic/Explanation";
 import { TextInput } from "../Generic/Input";
 import { NextNavigation } from "../Generic/NextBackNavigation";
@@ -31,8 +31,9 @@ const RegisterUsername: FC<RegisterUsernameProps> = ({
         Username is used when logging in to WebDiary.
       </Explanation>
       <NextNavigation>
-        <PrimaryButton
+        <Button
           text="Next"
+          size="large"
           clickHandler={() => setCurrentRegisterPanel(registerPanelEnum.secret)}
         />
       </NextNavigation>

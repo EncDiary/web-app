@@ -1,0 +1,34 @@
+@import "/src/assets/styles/colors.scss";
+
+.header {
+  background-color: $lightest-gray;
+  min-height: 65px;
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid $light-black;
+  &__username {
+    align-self: center;
+    flex: 1;
+    padding: 10px 30px;
+    font-size: 22px;
+  }
+  &__navigation {
+    display: flex;
+    align-items: stretch;
+    &-button {
+      margin: 0;
+      border: none;
+      cursor: pointer;
+      background-color: transparent;
+      padding: 0 18px;
+      &:hover {
+        background-color: $light-gray;
+      }
+      &-icon {
+        height: 35px;
+        width: 35px;
+        color: $light-black;
+      }
+    }
+  }
+}

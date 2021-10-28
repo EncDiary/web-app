@@ -39,9 +39,7 @@ const RegisterBulletItem: FC<RegisterBulletItemProps> = ({
 }) => {
   return (
     <div
-      className={
-        "bullet" + (currentPanelNum === panelNum + 1 ? "__checked" : "")
-      }
+      className={`bullet${currentPanelNum === panelNum + 1 ? "_checked" : ""}`}
       onClick={clickHandler}
     ></div>
   );

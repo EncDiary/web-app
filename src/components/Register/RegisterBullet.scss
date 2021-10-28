@@ -12,7 +12,7 @@
   width: 27px;
   height: 27px;
   margin: 7px;
-  &__checked {
+  &_checked {
     @extend .bullet;
     background-color: $medium-gray;
   }

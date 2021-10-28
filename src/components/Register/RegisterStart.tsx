@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import { registerPanelEnum } from "../../types/register";
-import { PrimaryButton } from "../Generic/Button";
+import Button from "../Generic/Button";
 import { NextNavigation } from "../Generic/NextBackNavigation";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
@@ -20,8 +20,9 @@ const RegisterStart: FC<RegisterStartProps> = ({ setCurrentRegisterPanel }) => {
         You will be prompted to choose username and password
       </TextBlock>
       <NextNavigation>
-        <PrimaryButton
+        <Button
           text="Start"
+          size="large"
           clickHandler={() =>
             setCurrentRegisterPanel(registerPanelEnum.username)
           }

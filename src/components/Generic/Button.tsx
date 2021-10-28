@@ -2,22 +2,29 @@ import { FC } from "react";
 import "./Button.scss";
 
 interface ButtonProps {
-  text: string;
+  text: string | JSX.Element;
   clickHandler?: () => void;
+  type?: "button" | "submit" | "reset" | undefined;
+  style?: "primary" | "secondary";
+  size?: "medium" | "large";
+  className?: string;
 }
 
-export const PrimaryButton: FC<ButtonProps> = ({ text, clickHandler }) => {
+const Button: FC<ButtonProps> = ({
+  text,
+  clickHandler,
+  style = "primary",
+  size = "medium",
+  className = "",
+}) => {
   return (
-    <button className="button__primary" onClick={clickHandler}>
+    <button
+      className={`button_${style} button_${size} ${className}`}
+      onClick={clickHandler}
+    >
       {text}
     </button>
   );
 };
 
-export const SecondaryButton: FC<ButtonProps> = ({ text, clickHandler }) => {
-  return (
-    <button className="button__secondary" onClick={clickHandler}>
-      {text}
-    </button>
-  );
-};
+export default Button;

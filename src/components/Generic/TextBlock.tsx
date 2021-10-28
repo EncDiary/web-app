@@ -6,7 +6,7 @@ interface TextBlockProps {
 }
 
 const TextBlock: FC<TextBlockProps> = ({ children, size = "medium" }) => {
-  return <div className={"text-block__" + size}>{children}</div>;
+  return <div className={`text-block_${size}`}>{children}</div>;
 };
 
 export default TextBlock;
