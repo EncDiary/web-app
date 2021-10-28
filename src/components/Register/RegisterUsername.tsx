@@ -24,7 +24,7 @@ const RegisterUsername: FC<RegisterUsernameProps> = ({
         ]}
         currentPanelNum={1}
       />
-      <Title text="Username" />
+      <Title text="Username" size="largest" />
       <TextInput placeholder="Username" type="text" />
       <Explanation>
         Username and dates of notes are the only things that are not encrypted.

@@ -12,7 +12,7 @@ interface RegisterStartProps {
 const RegisterStart: FC<RegisterStartProps> = ({ setCurrentRegisterPanel }) => {
   return (
     <>
-      <Title text="Register" />
+      <Title text="Register" size="largest" />
       <TextBlock>
         This wizard will help you create your WebDiary account.
       </TextBlock>

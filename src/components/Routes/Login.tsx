@@ -6,6 +6,7 @@ import Explanation from "../Generic/Explanation";
 import { TextInput } from "../Generic/Input";
 import Title from "../Generic/Title";
 import UnauthorizedWrapper from "../Generic/UnauthorizedWrapper";
+import "./Login.scss";
 
 const Login = () => {
   const history = useHistory();
@@ -28,7 +29,7 @@ const Login = () => {
 
   return (
     <UnauthorizedWrapper>
-      <Title text="Login" />
+      <Title text="Login" size="largest" />
       <form onSubmit={submitHandler}>
         <TextInput
           placeholder="Username"
@@ -46,7 +47,12 @@ const Login = () => {
         <Explanation>
           Your private key won't be uploaded to the servers.
         </Explanation>
-        <Button text="Login" size="large" type="submit" />
+        <Button
+          text="Login"
+          size="large"
+          type="submit"
+          className="login__button"
+        />
       </form>
       <hr />
       <Explanation>

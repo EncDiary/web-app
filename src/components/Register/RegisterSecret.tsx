@@ -24,7 +24,7 @@ const RegisterSecret: FC<RegisterSecretProps> = ({
         ]}
         currentPanelNum={2}
       />
-      <Title text="Secret" />
+      <Title text="Secret" size="largest" />
       <TextInput placeholder="Password" type="password" />
       <Explanation>
         Хороший пароль должен содержать как минимум: 16 символов, 2 заглавные

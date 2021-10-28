@@ -23,7 +23,7 @@ const RegisterDonate: FC<RegisterDonateProps> = ({
         ]}
         currentPanelNum={3}
       />
-      <Title text="Donate" />
+      <Title text="Donate" size="largest" />
       <TextBlock size="big">Плати сколько хочешь</TextBlock>
       <TextBlock>
         WebDiary абсолютно свободный проект и развивается только благодаря
