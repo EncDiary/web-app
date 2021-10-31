@@ -1,0 +1,12 @@
+.edit-note {
+  overflow-y: auto;
+  padding: 15px 0 30px;
+  &__buttons {
+    display: flex;
+    justify-content: center;
+    margin: 30px;
+    &-item {
+      margin: 5px 20px;
+    }
+  }
+}

@@ -34,7 +34,7 @@ const RegisterDonate: FC<RegisterDonateProps> = ({
           text="Back"
           colorTheme="secondary"
           size="large"
-          clickHandler={() => setCurrentRegisterPanel(registerPanelEnum.secret)}
+          onClick={() => setCurrentRegisterPanel(registerPanelEnum.secret)}
         />
         <Button text="Create" size="large" />
       </NextBackNavigation>

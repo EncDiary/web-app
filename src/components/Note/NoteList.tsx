@@ -1,7 +1,8 @@
+import { observer } from "mobx-react-lite";
 import store from "../../store";
 import NoteItem from "./NoteItem";
 
-const NoteList = () => {
+const NoteList = observer(() => {
   const notes = store.note.notes;
   return (
     <div className="notes">
@@ -10,6 +11,6 @@ const NoteList = () => {
       })}
     </div>
   );
-};
+});
 
 export default NoteList;

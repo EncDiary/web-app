@@ -23,9 +23,7 @@ const RegisterStart: FC<RegisterStartProps> = ({ setCurrentRegisterPanel }) => {
         <Button
           text="Start"
           size="large"
-          clickHandler={() =>
-            setCurrentRegisterPanel(registerPanelEnum.username)
-          }
+          onClick={() => setCurrentRegisterPanel(registerPanelEnum.username)}
         />
       </NextNavigation>
     </>

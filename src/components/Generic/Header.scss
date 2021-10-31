@@ -6,6 +6,9 @@
   display: flex;
   align-items: stretch;
   border-bottom: 3px solid $dark-gray;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
   &__username {
     align-self: center;
     flex: 1;

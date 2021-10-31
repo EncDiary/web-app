@@ -34,7 +34,7 @@ const RegisterUsername: FC<RegisterUsernameProps> = ({
         <Button
           text="Next"
           size="large"
-          clickHandler={() => setCurrentRegisterPanel(registerPanelEnum.secret)}
+          onClick={() => setCurrentRegisterPanel(registerPanelEnum.secret)}
         />
       </NextNavigation>
     </>

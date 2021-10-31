@@ -59,13 +59,13 @@ const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
           text={<BoldIcon />}
           className="wysiwyg__menu-group-item"
           colorTheme={checkOptionEnabled("bold")}
-          clickHandler={() => editor.chain().focus().toggleBold().run()}
+          onClick={() => editor.chain().focus().toggleBold().run()}
         />
         <Button
           text={<ItalicIcon />}
           className="wysiwyg__menu-group-item"
           colorTheme={checkOptionEnabled("italic")}
-          clickHandler={() => editor.chain().focus().toggleItalic().run()}
+          onClick={() => editor.chain().focus().toggleItalic().run()}
         />
       </MenuBarGroup>
 
@@ -74,13 +74,13 @@ const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
           text={<UnorderedListIcon />}
           className="wysiwyg__menu-group-item"
           colorTheme={checkOptionEnabled("bulletList")}
-          clickHandler={() => editor.chain().focus().toggleBulletList().run()}
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
         />
         <Button
           text={<OrderedListIcon />}
           className="wysiwyg__menu-group-item"
           colorTheme={checkOptionEnabled("orderedList")}
-          clickHandler={() => editor.chain().focus().toggleOrderedList().run()}
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
         />
       </MenuBarGroup>
 
@@ -89,13 +89,13 @@ const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
           text={<UndoIcon />}
           className="wysiwyg__menu-group-item"
           colorTheme={"secondary"}
-          clickHandler={() => editor.chain().focus().undo().run()}
+          onClick={() => editor.chain().focus().undo().run()}
         />
         <Button
           text={<RedoIcon />}
           className="wysiwyg__menu-group-item"
           colorTheme={"secondary"}
-          clickHandler={() => editor.chain().focus().redo().run()}
+          onClick={() => editor.chain().focus().redo().run()}
         />
       </MenuBarGroup>
     </div>

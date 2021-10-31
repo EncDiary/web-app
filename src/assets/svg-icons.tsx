@@ -183,7 +183,6 @@ export const BookIcon = () => {
       strokeWidth="3"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="feather feather-book-open"
     >
       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
@@ -191,7 +190,7 @@ export const BookIcon = () => {
   );
 };
 
-export const ChevronsLeft = () => {
+export const ChevronsLeftIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -201,7 +200,6 @@ export const ChevronsLeft = () => {
       strokeWidth="3"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="feather feather-chevrons-left"
     >
       <polyline points="11 17 6 12 11 7"></polyline>
       <polyline points="18 17 13 12 18 7"></polyline>
@@ -209,7 +207,7 @@ export const ChevronsLeft = () => {
   );
 };
 
-export const ChevronsRight = () => {
+export const ChevronsRightIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -219,10 +217,27 @@ export const ChevronsRight = () => {
       strokeWidth="3"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="feather feather-chevrons-right"
     >
       <polyline points="13 17 18 12 13 7"></polyline>
       <polyline points="6 17 11 12 6 7"></polyline>
     </svg>
   );
 };
+
+export const ErrorIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="15" y1="9" x2="9" y2="15"></line>
+    <line x1="9" y1="9" x2="15" y2="15"></line>
+  </svg>
+);

@@ -19,8 +19,34 @@ class Note {
       datetime: 1,
     },
   ];
+
   constructor() {
     makeAutoObservable(this);
+  }
+
+  create(text: string) {
+    const datetime = new Date().getTime();
+    this.notes.unshift({
+      id: datetime.toString(),
+      text: text,
+      datetime: datetime,
+    });
+  }
+
+  edit(id: string, text: string) {
+    const note = this.notes.find((item) => {
+      return item.id === id;
+    });
+    if (note) {
+      note.text = text;
+    }
+  }
+
+  delete(id: string) {
+    console.log("DELETE");
+    this.notes = this.notes.filter((item) => {
+      return item.id !== id;
+    });
   }
 }
 

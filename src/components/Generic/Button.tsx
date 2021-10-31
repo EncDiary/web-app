@@ -3,7 +3,7 @@ import "./Button.scss";
 
 interface ButtonProps {
   text: string | JSX.Element;
-  clickHandler?: () => void;
+  onClick?: () => void;
   type?: "button" | "submit" | "reset" | undefined;
   colorTheme?: "primary" | "secondary";
   size?: "medium" | "large";
@@ -12,7 +12,7 @@ interface ButtonProps {
 
 const Button: FC<ButtonProps> = ({
   text,
-  clickHandler,
+  onClick,
   colorTheme = "primary",
   size = "medium",
   className = "",
@@ -20,7 +20,7 @@ const Button: FC<ButtonProps> = ({
   return (
     <button
       className={`button_${colorTheme} button_${size} ${className}`}
-      onClick={clickHandler}
+      onClick={onClick}
     >
       {text}
     </button>

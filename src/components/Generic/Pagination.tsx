@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { ChevronsLeft, ChevronsRight } from "../../assets/svg-icons";
+import { ChevronsLeftIcon, ChevronsRightIcon } from "../../assets/svg-icons";
 import Button from "./Button";
 import "./Pagination.scss";
 
@@ -9,7 +9,7 @@ const Pagination: FC = () => {
       <Button
         text={
           <div className="pagination__row-icon">
-            <ChevronsLeft />
+            <ChevronsLeftIcon />
           </div>
         }
         className="pagination__row"
@@ -18,7 +18,7 @@ const Pagination: FC = () => {
       <Button
         text={
           <div className="pagination__row-icon">
-            <ChevronsRight />
+            <ChevronsRightIcon />
           </div>
         }
         className="pagination__row"

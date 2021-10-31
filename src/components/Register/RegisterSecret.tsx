@@ -39,14 +39,12 @@ const RegisterSecret: FC<RegisterSecretProps> = ({
           text="Back"
           colorTheme="secondary"
           size="large"
-          clickHandler={() =>
-            setCurrentRegisterPanel(registerPanelEnum.username)
-          }
+          onClick={() => setCurrentRegisterPanel(registerPanelEnum.username)}
         />
         <Button
           text="Next"
           size="large"
-          clickHandler={() => setCurrentRegisterPanel(registerPanelEnum.donate)}
+          onClick={() => setCurrentRegisterPanel(registerPanelEnum.donate)}
         />
       </NextBackNavigation>
     </>
