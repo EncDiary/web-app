@@ -43,7 +43,6 @@ class Note {
   }
 
   delete(id: string) {
-    console.log("DELETE");
     this.notes = this.notes.filter((item) => {
       return item.id !== id;
     });

@@ -1,13 +1,24 @@
 .title {
-  text-align: center;
   &_largest {
-    @extend .title;
     font-size: 50px;
-    margin-bottom: 40px;
+    margin: 30px 10px 40px;
   }
   &_large {
-    @extend .title;
     font-size: 40px;
-    margin-bottom: 30px;
+    margin: 20px 10px 30px;
+  }
+  &_medium {
+    font-size: 28px;
+    margin: 20px 10px;
+  }
+
+  &_center {
+    text-align: center;
+  }
+  &_left {
+    text-align: left;
+  }
+  &_right {
+    text-align: right;
   }
 }

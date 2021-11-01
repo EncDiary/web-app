@@ -1,4 +1,10 @@
 main {
-  margin: 67.4px 0 0;
   overflow-y: auto;
+  margin: 67.4px 0 0;
+}
+
+.main {
+  &_setting {
+    padding: 10px 30px !important;
+  }
 }

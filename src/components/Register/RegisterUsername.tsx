@@ -1,9 +1,9 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import { registerPanelEnum } from "../../types/register";
 import Button from "../Generic/Button";
-import Explanation from "../Generic/Explanation";
 import { TextInput } from "../Generic/Input";
 import { NextNavigation } from "../Generic/NextBackNavigation";
+import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 import RegisterBullet from "./RegisterBullet";
 
@@ -25,11 +25,11 @@ const RegisterUsername: FC<RegisterUsernameProps> = ({
         currentPanelNum={1}
       />
       <Title text="Username" size="largest" />
-      <TextInput placeholder="Username" type="text" />
-      <Explanation>
+      <TextInput placeholder="Username" type="text" size="large" />
+      <TextBlock size="small">
         Username and dates of notes are the only things that are not encrypted.
         Username is used when logging in to WebDiary.
-      </Explanation>
+      </TextBlock>
       <NextNavigation>
         <Button
           text="Next"

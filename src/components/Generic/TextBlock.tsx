@@ -2,7 +2,7 @@ import { FC } from "react";
 import "./TextBlock.scss";
 
 interface TextBlockProps {
-  size?: string;
+  size?: "small" | "medium" | "large" | "largest";
 }
 
 const TextBlock: FC<TextBlockProps> = ({ children, size = "medium" }) => {

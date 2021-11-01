@@ -28,7 +28,7 @@ const Header: FC = () => {
         <HeaderNavigationButton>
           <InfoIcon />
         </HeaderNavigationButton>
-        <HeaderNavigationButton>
+        <HeaderNavigationButton onClick={() => history.push("/setting")}>
           <SettingIcon />
         </HeaderNavigationButton>
         <HeaderNavigationButton onClick={() => history.push("/login")}>

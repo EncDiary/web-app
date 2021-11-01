@@ -10,7 +10,7 @@ const Notes: FC = () => {
   return (
     <>
       <Header />
-      <MainContent>
+      <MainContent type="note-list">
         <section className="history">
           <Title text="Список записей" />
           <Container>

@@ -13,10 +13,10 @@ const RegisterStart: FC<RegisterStartProps> = ({ setCurrentRegisterPanel }) => {
   return (
     <>
       <Title text="Register" size="largest" />
-      <TextBlock>
+      <TextBlock size="large">
         This wizard will help you create your WebDiary account.
       </TextBlock>
-      <TextBlock>
+      <TextBlock size="large">
         You will be prompted to choose username and password
       </TextBlock>
       <NextNavigation>

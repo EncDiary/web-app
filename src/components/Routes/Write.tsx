@@ -7,7 +7,7 @@ const Write = () => {
   return (
     <>
       <Header />
-      <MainContent>
+      <MainContent type="write">
         <CreateNote />
         <NoteToday />
       </MainContent>

@@ -1,8 +1,12 @@
 import { FC } from "react";
 import "./MainContent.scss";
 
-const MainContent: FC = ({ children }) => {
-  return <main>{children}</main>;
+interface MainContentProps {
+  type: string;
+}
+
+const MainContent: FC<MainContentProps> = ({ children, type }) => {
+  return <main className={`main_${type}`}>{children}</main>;
 };
 
 export default MainContent;

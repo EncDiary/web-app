@@ -2,8 +2,8 @@ import { Link, useHistory } from "react-router-dom";
 import { useFormState } from "../../hooks/useFormState";
 import store from "../../store";
 import Button from "../Generic/Button";
-import Explanation from "../Generic/Explanation";
 import { TextInput } from "../Generic/Input";
+import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 import UnauthorizedWrapper from "../Generic/UnauthorizedWrapper";
 import "./Login.scss";
@@ -36,6 +36,7 @@ const Login = () => {
           value={formValues.username}
           name="username"
           onChange={changeHandler}
+          size="large"
         />
         <TextInput
           placeholder="Password"
@@ -43,10 +44,11 @@ const Login = () => {
           value={formValues.password}
           name="password"
           onChange={changeHandler}
+          size="large"
         />
-        <Explanation>
+        <TextBlock size="small">
           Your private key won't be uploaded to the servers.
-        </Explanation>
+        </TextBlock>
         <Button
           text="Login"
           size="large"
@@ -55,9 +57,9 @@ const Login = () => {
         />
       </form>
       <hr />
-      <Explanation>
+      <TextBlock size="small">
         Don't have account? <Link to="/register">Register</Link>
-      </Explanation>
+      </TextBlock>
     </UnauthorizedWrapper>
   );
 };

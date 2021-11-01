@@ -1,0 +1,63 @@
+@import "/src/assets/styles/colors.scss";
+
+$toggle-width: 68px;
+$toggle-height: 34px;
+$toggle-gutter: 5px;
+$toggle-radius: $toggle-height / 2;
+$toggle-control-size: $toggle-height - ($toggle-gutter * 2);
+
+.switch {
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  &__control {
+    display: block;
+    position: relative;
+    padding-right: 16px;
+    cursor: pointer;
+    font-size: 22px;
+    user-select: none;
+    width: $toggle-width;
+    height: $toggle-height;
+
+    &-input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+      &:checked ~ .switch__control-inner {
+        background-color: $medium-gray;
+        &:after {
+          left: $toggle-width - $toggle-control-size - $toggle-gutter - 4px;
+        }
+      }
+    }
+    &-inner {
+      box-sizing: border-box;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: $toggle-height;
+      width: $toggle-width;
+      border-radius: $toggle-radius;
+      background-color: $background-color;
+      transition: background-color 0.15s ease-in;
+      border: 3px solid $light-black;
+      &:after {
+        box-sizing: border-box;
+        content: "";
+        position: absolute;
+        left: $toggle-gutter - 1px;
+        top: $toggle-gutter - 2px;
+        width: $toggle-control-size;
+        height: $toggle-control-size;
+        border-radius: $toggle-radius;
+        background: $background-color;
+        transition: left 0.15s ease-in;
+        border: 3px solid $light-black;
+      }
+    }
+  }
+}
