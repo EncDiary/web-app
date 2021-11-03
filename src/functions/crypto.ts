@@ -1,3 +1,5 @@
+import CryptoJS from "crypto-js";
+
 export const AesDecrypt = (
   passphrase: string,
   encrypted: string,

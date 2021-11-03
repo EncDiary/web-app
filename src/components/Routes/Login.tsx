@@ -66,7 +66,7 @@ const Login = () => {
 
     if (token === undefined) return;
 
-    store.app.setAccount(formValues.username, formValues.password);
+    store.app.setAccount(formValues.username, formValues.password, token);
     history.push("/write");
   };
 

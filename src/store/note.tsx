@@ -24,13 +24,8 @@ class Note {
     makeAutoObservable(this);
   }
 
-  create(text: string) {
-    const datetime = new Date().getTime();
-    this.notes.unshift({
-      id: datetime.toString(),
-      text: text,
-      datetime: datetime,
-    });
+  create(note: INote) {
+    this.notes.unshift(note);
   }
 
   edit(id: string, text: string) {
