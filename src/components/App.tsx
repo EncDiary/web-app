@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router";
+import { Redirect, Route, Switch } from "react-router";
 import Login from "./Routes/Login";
 import Notes from "./Routes/Notes";
 import Register from "./Routes/Register";
@@ -10,7 +10,7 @@ const App: React.FC = () => {
   return (
     <Switch>
       <Route path="/" exact>
-        Old design
+        <Redirect to="/login" />
       </Route>
       <Route path="/login" exact>
         <Login />

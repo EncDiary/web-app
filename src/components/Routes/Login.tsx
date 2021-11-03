@@ -1,3 +1,5 @@
+import axios, { AxiosError } from "axios";
+import qs from "qs";
 import { Link, useHistory } from "react-router-dom";
 import { useFormState } from "../../hooks/useFormState";
 import store from "../../store";
@@ -7,8 +9,10 @@ import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 import UnauthorizedWrapper from "../Generic/UnauthorizedWrapper";
 import "./Login.scss";
+import { AesDecrypt } from "../../functions/crypto";
 
 const Login = () => {
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const history = useHistory();
 
   const [formValues, changeHandler] = useFormState({
@@ -16,15 +20,54 @@ const Login = () => {
     password: "",
   });
 
-  const submitHandler = (event: React.FormEvent) => {
+  const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    const isValidData = store.app.checkPassword(
-      formValues.username,
-      formValues.password
-    );
-    if (isValidData) {
-      history.push("/write");
+    const plaintext = await axios({
+      method: "post",
+      url: serverUrl + "request",
+      data: qs.stringify({
+        username: formValues.username,
+      }),
+    })
+      .then((response) => {
+        const plaintext = AesDecrypt(
+          formValues.password,
+          response.data.ciphertext,
+          response.data.salt,
+          response.data.iv
+        );
+        return plaintext;
+      })
+      .catch((error: AxiosError) => {
+        console.log(error.response?.data.message ?? "Неизвестная ошибка");
+      });
+
+    if (plaintext === undefined) return;
+
+    if (!plaintext.length) {
+      console.log("Неверный пароль");
+      return;
     }
+
+    const token = await axios({
+      method: "post",
+      url: serverUrl + "auth",
+      data: qs.stringify({
+        username: formValues.username,
+        plain: plaintext,
+      }),
+    })
+      .then((response) => {
+        return response.data.token;
+      })
+      .catch((error: AxiosError) => {
+        console.log(error.response?.data.message ?? "Неизвестная ошибка");
+      });
+
+    if (token === undefined) return;
+
+    store.app.setAccount(formValues.username, formValues.password);
+    history.push("/write");
   };
 
   return (
