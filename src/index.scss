@@ -1,6 +1,33 @@
 @import "~normalize.css/normalize.css";
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 @import "/src/assets/styles/colors.scss";
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  src: url(./assets/fonts/Roboto-Regular.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: italic;
+  font-weight: normal;
+  src: url(./assets/fonts/Roboto-Italic.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  src: url(./assets/fonts/Roboto-Bold.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: italic;
+  font-weight: 700;
+  src: url(./assets/fonts/Roboto-BoldItalic.ttf) format("truetype");
+}
 
 body {
   font-family: "Roboto", sans-serif;
