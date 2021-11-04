@@ -17,7 +17,8 @@
   border-right: 3px solid $dark-gray;
   overflow-y: auto;
   background-color: $lightest-gray;
-  margin: 67.4px 0 0;
+  width: 300px;
+
   &__button {
     @include sidebar-button($lightest-gray);
     &:hover {

@@ -1,5 +1,6 @@
 .with-sidebar {
-  height: 100%;
-  display: grid;
-  grid-template-columns: 300px 3fr;
+  padding: 67.4px 0 0;
+  height: calc(100vh - 67.4px);
+  display: flex;
+  flex-direction: row;
 }

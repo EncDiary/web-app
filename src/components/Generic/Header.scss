@@ -21,7 +21,10 @@
   &__navigation {
     display: flex;
     align-items: stretch;
-    &-button {
+    &-item {
+      display: flex;
+      align-items: center;
+
       margin: 0;
       border: none;
       cursor: pointer;
@@ -29,6 +32,13 @@
       padding: 0 18px;
       &:hover {
         background-color: $light-gray;
+        border: none;
+      }
+      &_active {
+        background-color: $light-gray;
+        &:hover {
+          background-color: $medium-gray;
+        }
       }
       &-icon {
         height: 35px;

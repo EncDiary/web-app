@@ -9,9 +9,6 @@ import Write from "./Routes/Write";
 const App: React.FC = () => {
   return (
     <Switch>
-      <Route path="/" exact>
-        <Redirect to="/login" />
-      </Route>
       <Route path="/login" exact>
         <Login />
       </Route>
@@ -27,6 +24,7 @@ const App: React.FC = () => {
       <Route path="/setting" exact>
         <Setting />
       </Route>
+      <Redirect to="/login" />
     </Switch>
   );
 };

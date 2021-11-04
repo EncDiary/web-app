@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { Link } from "react-router-dom";
 import "./Button.scss";
 
 interface ButtonProps {
@@ -8,6 +9,14 @@ interface ButtonProps {
   colorTheme?: "primary" | "secondary";
   size?: "medium" | "large";
   className?: string;
+}
+
+interface ButtonLinkProps {
+  link: string;
+  text: string;
+  colorTheme?: "primary" | "secondary";
+  size?: "medium" | "large";
+  className: string;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -24,6 +33,23 @@ const Button: FC<ButtonProps> = ({
     >
       {text}
     </button>
+  );
+};
+
+export const ButtonLink: FC<ButtonLinkProps> = ({
+  link,
+  text,
+  colorTheme = "primary",
+  size = "medium",
+  className = "",
+}) => {
+  return (
+    <Link
+      to={link}
+      className={`button_${colorTheme} button_${size} ${className}`}
+    >
+      {text}
+    </Link>
   );
 };
 

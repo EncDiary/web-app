@@ -1,10 +1,11 @@
 main {
-  overflow-y: auto;
-  margin: 67.4px 0 0;
+  padding: 67.4px 0 0;
 }
 
 .main {
   &_setting {
     padding: 10px 30px !important;
+    overflow-y: auto;
+    flex: 1;
   }
 }
