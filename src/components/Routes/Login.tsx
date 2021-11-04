@@ -10,6 +10,7 @@ import Title from "../Generic/Title";
 import UnauthorizedWrapper from "../Generic/UnauthorizedWrapper";
 import "./Login.scss";
 import { AesDecrypt } from "../../functions/crypto";
+import { errorPopup } from "../Generic/Popup";
 
 const Login = () => {
   const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -39,13 +40,14 @@ const Login = () => {
         return plaintext;
       })
       .catch((error: AxiosError) => {
-        console.log(error.response?.data.message ?? "Неизвестная ошибка");
+        const errorText = error.response?.data.message ?? "Неизвестная ошибка";
+        errorPopup(errorText);
       });
 
     if (plaintext === undefined) return;
 
     if (!plaintext.length) {
-      console.log("Неверный пароль");
+      errorPopup("Неверный пароль");
       return;
     }
 
@@ -61,7 +63,8 @@ const Login = () => {
         return response.data.token;
       })
       .catch((error: AxiosError) => {
-        console.log(error.response?.data.message ?? "Неизвестная ошибка");
+        const errorText = error.response?.data.message ?? "Неизвестная ошибка";
+        errorPopup(errorText);
       });
 
     if (token === undefined) return;

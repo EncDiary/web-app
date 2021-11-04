@@ -16,7 +16,7 @@
       background-color: $light-gray;
     }
     &:focus {
-      box-shadow: 0 0 0 3px $light-gray;
+      box-shadow: 0 0 3px 3px $light-gray;
     }
   }
 
@@ -28,7 +28,7 @@
       background-color: $lightest-gray;
     }
     &:focus {
-      box-shadow: 0 0 0 3px $lightest-gray;
+      box-shadow: 0 0 3px 3px $light-gray;
     }
   }
 

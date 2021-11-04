@@ -5,13 +5,15 @@ import { INote } from "../../types/note";
 import "./NoteItem.scss";
 import EditNote from "./EditNote";
 import store from "../../store";
-import { confirmationPopup } from "../Generic/Popup";
+import { confirmationPopup, errorPopup } from "../Generic/Popup";
+import axios, { AxiosError } from "axios";
 
 interface NoteItemProps {
   note: INote;
 }
 
 const NoteItem: FC<NoteItemProps> = ({ note }) => {
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const [isEdit, setIsEdit] = useState(false);
 
   const noteDatetime = new Date(note.datetime);
@@ -42,9 +44,22 @@ const NoteItem: FC<NoteItemProps> = ({ note }) => {
   const confirmDeleteHandler = async () => {
     const result = await confirmationPopup(
       "Удаление записи",
-      `Восстановление удаленных записей невозможно!\n${sliceText(note.text)}`
+      `Восстановление удаленных записей невозможно!\n${sliceText(
+        note.text.replace(/<[^>]+>/g, "")
+      )}`
     );
     if (result.isConfirmed) {
+      const data = await axios({
+        method: "delete",
+        url: serverUrl + "note/" + note.id,
+        headers: { Authorization: `Bearer ${store.app.account?.token}` },
+      }).catch((error: AxiosError) => {
+        const errorText = error.response?.data.message ?? "Неизвестная ошибка";
+        errorPopup(errorText);
+      });
+
+      if (data === undefined) return;
+
       store.note.delete(note.id);
     }
   };

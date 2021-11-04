@@ -1,9 +1,12 @@
+import axios, { AxiosError } from "axios";
+import qs from "qs";
 import { FC } from "react";
 import store from "../../store";
 import { INote } from "../../types/note";
 import Button from "../Generic/Button";
 import Container from "../Generic/Container";
 import { EditorPanel, SetEditor } from "../Generic/Editor";
+import { errorPopup } from "../Generic/Popup";
 import Title from "../Generic/Title";
 import UnderWindow from "../Generic/UnderWindow";
 import "./CreateNote.scss";
@@ -16,9 +19,35 @@ interface EditNoteProps {
 
 const EditNote: FC<EditNoteProps> = ({ note, closeHandler }) => {
   const editor = SetEditor(note.text);
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     const text = editor?.getHTML() || "";
+
+    if (text.length < 8) {
+      errorPopup("Сначала введите текст записи");
+      return;
+    }
+
+    if (text === note.text) {
+      closeHandler();
+      return;
+    }
+
+    const data = await axios({
+      method: "put",
+      url: serverUrl + "note/" + note.id,
+      headers: { Authorization: `Bearer ${store.app.account?.token}` },
+      data: qs.stringify({
+        text: text,
+      }),
+    }).catch((error: AxiosError) => {
+      const errorText = error.response?.data.message ?? "Неизвестная ошибка";
+      errorPopup(errorText);
+    });
+
+    if (data === undefined) return;
+
     store.note.edit(note.id, text);
     closeHandler();
   };

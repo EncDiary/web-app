@@ -5,6 +5,7 @@ import store from "../../store";
 import Button from "../Generic/Button";
 import Container from "../Generic/Container";
 import { EditorPanel, SetEditor } from "../Generic/Editor";
+import { errorPopup } from "../Generic/Popup";
 import "./CreateNote.scss";
 
 const CreateNote: FC = () => {
@@ -14,7 +15,7 @@ const CreateNote: FC = () => {
   const submitHandler = async () => {
     const text = editor?.getHTML() || "";
     if (text.length < 8) {
-      console.log("Сначала введите текст записи");
+      errorPopup("Сначала введите текст записи");
       return;
     }
 
@@ -26,7 +27,8 @@ const CreateNote: FC = () => {
         text: text,
       }),
     }).catch((error: AxiosError) => {
-      console.log(error.response?.data.message ?? "Неизвестная ошибка");
+      const errorText = error.response?.data.message ?? "Неизвестная ошибка";
+      errorPopup(errorText);
     });
 
     if (data === undefined) return;

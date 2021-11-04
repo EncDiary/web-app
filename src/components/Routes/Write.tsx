@@ -5,6 +5,7 @@ import store from "../../store";
 import { INote } from "../../types/note";
 import Header from "../Generic/Header";
 import MainContent from "../Generic/MainContent";
+import { errorPopup } from "../Generic/Popup";
 import CreateNote from "../Note/CreateNote";
 import NoteToday from "../Note/NoteToday";
 
@@ -25,7 +26,8 @@ const Write = () => {
         return response.data.notes;
       })
       .catch((error: AxiosError) => {
-        console.log(error.response?.data.message ?? "Неизвестная ошибка");
+        const errorText = error.response?.data.message ?? "Неизвестная ошибка";
+        errorPopup(errorText);
       });
     if (notesData === undefined) return;
 
