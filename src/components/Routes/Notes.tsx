@@ -12,8 +12,8 @@ const Notes: FC = () => {
       <Header />
       <MainContent type="note-list">
         <section className="history">
-          <Title text="Список записей" />
           <Container>
+            <Title text="Список записей" />
             <Pagination />
             <NoteList />
             <Pagination />

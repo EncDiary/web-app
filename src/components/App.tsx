@@ -1,5 +1,6 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router";
+import Info from "./Routes/Info";
 import Login from "./Routes/Login";
 import Notes from "./Routes/Notes";
 import Register from "./Routes/Register";
@@ -20,6 +21,9 @@ const App: React.FC = () => {
       </Route>
       <Route path="/notes" exact>
         <Notes />
+      </Route>
+      <Route path="/info" exact>
+        <Info />
       </Route>
       <Route path="/setting" exact>
         <Setting />
