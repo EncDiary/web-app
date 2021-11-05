@@ -1,4 +1,5 @@
 import { FC } from "react";
+import store from "../../store";
 import "./Input.scss";
 
 interface TextInputProps {
@@ -12,6 +13,11 @@ interface TextInputProps {
 
 interface FileInputProps {
   description: string;
+}
+
+interface SelectInputProps {
+  options: { value: string | number; content: string | number }[];
+  selectedValue: number;
 }
 
 export const TextInput: FC<TextInputProps> = ({
@@ -48,5 +54,29 @@ export const FileInput: FC<FileInputProps> = ({ description }) => {
       <div className="file-input__description">{description}</div>
       <div className="file-input__file-name">file_name.txt</div>
     </label>
+  );
+};
+
+export const SelectInput: FC<SelectInputProps> = ({
+  options,
+  selectedValue,
+}) => {
+  return (
+    <select
+      className="select"
+      required
+      defaultValue={selectedValue}
+      onChange={(event) =>
+        store.setting.setNotesNumberPerPage(+event.target.value)
+      }
+    >
+      {options.map((option) => {
+        return (
+          <option value={option.value} key={option.value}>
+            {option.content}
+          </option>
+        );
+      })}
+    </select>
   );
 };

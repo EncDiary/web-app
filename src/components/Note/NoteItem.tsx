@@ -81,13 +81,13 @@ const NoteItem: FC<NoteItemProps> = ({ note }) => {
           <div className="note__header-title-time">{getTime}</div>
         </div>
         <div className="note__header-actions">
-          {isEditable !== undefined && isEditable && (
+          {isEditable && (
             <NoteActionButton
               content={<EditIcon />}
               onClick={() => setIsEdit(!isEdit)}
             />
           )}
-          {isDeletable !== undefined && isDeletable && (
+          {isDeletable && (
             <NoteActionButton
               content={<DeleteIcon />}
               onClick={() => confirmDeleteHandler()}

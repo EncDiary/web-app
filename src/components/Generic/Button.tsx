@@ -9,6 +9,7 @@ interface ButtonProps {
   colorTheme?: "primary" | "secondary";
   size?: "medium" | "large";
   className?: string;
+  disabled?: boolean;
 }
 
 interface ButtonLinkProps {
@@ -25,11 +26,13 @@ const Button: FC<ButtonProps> = ({
   colorTheme = "primary",
   size = "medium",
   className = "",
+  disabled = false,
 }) => {
   return (
     <button
       className={`button_${colorTheme} button_${size} ${className}`}
       onClick={onClick}
+      disabled={disabled}
     >
       {text}
     </button>

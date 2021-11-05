@@ -33,6 +33,9 @@ $toggle-control-size: $toggle-height - ($toggle-gutter * 2);
           left: $toggle-width - $toggle-control-size - $toggle-gutter - 4px;
         }
       }
+      &:focus ~ .switch__control-inner {
+        box-shadow: 0 0 3px 3px $light-gray;
+      }
     }
     &-inner {
       box-sizing: border-box;
