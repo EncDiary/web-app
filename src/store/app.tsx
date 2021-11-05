@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx";
 
 class App {
   account: { username: string; password: string; token: string } | undefined;
+
   constructor() {
     makeAutoObservable(this);
   }

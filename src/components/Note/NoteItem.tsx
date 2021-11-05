@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, ReactElement, useState } from "react";
 import parse from "html-react-parser";
 import { DeleteIcon, EditIcon } from "../../assets/svg-icons";
 import { INote } from "../../types/note";
@@ -12,9 +12,15 @@ interface NoteItemProps {
   note: INote;
 }
 
+interface NoteActionButtonProps {
+  onClick: () => void;
+  content: ReactElement;
+}
+
 const NoteItem: FC<NoteItemProps> = ({ note }) => {
   const serverUrl = process.env.REACT_APP_SERVER_URL;
   const [isEdit, setIsEdit] = useState(false);
+  const { isEditable, isDeletable } = store.setting.noteActions;
 
   const noteDatetime = new Date(note.datetime);
 
@@ -75,28 +81,32 @@ const NoteItem: FC<NoteItemProps> = ({ note }) => {
           <div className="note__header-title-time">{getTime}</div>
         </div>
         <div className="note__header-actions">
-          <button
-            className="note__header-actions-button"
-            onClick={() => setIsEdit(!isEdit)}
-          >
-            <div className="note__header-actions-button-icon">
-              <EditIcon />
-            </div>
-          </button>
-          <button
-            className="note__header-actions-button"
-            onClick={() => confirmDeleteHandler()}
-          >
-            <div className="note__header-actions-button-icon">
-              <DeleteIcon />
-            </div>
-          </button>
+          {isEditable !== undefined && isEditable && (
+            <NoteActionButton
+              content={<EditIcon />}
+              onClick={() => setIsEdit(!isEdit)}
+            />
+          )}
+          {isDeletable !== undefined && isDeletable && (
+            <NoteActionButton
+              content={<DeleteIcon />}
+              onClick={() => confirmDeleteHandler()}
+            />
+          )}
         </div>
       </div>
       <div className="note__content">{parse(note.text)}</div>
 
       {isEdit && <EditNote note={note} closeHandler={() => setIsEdit(false)} />}
     </article>
+  );
+};
+
+const NoteActionButton: FC<NoteActionButtonProps> = ({ onClick, content }) => {
+  return (
+    <button className="note__header-actions-button" onClick={onClick}>
+      <div className="note__header-actions-button-icon">{content}</div>
+    </button>
   );
 };
 

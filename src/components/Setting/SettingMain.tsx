@@ -1,14 +1,12 @@
 import { FC } from "react";
 import ToggleSwitch from "../Generic/ToggleSwitch";
 import Title from "../Generic/Title";
-import { useCheckboxesState } from "../../hooks/useCheckboxesState";
 import SettingSection from "./SettingSection";
+import store from "../../store";
+import { observer } from "mobx-react-lite";
 
-const SettingMain: FC = () => {
-  const [isEnabled, changeHandler] = useCheckboxesState({
-    action_edit: false,
-    action_delete: true,
-  });
+const SettingMain: FC = observer(() => {
+  const { isEditable, isDeletable } = store.setting.noteActions;
 
   return (
     <>
@@ -17,19 +15,17 @@ const SettingMain: FC = () => {
         <Title text="Действия над записями" size="medium" align="left" />
         <ToggleSwitch
           text="Редактирование"
-          isEnabled={isEnabled.action_edit}
-          changeHandler={changeHandler}
-          name="action_edit"
+          isEnabled={isEditable !== undefined ? isEditable : true}
+          changeHandler={() => store.setting.setNoteActions("isEditable")}
         />
         <ToggleSwitch
           text="Удаление"
-          isEnabled={isEnabled.action_delete}
-          changeHandler={changeHandler}
-          name="action_delete"
+          isEnabled={isDeletable !== undefined ? isDeletable : true}
+          changeHandler={() => store.setting.setNoteActions("isDeletable")}
         />
       </SettingSection>
     </>
   );
-};
+});
 
 export default SettingMain;
