@@ -1,12 +1,11 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import { generateId, textToHex } from "../../functions/crypto";
+import { generateId, getHashText, textToHex } from "../../functions/crypto";
 import { useFormState } from "../../hooks/useFormState";
 import { registerPanelEnum } from "../../types/register";
 import RegisterBullet from "./RegisterBullet";
 import RegisterDonate from "./RegisterDonate";
 import RegisterSecret from "./RegisterSecret";
 import RegisterUsername from "./RegisterUsername";
-import CryptoJS from "crypto-js";
 import axios, { AxiosError } from "axios";
 import qs from "qs";
 import { errorPopup, successPopup } from "../Generic/Popup";
@@ -69,8 +68,8 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
   const submitHandler = async () => {
     const passwordHexText = textToHex(formValues.password);
     const saltHexText = generateId(64);
-    const saltyPasswordHash = CryptoJS.SHA256(passwordHexText + saltHexText);
-    const saltyPasswordHashText = CryptoJS.enc.Hex.stringify(saltyPasswordHash);
+
+    const saltyPasswordHashText = getHashText(passwordHexText + saltHexText);
 
     const data = await axios({
       method: "post",

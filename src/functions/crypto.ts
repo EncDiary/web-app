@@ -23,17 +23,22 @@ export const AesDecrypt = (
   }
 };
 
-export const dec2hex = (dec: number) => {
-  return dec.toString(16).padStart(2, "0");
+export const decToHex = (decimalNumber: number) => {
+  return decimalNumber.toString(16).padStart(2, "0");
 };
 
 export const generateId = (len: number) => {
-  var arr = new Uint8Array((len || 40) / 2);
-  window.crypto.getRandomValues(arr);
-  return Array.from(arr, dec2hex).join("");
+  var randomNumbers = new Uint8Array((len || 40) / 2);
+  window.crypto.getRandomValues(randomNumbers);
+  return Array.from(randomNumbers, decToHex).join("");
 };
 
 export const textToHex = (text: string) => {
-  const passwordHexByte = CryptoJS.enc.Utf8.parse(text);
-  return CryptoJS.enc.Hex.stringify(passwordHexByte);
+  const hexByte = CryptoJS.enc.Utf8.parse(text);
+  return CryptoJS.enc.Hex.stringify(hexByte);
+};
+
+export const getHashText = (text: string) => {
+  const hashByte = CryptoJS.SHA256(text);
+  return CryptoJS.enc.Hex.stringify(hashByte);
 };
