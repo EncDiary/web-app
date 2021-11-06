@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { FC, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { AesDecrypt } from "../../functions/crypto";
 import store from "../../store";
 import { INote } from "../../types/note";
 import Container from "../Generic/Container";
@@ -29,12 +30,19 @@ const Notes: FC = () => {
   }, []);
 
   useEffect(() => {
+    const account = store.app.account;
+
+    if (!account) {
+      history.push("/login");
+      return;
+    }
+
     const fetchNotes = async () => {
       const fetchedData = await axios({
         method: "get",
         url:
           serverUrl + `notes?limit=${limit}&offset=${(pageNumber - 1) * limit}`,
-        headers: { Authorization: `Bearer ${store.app.account?.token}` },
+        headers: { Authorization: `Bearer ${account.token}` },
       })
         .then((response) => {
           return response.data;
@@ -49,19 +57,26 @@ const Notes: FC = () => {
 
       const notes: INote[] = [];
       fetchedData.notes.forEach(
-        (note: { id: string; text: string; datetime: string }) => {
-          notes.push({ ...note, datetime: +note.datetime * 1000 });
+        (note: {
+          id: string;
+          text: string;
+          datetime: string;
+          iv: string;
+          salt: string;
+        }) => {
+          const text = AesDecrypt(
+            account.password,
+            note.text,
+            note.salt,
+            note.iv
+          );
+          notes.push({ id: note.id, text, datetime: +note.datetime * 1000 });
         }
       );
       store.note.setNotes(notes);
       setIsLoading(false);
       setAreNotesOver(fetchedData.notes_is_over);
     };
-
-    if (!store.app.account) {
-      history.push("/login");
-      return;
-    }
 
     fetchNotes();
   }, [pageNumber, limit, serverUrl, history]);

@@ -23,6 +23,26 @@ export const AesDecrypt = (
   }
 };
 
+export const AesEncrypt = (passphrase: string, plaintext: string) => {
+  var salt = CryptoJS.lib.WordArray.random(256);
+  var iv = CryptoJS.lib.WordArray.random(16);
+
+  var key = CryptoJS.PBKDF2(passphrase, salt, {
+    hasher: CryptoJS.algo.SHA512,
+    keySize: 64 / 8,
+    iterations: 999,
+  });
+
+  var encrypted = CryptoJS.AES.encrypt(plaintext, key, { iv: iv });
+
+  var data = {
+    ciphertext: CryptoJS.enc.Base64.stringify(encrypted.ciphertext),
+    salt: CryptoJS.enc.Hex.stringify(salt),
+    iv: CryptoJS.enc.Hex.stringify(iv),
+  };
+  return data;
+};
+
 export const decToHex = (decimalNumber: number) => {
   return decimalNumber.toString(16).padStart(2, "0");
 };

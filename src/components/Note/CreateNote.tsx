@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import qs from "qs";
 import { FC } from "react";
+import { AesEncrypt } from "../../functions/crypto";
 import store from "../../store";
 import Button from "../Generic/Button";
 import Container from "../Generic/Container";
@@ -13,18 +14,25 @@ const CreateNote: FC = () => {
   const editor = SetEditor("");
 
   const submitHandler = async () => {
+    const account = store.app.account;
+    if (!account) return;
+
     const text = editor?.getHTML() || "";
     if (text.length < 8) {
       errorPopup("Сначала введите текст записи");
       return;
     }
 
+    const cypherData = AesEncrypt(account.password, text);
+
     const data = await axios({
       method: "post",
       url: serverUrl + "note",
-      headers: { Authorization: `Bearer ${store.app.account?.token}` },
+      headers: { Authorization: `Bearer ${account.token}` },
       data: qs.stringify({
-        text: text,
+        text: cypherData.ciphertext,
+        iv: cypherData.iv,
+        salt: cypherData.salt,
       }),
     }).catch((error: AxiosError) => {
       const errorText = error.response?.data.message ?? "Неизвестная ошибка";
