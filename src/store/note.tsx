@@ -12,6 +12,10 @@ class Note {
     this.notes = notes;
   }
 
+  clearNotes() {
+    this.notes = [];
+  }
+
   create(note: INote) {
     this.notes.unshift(note);
   }

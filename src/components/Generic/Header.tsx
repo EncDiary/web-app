@@ -8,6 +8,7 @@ import {
   LockIcon,
   SettingIcon,
 } from "../../assets/svg-icons";
+import store from "../../store";
 import "./Header.scss";
 
 interface HeaderNavigationButtonProps {
@@ -22,6 +23,13 @@ interface HeaderNavigationLinkProps {
 
 const Header: FC = () => {
   const history = useHistory();
+
+  const logOut = () => {
+    history.push("/login");
+    store.note.clearNotes();
+    store.app.clearAccount();
+  };
+
   return (
     <header className="header">
       <div className="header__username">admin</div>
@@ -32,7 +40,7 @@ const Header: FC = () => {
         <HeaderNavigationLink link="/setting" content={<SettingIcon />} />
 
         <HeaderNavigationButton
-          onClick={() => history.push("/login")}
+          onClick={() => logOut()}
           content={<LockIcon />}
         />
       </div>

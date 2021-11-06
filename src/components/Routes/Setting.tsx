@@ -1,4 +1,6 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { useHistory } from "react-router";
+import store from "../../store";
 import { settingPanelEnum } from "../../types/setting";
 import Header from "../Generic/Header";
 import MainContent from "../Generic/MainContent";
@@ -9,6 +11,14 @@ import SettingSecure from "../Setting/SettingSecure";
 import SettingSidebar from "../Setting/SettingSidebar";
 
 const Setting: FC = () => {
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!store.app.account) {
+      history.push("/login");
+    }
+  }, [history]);
+
   const [currentSettingPanel, setCurrentSettingPanel] = useState(
     settingPanelEnum.main
   );

@@ -10,6 +10,10 @@ class App {
   setAccount(username: string, password: string, token: string) {
     this.account = { username, password, token };
   }
+
+  clearAccount() {
+    this.account = undefined;
+  }
 }
 
 export default new App();

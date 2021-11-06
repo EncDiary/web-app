@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { FC, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import store from "../../store";
 import { INote } from "../../types/note";
 import Container from "../Generic/Container";
@@ -11,6 +12,9 @@ import Title from "../Generic/Title";
 import NoteList from "../Note/NoteList";
 
 const Notes: FC = () => {
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
+  const history = useHistory();
+
   const [pageNumber, setPageNumber] = useState(1);
   const [areNotesOver, setAreNotesOver] = useState(false);
   const limit = store.setting.notesNumberPerPage;
@@ -21,12 +25,10 @@ const Notes: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    store.note.setNotes([]);
+    store.note.clearNotes();
   }, []);
 
   useEffect(() => {
-    const serverUrl = process.env.REACT_APP_SERVER_URL;
-
     const fetchNotes = async () => {
       const fetchedData = await axios({
         method: "get",
@@ -55,8 +57,14 @@ const Notes: FC = () => {
       setIsLoading(false);
       setAreNotesOver(fetchedData.notes_is_over);
     };
+
+    if (!store.app.account) {
+      history.push("/login");
+      return;
+    }
+
     fetchNotes();
-  }, [pageNumber, limit]);
+  }, [pageNumber, limit, serverUrl, history]);
 
   return (
     <>

@@ -10,14 +10,16 @@ import CreateNote from "../Note/CreateNote";
 import NoteToday from "../Note/NoteToday";
 
 const Write = () => {
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const history = useHistory();
-  if (!store.app.account) {
-    history.push("/login");
-  }
 
   useEffect(() => {
-    store.note.setNotes([]);
-    const serverUrl = process.env.REACT_APP_SERVER_URL;
+    if (!store.app.account) {
+      history.push("/login");
+      return;
+    }
+
+    store.note.clearNotes();
 
     const fetchNotes = async () => {
       const notesData = await axios({
@@ -56,7 +58,7 @@ const Write = () => {
     };
 
     fetchNotes();
-  }, []);
+  }, [history, serverUrl]);
 
   return (
     <>
