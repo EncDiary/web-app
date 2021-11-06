@@ -9,6 +9,11 @@
   display: block;
   width: max-content;
   text-align: center;
+  &:disabled {
+    opacity: 0.6;
+    color: $light-black;
+    background-color: $light-gray;
+  }
 
   &_primary {
     @extend .button;

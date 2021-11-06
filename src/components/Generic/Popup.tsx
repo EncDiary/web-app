@@ -29,3 +29,15 @@ export const errorPopup = (title: string, text?: string) => {
     buttonsStyling: false,
   });
 };
+
+export const successPopup = (title: string, text?: string) => {
+  return Swal.fire({
+    icon: "success",
+    title,
+    text,
+    customClass: {
+      confirmButton: "button_primary button_medium",
+    },
+    buttonsStyling: false,
+  });
+};

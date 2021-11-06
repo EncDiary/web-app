@@ -4,25 +4,18 @@ import Button from "../Generic/Button";
 import { NextBackNavigation } from "../Generic/NextBackNavigation";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
-import RegisterBullet from "./RegisterBullet";
 
 interface RegisterDonateProps {
   setCurrentRegisterPanel: Dispatch<SetStateAction<registerPanelEnum>>;
+  submitHandler: () => void;
 }
 
 const RegisterDonate: FC<RegisterDonateProps> = ({
   setCurrentRegisterPanel,
+  submitHandler,
 }) => {
   return (
     <>
-      <RegisterBullet
-        clickHandlers={[
-          () => setCurrentRegisterPanel(registerPanelEnum.username),
-          () => setCurrentRegisterPanel(registerPanelEnum.secret),
-          () => setCurrentRegisterPanel(registerPanelEnum.donate),
-        ]}
-        currentPanelNum={3}
-      />
       <Title text="Donate" size="largest" />
       <TextBlock size="largest">Плати сколько хочешь</TextBlock>
       <TextBlock size="large">
@@ -36,7 +29,7 @@ const RegisterDonate: FC<RegisterDonateProps> = ({
           size="large"
           onClick={() => setCurrentRegisterPanel(registerPanelEnum.secret)}
         />
-        <Button text="Create" size="large" />
+        <Button text="Create" size="large" onClick={submitHandler} />
       </NextBackNavigation>
     </>
   );

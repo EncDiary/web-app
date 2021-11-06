@@ -12,6 +12,14 @@
   width: 27px;
   height: 27px;
   margin: 7px;
+  padding: 0;
+  box-sizing: content-box;
+  &:disabled {
+    opacity: 0.5;
+  }
+  &:focus-visible {
+    box-shadow: 0 0 3px 3px $light-gray;
+  }
   &_checked {
     @extend .bullet;
     background-color: $medium-gray;

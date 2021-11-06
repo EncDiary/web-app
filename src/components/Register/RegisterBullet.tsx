@@ -1,47 +1,51 @@
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
+import { registerPanelEnum } from "../../types/register";
 import "./RegisterBullet.scss";
 
 interface RegisterBulletProps {
-  clickHandlers: (() => void)[];
-  currentPanelNum?: number;
+  panels: registerPanelEnum[];
+  currentPanel: registerPanelEnum;
+  setCurrentPanel: Dispatch<SetStateAction<registerPanelEnum>>;
+  currentPanelNumber: number;
 }
 
 interface RegisterBulletItemProps {
-  currentPanelNum: number;
-  panelNum: number;
-  clickHandler: () => void;
+  isActive: boolean;
+  onClick: () => void;
+  disabled: boolean;
 }
 
 const RegisterBullet: FC<RegisterBulletProps> = ({
-  clickHandlers,
-  currentPanelNum = 1,
+  panels,
+  currentPanel,
+  setCurrentPanel,
+  currentPanelNumber,
 }) => {
   return (
     <div className="bullets">
-      {clickHandlers.map((clickHandler, panelNum) => {
-        return (
-          <RegisterBulletItem
-            currentPanelNum={currentPanelNum}
-            panelNum={panelNum}
-            clickHandler={clickHandler}
-            key={panelNum}
-          />
-        );
-      })}
+      {panels.map((panel, panelNumber) => (
+        <RegisterBulletItem
+          isActive={panel === currentPanel}
+          onClick={() => setCurrentPanel(panel)}
+          disabled={panelNumber + 1 > currentPanelNumber}
+          key={panel}
+        />
+      ))}
     </div>
   );
 };
 
 const RegisterBulletItem: FC<RegisterBulletItemProps> = ({
-  currentPanelNum,
-  panelNum,
-  clickHandler,
+  isActive,
+  onClick,
+  disabled,
 }) => {
   return (
-    <div
-      className={`bullet${currentPanelNum === panelNum + 1 ? "_checked" : ""}`}
-      onClick={clickHandler}
-    ></div>
+    <button
+      className={`bullet${isActive ? "_checked" : ""}`}
+      onClick={onClick}
+      disabled={disabled}
+    ></button>
   );
 };
 
