@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { FC, useEffect } from "react";
 import { useHistory } from "react-router";
-import { AesDecrypt } from "../../functions/crypto";
+import { aesDecrypt } from "../../modules/crypto";
 import store from "../../store";
 import { INote } from "../../types/note";
 import { ButtonLink } from "../Generic/Button";
@@ -59,7 +59,7 @@ const NoteToday: FC = () => {
           salt: string;
         }) => {
           const datetime = +note.datetime * 1000;
-          const text = AesDecrypt(
+          const text = aesDecrypt(
             account.password,
             note.text,
             note.salt,

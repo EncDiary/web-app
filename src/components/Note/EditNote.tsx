@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import qs from "qs";
 import { FC } from "react";
-import { AesEncrypt } from "../../functions/crypto";
+import { aesEncrypt } from "../../modules/crypto";
 import store from "../../store";
 import { INote } from "../../types/note";
 import Button from "../Generic/Button";
@@ -38,7 +38,7 @@ const EditNote: FC<EditNoteProps> = ({ note, closeHandler }) => {
       return;
     }
 
-    const cypherData = AesEncrypt(account.password, text);
+    const cypherData = aesEncrypt(account.password, text);
 
     const data = await axios({
       method: "put",

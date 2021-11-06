@@ -1,5 +1,9 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import { generateId, getHashText, textToHex } from "../../functions/crypto";
+import {
+  generateRandomByte,
+  getHashText,
+  textToHex,
+} from "../../modules/crypto";
 import { useFormState } from "../../hooks/useFormState";
 import { registerPanelEnum } from "../../types/register";
 import RegisterBullet from "./RegisterBullet";
@@ -67,7 +71,7 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
 
   const submitHandler = async () => {
     const passwordHexText = textToHex(formValues.password);
-    const saltHexText = generateId(64);
+    const saltHexText = generateRandomByte(64);
 
     const saltyPasswordHashText = getHashText(passwordHexText + saltHexText);
 

@@ -9,7 +9,7 @@ import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 import UnauthorizedWrapper from "../Generic/UnauthorizedWrapper";
 import "./Login.scss";
-import { AesDecrypt, getHashText, textToHex } from "../../functions/crypto";
+import { aesDecrypt, getHashText, textToHex } from "../../modules/crypto";
 import { errorPopup } from "../Generic/Popup";
 
 const Login = () => {
@@ -37,7 +37,7 @@ const Login = () => {
           passwordHexText + saltHexText
         );
 
-        const plaintext = AesDecrypt(
+        const plaintext = aesDecrypt(
           saltyPasswordHashText,
           response.data.ciphertext,
           response.data.salt,

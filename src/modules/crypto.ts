@@ -1,6 +1,6 @@
 import CryptoJS from "crypto-js";
 
-export const AesDecrypt = (
+export const aesDecrypt = (
   passphrase: string,
   encrypted: string,
   salt_str: string,
@@ -23,7 +23,7 @@ export const AesDecrypt = (
   }
 };
 
-export const AesEncrypt = (passphrase: string, plaintext: string) => {
+export const aesEncrypt = (passphrase: string, plaintext: string) => {
   var salt = CryptoJS.lib.WordArray.random(256);
   var iv = CryptoJS.lib.WordArray.random(16);
 
@@ -43,14 +43,9 @@ export const AesEncrypt = (passphrase: string, plaintext: string) => {
   return data;
 };
 
-export const decToHex = (decimalNumber: number) => {
-  return decimalNumber.toString(16).padStart(2, "0");
-};
-
-export const generateId = (len: number) => {
-  var randomNumbers = new Uint8Array((len || 40) / 2);
-  window.crypto.getRandomValues(randomNumbers);
-  return Array.from(randomNumbers, decToHex).join("");
+export const generateRandomByte = (byteLength: number) => {
+  var randomByte = CryptoJS.lib.WordArray.random(byteLength);
+  return CryptoJS.enc.Hex.stringify(randomByte);
 };
 
 export const textToHex = (text: string) => {

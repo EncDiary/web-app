@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { FC, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { AesDecrypt } from "../../functions/crypto";
+import { aesDecrypt } from "../../modules/crypto";
 import store from "../../store";
 import { INote } from "../../types/note";
 import Container from "../Generic/Container";
@@ -64,7 +64,7 @@ const Notes: FC = () => {
           iv: string;
           salt: string;
         }) => {
-          const text = AesDecrypt(
+          const text = aesDecrypt(
             account.password,
             note.text,
             note.salt,

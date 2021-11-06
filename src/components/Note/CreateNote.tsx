@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import qs from "qs";
 import { FC } from "react";
-import { AesEncrypt } from "../../functions/crypto";
+import { aesEncrypt } from "../../modules/crypto";
 import store from "../../store";
 import Button from "../Generic/Button";
 import Container from "../Generic/Container";
@@ -23,7 +23,7 @@ const CreateNote: FC = () => {
       return;
     }
 
-    const cypherData = AesEncrypt(account.password, text);
+    const cypherData = aesEncrypt(account.password, text);
 
     const data = await axios({
       method: "post",
