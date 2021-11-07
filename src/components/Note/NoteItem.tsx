@@ -7,6 +7,7 @@ import EditNote from "./EditNote";
 import store from "../../store";
 import { confirmationPopup, errorPopup } from "../Generic/Popup";
 import axios, { AxiosError } from "axios";
+import { getLongDate, getShortWeekDay, getTime } from "../../modules/datetime";
 
 interface NoteItemProps {
   note: INote;
@@ -23,21 +24,6 @@ const NoteItem: FC<NoteItemProps> = ({ note }) => {
   const { isEditable, isDeletable } = store.setting.noteActions;
 
   const noteDatetime = new Date(note.datetime);
-
-  const getDate = noteDatetime.toLocaleString("ru", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
-  const getWeekDay = noteDatetime
-    .toLocaleString("ru", { weekday: "short" })
-    .toUpperCase();
-
-  const getTime = noteDatetime.toLocaleString("ru", {
-    hour: "numeric",
-    minute: "numeric",
-  });
 
   const sliceText = (text: string, length: number = 100) => {
     let sliced = text.slice(0, length);
@@ -75,10 +61,14 @@ const NoteItem: FC<NoteItemProps> = ({ note }) => {
       <div className="note__header">
         <div className="note__header-title">
           <div className="note__header-title-date">
-            <div className="note__header-title-date-numeric">{getDate}</div>
-            <div className="note__header-title-date-weekday">{getWeekDay}</div>
+            <div className="note__header-title-date-numeric">
+              {getLongDate(noteDatetime)}
+            </div>
+            <div className="note__header-title-date-weekday">
+              {getShortWeekDay(noteDatetime)}
+            </div>
           </div>
-          <div className="note__header-title-time">{getTime}</div>
+          <div className="note__header-title-time">{getTime(noteDatetime)}</div>
         </div>
         <div className="note__header-actions">
           {isEditable && (
