@@ -1,5 +1,4 @@
 import { FC } from "react";
-import store from "../../store";
 import "./Input.scss";
 
 interface TextInputProps {
@@ -18,6 +17,7 @@ interface FileInputProps {
 interface SelectInputProps {
   options: { value: string | number; content: string | number }[];
   selectedValue: number;
+  onChange: React.ChangeEventHandler<HTMLSelectElement> | undefined;
 }
 
 export const TextInput: FC<TextInputProps> = ({
@@ -60,15 +60,14 @@ export const FileInput: FC<FileInputProps> = ({ description }) => {
 export const SelectInput: FC<SelectInputProps> = ({
   options,
   selectedValue,
+  onChange,
 }) => {
   return (
     <select
       className="select"
       required
       defaultValue={selectedValue}
-      onChange={(event) =>
-        store.settingStore.setNotesNumberPerPage(+event.target.value)
-      }
+      onChange={onChange}
     >
       {options.map((option) => {
         return (

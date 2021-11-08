@@ -54,6 +54,9 @@ const SettingListNotes: FC = observer(() => {
             { value: 300, content: 300 },
           ]}
           selectedValue={notesNumber}
+          onChange={(event) =>
+            store.settingStore.setNotesNumberPerPage(+event.target.value)
+          }
         />
       </TextBlock>
     </SettingSection>
