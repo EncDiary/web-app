@@ -1,8 +1,5 @@
-import axios, { AxiosError } from "axios";
-import qs from "qs";
 import { Link, useHistory } from "react-router-dom";
 import { useFormState } from "../../hooks/useFormState";
-import store from "../../store";
 import Button from "../Generic/Button";
 import { TextInput } from "../Generic/Input";
 import TextBlock from "../Generic/TextBlock";
@@ -10,10 +7,14 @@ import Title from "../Generic/Title";
 import UnauthorizedWrapper from "../Generic/UnauthorizedWrapper";
 import "./Login.scss";
 import { aesDecrypt, getHashText, textToHex } from "../../modules/crypto";
-import { errorPopup } from "../Generic/Popup";
+import { errorAlert } from "../../modules/sweetalert";
+import {
+  authUserRequest,
+  getDisposableKeyRequest,
+} from "../../modules/request";
+import store from "../../store";
 
 const Login = () => {
-  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const history = useHistory();
 
   const [formValues, changeHandler] = useFormState({
@@ -23,59 +24,37 @@ const Login = () => {
 
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    const plaintext = await axios({
-      method: "post",
-      url: serverUrl + "request",
-      data: qs.stringify({
-        username: formValues.username,
-      }),
-    })
-      .then((response) => {
-        const passwordHexText = textToHex(formValues.password);
-        const saltHexText = response.data.password_salt;
-        const saltyPasswordHashText = getHashText(
-          passwordHexText + saltHexText
-        );
+    const serverResponse = await getDisposableKeyRequest(formValues.username);
+    if (!serverResponse) return;
 
-        const plaintext = aesDecrypt(
-          saltyPasswordHashText,
-          response.data.ciphertext,
-          response.data.salt,
-          response.data.iv
-        );
-        return plaintext;
-      })
-      .catch((error: AxiosError) => {
-        const errorText = error.response?.data.message ?? "Неизвестная ошибка";
-        errorPopup(errorText);
-      });
+    const passwordHexText = textToHex(formValues.password);
+    const saltHexText = serverResponse.data.password_salt;
+    const saltyPasswordHashText = getHashText(passwordHexText + saltHexText);
 
-    if (plaintext === undefined) return;
+    const plaintext = aesDecrypt(
+      saltyPasswordHashText,
+      serverResponse.data.ciphertext,
+      serverResponse.data.salt,
+      serverResponse.data.iv
+    );
 
     if (!plaintext.length) {
-      errorPopup("Неверный пароль");
+      errorAlert("Неверный пароль");
       return;
     }
 
-    const token = await axios({
-      method: "post",
-      url: serverUrl + "auth",
-      data: qs.stringify({
-        username: formValues.username,
-        plain: plaintext,
-      }),
-    })
-      .then((response) => {
-        return response.data.token;
-      })
-      .catch((error: AxiosError) => {
-        const errorText = error.response?.data.message ?? "Неизвестная ошибка";
-        errorPopup(errorText);
-      });
+    const serverAuthResponse = await authUserRequest(
+      formValues.username,
+      plaintext
+    );
 
-    if (token === undefined) return;
+    if (!serverAuthResponse) return;
 
-    store.app.setAccount(formValues.username, formValues.password, token);
+    store.appStore.setAccount(
+      formValues.username,
+      formValues.password,
+      serverAuthResponse.data.token
+    );
     history.push("/write");
   };
 

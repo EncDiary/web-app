@@ -1,11 +1,15 @@
 import { makeAutoObservable } from "mobx";
 import { INote } from "../types/note";
+import { RootStore } from ".";
 
-class Note {
+class NoteStore {
   notes: INote[] = [];
 
-  constructor() {
+  rootStore: RootStore;
+
+  constructor(rootStore: RootStore) {
     makeAutoObservable(this);
+    this.rootStore = rootStore;
   }
 
   setNotes(notes: INote[]) {
@@ -36,4 +40,4 @@ class Note {
   }
 }
 
-export default new Note();
+export default NoteStore;

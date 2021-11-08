@@ -4,10 +4,10 @@ import { DeleteIcon, EditIcon } from "../../assets/svg-icons";
 import { INote } from "../../types/note";
 import "./NoteItem.scss";
 import EditNote from "./EditNote";
-import store from "../../store";
-import { confirmationPopup, errorPopup } from "../Generic/Popup";
-import axios, { AxiosError } from "axios";
+import { confirmationAlert } from "../../modules/sweetalert";
 import { getLongDate, getShortWeekDay, getTime } from "../../modules/datetime";
+import { deleteNoteRequest } from "../../modules/request";
+import store from "../../store";
 
 interface NoteItemProps {
   note: INote;
@@ -19,9 +19,13 @@ interface NoteActionButtonProps {
 }
 
 const NoteItem: FC<NoteItemProps> = ({ note }) => {
-  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const [isEdit, setIsEdit] = useState(false);
-  const { isEditable, isDeletable } = store.setting.noteActions;
+  const {
+    settingStore: {
+      noteActions: { isEditable, isDeletable },
+    },
+    appStore: { account },
+  } = store;
 
   const noteDatetime = new Date(note.datetime);
 
@@ -34,25 +38,18 @@ const NoteItem: FC<NoteItemProps> = ({ note }) => {
   };
 
   const confirmDeleteHandler = async () => {
-    const result = await confirmationPopup(
+    if (!account) return;
+
+    const result = await confirmationAlert(
       "Удаление записи",
       `Восстановление удаленных записей невозможно!\n${sliceText(
         note.text.replace(/<[^>]+>/g, "")
       )}`
     );
     if (result.isConfirmed) {
-      const data = await axios({
-        method: "delete",
-        url: serverUrl + "note/" + note.id,
-        headers: { Authorization: `Bearer ${store.app.account?.token}` },
-      }).catch((error: AxiosError) => {
-        const errorText = error.response?.data.message ?? "Неизвестная ошибка";
-        errorPopup(errorText);
-      });
-
-      if (data === undefined) return;
-
-      store.note.delete(note.id);
+      const serverResponse = await deleteNoteRequest(note.id, account.token);
+      if (!serverResponse) return;
+      store.noteStore.delete(note.id);
     }
   };
 

@@ -1,17 +1,16 @@
-import axios, { AxiosError } from "axios";
-import qs from "qs";
 import { FC } from "react";
 import { aesEncrypt } from "../../modules/crypto";
-import store from "../../store";
 import { INote } from "../../types/note";
 import Button from "../Generic/Button";
 import Container from "../Generic/Container";
 import { EditorPanel, SetEditor } from "../Generic/Editor";
-import { errorPopup } from "../Generic/Popup";
+import { errorAlert } from "../../modules/sweetalert";
 import Title from "../Generic/Title";
 import UnderWindow from "../Generic/UnderWindow";
 import "./CreateNote.scss";
 import "./EditNote.scss";
+import { editNoteRequest } from "../../modules/request";
+import store from "../../store";
 
 interface EditNoteProps {
   note: INote;
@@ -20,16 +19,14 @@ interface EditNoteProps {
 
 const EditNote: FC<EditNoteProps> = ({ note, closeHandler }) => {
   const editor = SetEditor(note.text);
-  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   const submitHandler = async () => {
     const text = editor?.getHTML() || "";
-
-    const account = store.app.account;
+    const account = store.appStore.account;
     if (!account) return;
 
     if (text.length < 8) {
-      errorPopup("Сначала введите текст записи");
+      errorAlert("Сначала введите текст записи");
       return;
     }
 
@@ -38,25 +35,15 @@ const EditNote: FC<EditNoteProps> = ({ note, closeHandler }) => {
       return;
     }
 
-    const cypherData = aesEncrypt(account.password, text);
+    const cipherNote = aesEncrypt(account.password, text);
+    const serverResponse = await editNoteRequest(
+      note.id,
+      cipherNote,
+      account.token
+    );
+    if (!serverResponse) return;
 
-    const data = await axios({
-      method: "put",
-      url: serverUrl + "note/" + note.id,
-      headers: { Authorization: `Bearer ${account.token}` },
-      data: qs.stringify({
-        text: cypherData.ciphertext,
-        iv: cypherData.iv,
-        salt: cypherData.salt,
-      }),
-    }).catch((error: AxiosError) => {
-      const errorText = error.response?.data.message ?? "Неизвестная ошибка";
-      errorPopup(errorText);
-    });
-
-    if (data === undefined) return;
-
-    store.note.edit(note.id, text);
+    store.noteStore.edit(note.id, text);
     closeHandler();
   };
 

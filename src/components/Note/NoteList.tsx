@@ -3,7 +3,7 @@ import store from "../../store";
 import NoteItem from "./NoteItem";
 
 const NoteList = observer(() => {
-  const notes = store.note.notes;
+  const notes = store.noteStore.notes;
   return (
     <div className="notes">
       {notes.map((note) => {

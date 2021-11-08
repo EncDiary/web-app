@@ -26,8 +26,8 @@ const Header: FC = () => {
 
   const logOut = () => {
     history.push("/login");
-    store.note.clearNotes();
-    store.app.clearAccount();
+    store.noteStore.clearNotes();
+    store.appStore.clearAccount();
   };
 
   return (

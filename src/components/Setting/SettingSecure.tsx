@@ -1,4 +1,3 @@
-import axios, { AxiosError } from "axios";
 import { FC } from "react";
 import { useHistory } from "react-router";
 import { useFormState } from "../../hooks/useFormState";
@@ -7,14 +6,14 @@ import {
   exportDecryptedBackup,
   exportEncryptedBackup,
 } from "../../modules/file";
-import store from "../../store";
 import Button from "../Generic/Button";
 import { TextInput } from "../Generic/Input";
-import { errorPopup } from "../Generic/Popup";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 import SettingSection from "./SettingSection";
 import "./SettingSecure.scss";
+import { getBackupRequest } from "../../modules/request";
+import store from "../../store";
 
 const SettingSecure: FC = () => {
   return (
@@ -28,9 +27,8 @@ const SettingSecure: FC = () => {
 };
 
 const SettingDownloadBackup: FC = () => {
-  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const history = useHistory();
-  const account = store.app.account;
+  const account = store.appStore.account;
 
   const exportBackup = async (backupType: "encrypted" | "decrypted") => {
     if (!account) {
@@ -38,29 +36,20 @@ const SettingDownloadBackup: FC = () => {
       return;
     }
 
-    const fetchedData = await axios({
-      method: "get",
-      url: serverUrl + "notes/backup",
-      headers: { Authorization: `Bearer ${account.token}` },
-    })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error: AxiosError) => {
-        const errorText = error.response?.data.message ?? "Неизвестная ошибка";
-        errorPopup(errorText);
-      });
-
-    if (!fetchedData) return;
-
+    const serverResponse = await getBackupRequest(account.token);
+    if (!serverResponse) return;
     const currentDate = getDotSeparatedDate(new Date());
 
     switch (backupType) {
       case "encrypted":
-        exportEncryptedBackup(fetchedData, currentDate);
+        exportEncryptedBackup(serverResponse.data, currentDate);
         break;
       case "decrypted":
-        exportDecryptedBackup(fetchedData, currentDate, account.password);
+        exportDecryptedBackup(
+          serverResponse.data,
+          currentDate,
+          account.password
+        );
         break;
     }
   };

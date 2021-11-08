@@ -67,7 +67,7 @@ export const SelectInput: FC<SelectInputProps> = ({
       required
       defaultValue={selectedValue}
       onChange={(event) =>
-        store.setting.setNotesNumberPerPage(+event.target.value)
+        store.settingStore.setNotesNumberPerPage(+event.target.value)
       }
     >
       {options.map((option) => {

@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 
-export const confirmationPopup = (title: string, text: string) => {
+export const confirmationAlert = (title: string, text: string) => {
   return Swal.fire({
     icon: "warning",
     title,
@@ -18,7 +18,7 @@ export const confirmationPopup = (title: string, text: string) => {
   });
 };
 
-export const errorPopup = (title: string, text?: string) => {
+export const errorAlert = (title: string, text?: string) => {
   return Swal.fire({
     icon: "error",
     title,
@@ -30,7 +30,7 @@ export const errorPopup = (title: string, text?: string) => {
   });
 };
 
-export const successPopup = (title: string, text?: string) => {
+export const successAlert = (title: string, text?: string) => {
   return Swal.fire({
     icon: "success",
     title,

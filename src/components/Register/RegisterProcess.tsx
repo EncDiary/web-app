@@ -10,10 +10,9 @@ import RegisterBullet from "./RegisterBullet";
 import RegisterDonate from "./RegisterDonate";
 import RegisterSecret from "./RegisterSecret";
 import RegisterUsername from "./RegisterUsername";
-import axios, { AxiosError } from "axios";
-import qs from "qs";
-import { errorPopup, successPopup } from "../Generic/Popup";
+import { successAlert } from "../../modules/sweetalert";
 import { useHistory } from "react-router";
+import { registerRequest } from "../../modules/request";
 
 interface RegisterProcessProps {
   currentRegisterPanel: registerPanelEnum;
@@ -24,7 +23,6 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
   currentRegisterPanel,
   setCurrentRegisterPanel,
 }) => {
-  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const history = useHistory();
 
   const switchRegisterPanel = (currentRegisterPanel: registerPanelEnum) => {
@@ -70,27 +68,19 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
   const [currentPanelNumber, setCurrentPanelNumber] = useState(1);
 
   const submitHandler = async () => {
-    const passwordHexText = textToHex(formValues.password);
-    const saltHexText = generateRandomByte(64);
+    const passwordHex = textToHex(formValues.password);
+    const saltHex = generateRandomByte(64);
+    const saltyPasswordHash = getHashText(passwordHex + saltHex);
 
-    const saltyPasswordHashText = getHashText(passwordHexText + saltHexText);
+    const serverResponse = await registerRequest(
+      formValues.username,
+      saltyPasswordHash,
+      "aes",
+      saltHex
+    );
 
-    const data = await axios({
-      method: "post",
-      url: serverUrl + "register",
-      data: qs.stringify({
-        username: formValues.username,
-        key: saltyPasswordHashText,
-        encryption_type: "aes",
-        password_salt: saltHexText,
-      }),
-    }).catch((error: AxiosError) => {
-      const errorText = error.response?.data.message ?? "Неизвестная ошибка";
-      errorPopup(errorText);
-    });
-
-    if (data === undefined) return;
-    successPopup("Пользователь успешно зарегистрирован");
+    if (!serverResponse) return;
+    successAlert("Пользователь успешно зарегистрирован");
     history.push("/login");
   };
 

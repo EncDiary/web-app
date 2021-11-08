@@ -2,10 +2,10 @@ import { FC } from "react";
 import ToggleSwitch from "../Generic/ToggleSwitch";
 import Title from "../Generic/Title";
 import SettingSection from "./SettingSection";
-import store from "../../store";
 import { observer } from "mobx-react-lite";
 import { SelectInput } from "../Generic/Input";
 import TextBlock from "../Generic/TextBlock";
+import store from "../../store";
 
 const SettingMain: FC = () => {
   return (
@@ -18,7 +18,7 @@ const SettingMain: FC = () => {
 };
 
 const SettingNoteActions: FC = observer(() => {
-  const { isEditable, isDeletable } = store.setting.noteActions;
+  const { isEditable, isDeletable } = store.settingStore.noteActions;
 
   return (
     <SettingSection>
@@ -26,19 +26,19 @@ const SettingNoteActions: FC = observer(() => {
       <ToggleSwitch
         text="Редактирование"
         isEnabled={isEditable}
-        changeHandler={() => store.setting.setNoteActions("isEditable")}
+        changeHandler={() => store.settingStore.setNoteActions("isEditable")}
       />
       <ToggleSwitch
         text="Удаление"
         isEnabled={isDeletable}
-        changeHandler={() => store.setting.setNoteActions("isDeletable")}
+        changeHandler={() => store.settingStore.setNoteActions("isDeletable")}
       />
     </SettingSection>
   );
 });
 
 const SettingListNotes: FC = observer(() => {
-  const notesNumber = store.setting.notesNumberPerPage;
+  const notesNumber = store.settingStore.notesNumberPerPage;
   return (
     <SettingSection>
       <Title text="Список записей" size="medium" align="left" />

@@ -10,7 +10,7 @@ const Write = () => {
   const history = useHistory();
 
   useEffect(() => {
-    const account = store.app.account;
+    const account = store.appStore.account;
 
     if (!account) {
       history.push("/login");

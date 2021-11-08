@@ -14,7 +14,7 @@ const Setting: FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    if (!store.app.account) {
+    if (!store.appStore.account) {
       history.push("/login");
     }
   }, [history]);

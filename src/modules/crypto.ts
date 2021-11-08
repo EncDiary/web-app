@@ -3,19 +3,19 @@ import CryptoJS from "crypto-js";
 export const aesDecrypt = (
   passphrase: string,
   encrypted: string,
-  salt_str: string,
-  iv_str: string
+  saltString: string,
+  ivString: string
 ) => {
-  var salt = CryptoJS.enc.Hex.parse(salt_str);
-  var iv = CryptoJS.enc.Hex.parse(iv_str);
+  const salt = CryptoJS.enc.Hex.parse(saltString);
+  const iv = CryptoJS.enc.Hex.parse(ivString);
 
-  var key = CryptoJS.PBKDF2(passphrase, salt, {
+  const key = CryptoJS.PBKDF2(passphrase, salt, {
     hasher: CryptoJS.algo.SHA512,
     keySize: 64 / 8,
     iterations: 999,
   });
 
-  var decrypted = CryptoJS.AES.decrypt(encrypted, key, { iv: iv });
+  const decrypted = CryptoJS.AES.decrypt(encrypted, key, { iv });
   try {
     return decrypted.toString(CryptoJS.enc.Utf8);
   } catch (error) {
@@ -24,27 +24,26 @@ export const aesDecrypt = (
 };
 
 export const aesEncrypt = (passphrase: string, plaintext: string) => {
-  var salt = CryptoJS.lib.WordArray.random(256);
-  var iv = CryptoJS.lib.WordArray.random(16);
+  const salt = CryptoJS.lib.WordArray.random(256);
+  const iv = CryptoJS.lib.WordArray.random(16);
 
-  var key = CryptoJS.PBKDF2(passphrase, salt, {
+  const key = CryptoJS.PBKDF2(passphrase, salt, {
     hasher: CryptoJS.algo.SHA512,
     keySize: 64 / 8,
     iterations: 999,
   });
 
-  var encrypted = CryptoJS.AES.encrypt(plaintext, key, { iv: iv });
+  const encrypted = CryptoJS.AES.encrypt(plaintext, key, { iv });
 
-  var data = {
+  return {
     ciphertext: CryptoJS.enc.Base64.stringify(encrypted.ciphertext),
     salt: CryptoJS.enc.Hex.stringify(salt),
     iv: CryptoJS.enc.Hex.stringify(iv),
   };
-  return data;
 };
 
 export const generateRandomByte = (byteLength: number) => {
-  var randomByte = CryptoJS.lib.WordArray.random(byteLength);
+  const randomByte = CryptoJS.lib.WordArray.random(byteLength);
   return CryptoJS.enc.Hex.stringify(randomByte);
 };
 

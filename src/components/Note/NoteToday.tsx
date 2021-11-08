@@ -1,48 +1,31 @@
-import axios, { AxiosError } from "axios";
 import { FC, useEffect } from "react";
 import { useHistory } from "react-router";
 import { aesDecrypt } from "../../modules/crypto";
-import store from "../../store";
 import { INote } from "../../types/note";
 import { ButtonLink } from "../Generic/Button";
 import Container from "../Generic/Container";
-import { errorPopup } from "../Generic/Popup";
 import Title from "../Generic/Title";
 import NoteList from "./NoteList";
 import "./NoteToday.scss";
+import { getTodayNotesRequest } from "../../modules/request";
+import store from "../../store";
 
 const NoteToday: FC = () => {
-  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const history = useHistory();
 
   useEffect(() => {
-    const account = store.app.account;
-
+    const account = store.appStore.account;
     if (!account) {
       history.push("/login");
       return;
     }
-
-    store.note.clearNotes();
+    store.noteStore.clearNotes();
 
     const fetchNotes = async () => {
-      const notesData = await axios({
-        method: "get",
-        url: serverUrl + "notes/today",
-        headers: { Authorization: `Bearer ${account.token}` },
-      })
-        .then((response) => {
-          return response.data.notes;
-        })
-        .catch((error: AxiosError) => {
-          const errorText =
-            error.response?.data.message ?? "Неизвестная ошибка";
-          errorPopup(errorText);
-        });
-      if (notesData === undefined) return;
+      const serverResponse = await getTodayNotesRequest(account.token);
+      if (!serverResponse) return;
 
       const today = new Date();
-
       const todayMidnightTime = new Date(
         today.getFullYear(),
         today.getMonth(),
@@ -50,7 +33,7 @@ const NoteToday: FC = () => {
       ).getTime();
 
       const notes: INote[] = [];
-      notesData.forEach(
+      serverResponse.data.notes.forEach(
         (note: {
           id: string;
           text: string;
@@ -70,7 +53,7 @@ const NoteToday: FC = () => {
           }
         }
       );
-      store.note.setNotes(notes);
+      store.noteStore.setNotes(notes);
     };
 
     fetchNotes();

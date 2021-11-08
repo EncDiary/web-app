@@ -1,10 +1,13 @@
 import { makeAutoObservable } from "mobx";
+import { RootStore } from ".";
 
-class App {
+class AppStore {
   account: { username: string; password: string; token: string } | undefined;
 
-  constructor() {
+  rootStore: RootStore;
+  constructor(rootStore: RootStore) {
     makeAutoObservable(this);
+    this.rootStore = rootStore;
   }
 
   setAccount(username: string, password: string, token: string) {
@@ -16,4 +19,4 @@ class App {
   }
 }
 
-export default new App();
+export default AppStore;

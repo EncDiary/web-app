@@ -1,14 +1,17 @@
 import { makeAutoObservable } from "mobx";
+import { RootStore } from ".";
 
-class Setting {
+class SettingStore {
   noteActions: { isEditable: boolean; isDeletable: boolean } = {
     isEditable: true,
     isDeletable: true,
   };
   notesNumberPerPage: 10 | 20 | 50 | 100 | 300 = 10;
 
-  constructor() {
+  rootStore: RootStore;
+  constructor(rootStore: RootStore) {
     makeAutoObservable(this);
+    this.rootStore = rootStore;
 
     const noteActions = localStorage.getItem("noteActions");
     if (noteActions) {
@@ -43,4 +46,4 @@ class Setting {
   }
 }
 
-export default new Setting();
+export default SettingStore;
