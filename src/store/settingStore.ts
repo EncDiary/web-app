@@ -2,10 +2,11 @@ import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
 
 class SettingStore {
-  noteActions: { isEditable: boolean; isDeletable: boolean } = {
+  noteActions = {
     isEditable: true,
     isDeletable: true,
   };
+  editor = { isMenubarDisplayed: true };
   notesNumberPerPage: 10 | 20 | 50 | 100 | 300 = 10;
 
   rootStore: RootStore;
@@ -21,6 +22,11 @@ class SettingStore {
     const notesNumberPerPage = localStorage.getItem("notesNumberPerPage");
     if (notesNumberPerPage) {
       this.notesNumberPerPage = JSON.parse(notesNumberPerPage);
+    }
+
+    const editor = localStorage.getItem("editor");
+    if (editor) {
+      this.editor = JSON.parse(editor);
     }
   }
 
@@ -43,6 +49,11 @@ class SettingStore {
         JSON.stringify(this.notesNumberPerPage)
       );
     }
+  }
+
+  setEditor() {
+    this.editor.isMenubarDisplayed = !this.editor.isMenubarDisplayed;
+    localStorage.setItem("editor", JSON.stringify(this.editor));
   }
 }
 

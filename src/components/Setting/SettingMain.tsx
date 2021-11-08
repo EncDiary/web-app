@@ -13,6 +13,7 @@ const SettingMain: FC = () => {
       <Title text="Основное" align="left" />
       <SettingNoteActions />
       <SettingListNotes />
+      <SettingEditor />
     </>
   );
 };
@@ -55,6 +56,20 @@ const SettingListNotes: FC = observer(() => {
           selectedValue={notesNumber}
         />
       </TextBlock>
+    </SettingSection>
+  );
+});
+
+const SettingEditor = observer(() => {
+  const isMenubarDisplayed = store.settingStore.editor.isMenubarDisplayed;
+  return (
+    <SettingSection>
+      <Title text="Редактор" size="medium" align="left" />
+      <ToggleSwitch
+        text="Показывать панель инструментов"
+        isEnabled={isMenubarDisplayed}
+        changeHandler={() => store.settingStore.setEditor()}
+      />
     </SettingSection>
   );
 });

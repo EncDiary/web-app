@@ -20,6 +20,7 @@ import {
 } from "../../assets/svg-icons";
 import "./Editor.scss";
 import Button from "./Button";
+import store from "../../store";
 
 export const SetEditor = (text: string) => {
   return useEditor({
@@ -105,7 +106,9 @@ const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
 export const EditorPanel: FC<{ editor: Editor | null }> = ({ editor }) => {
   return (
     <>
-      <MenuBar editor={editor} />
+      {store.settingStore.editor.isMenubarDisplayed && (
+        <MenuBar editor={editor} />
+      )}
       <EditorContent editor={editor} className="wysiwyg__editor" />
     </>
   );
