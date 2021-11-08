@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 export const useFormState = (fields: {
-  [key: string]: any;
+  [key: string]: string;
 }): [
-  { [key: string]: any },
+  { [key: string]: string },
   (event: React.ChangeEvent<HTMLInputElement>) => void
 ] => {
   const [formValues, setFormValues] = useState(fields);

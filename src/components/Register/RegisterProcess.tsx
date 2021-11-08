@@ -73,7 +73,7 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
     const saltyPasswordHash = getHashText(passwordHex + saltHex);
 
     const serverResponse = await registerRequest(
-      formValues.username,
+      formValues.username.toLowerCase(),
       saltyPasswordHash,
       "aes",
       saltHex

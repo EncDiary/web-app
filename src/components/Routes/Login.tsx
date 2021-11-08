@@ -51,7 +51,7 @@ const Login = () => {
     if (!serverAuthResponse) return;
 
     store.appStore.setAccount(
-      formValues.username,
+      formValues.username.toLowerCase(),
       formValues.password,
       serverAuthResponse.data.token
     );
