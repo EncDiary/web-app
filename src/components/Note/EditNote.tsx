@@ -35,7 +35,7 @@ const EditNote: FC<EditNoteProps> = ({ note, closeHandler }) => {
       return;
     }
 
-    const cipherNote = aesEncrypt(account.password, text);
+    const cipherNote = aesEncrypt(account.passphrase, text);
     const serverResponse = await editNoteRequest(
       note.id,
       cipherNote,

@@ -48,7 +48,7 @@ const SettingDownloadBackup: FC = () => {
         exportDecryptedBackup(
           serverResponse.data,
           currentDate,
-          account.password
+          account.passphrase
         );
         break;
     }

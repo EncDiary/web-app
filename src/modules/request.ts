@@ -20,11 +20,7 @@ export const createNoteRequest = (
     baseURL: serverUrl,
     url: "/note",
     headers: { Authorization: `Bearer ${jwtToken}` },
-    data: qs.stringify({
-      text: cipherNote.ciphertext,
-      iv: cipherNote.iv,
-      salt: cipherNote.salt,
-    }),
+    data: qs.stringify(cipherNote),
   }).catch((error: AxiosError) => {
     errorAlert(getErrorMessage(error));
   });
@@ -44,11 +40,7 @@ export const editNoteRequest = (
     baseURL: serverUrl,
     url: `/note/${noteId}`,
     headers: { Authorization: `Bearer ${jwtToken}` },
-    data: qs.stringify({
-      text: cipherNote.ciphertext,
-      iv: cipherNote.iv,
-      salt: cipherNote.salt,
-    }),
+    data: qs.stringify(cipherNote),
   }).catch((error: AxiosError) => {
     errorAlert(getErrorMessage(error));
   });
@@ -76,21 +68,14 @@ export const getTodayNotesRequest = (jwtToken: string) => {
   });
 };
 
-export const registerRequest = (
-  username: string,
-  saltyPasswordHashText: string,
-  encryptionType: "aes",
-  saltHexText: string
-) => {
+export const registerRequest = (username: string, publicKey: string) => {
   return axios({
     method: "post",
     baseURL: serverUrl,
     url: "/register",
     data: qs.stringify({
       username,
-      key: saltyPasswordHashText,
-      encryption_type: encryptionType,
-      password_salt: saltHexText,
+      public_key: publicKey,
     }),
   }).catch((error: AxiosError) => {
     errorAlert(getErrorMessage(error));

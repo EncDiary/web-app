@@ -36,15 +36,15 @@ const NoteToday: FC = () => {
       serverResponse.data.notes.forEach(
         (note: {
           id: string;
-          text: string;
+          ciphertext: string;
           datetime: string;
           iv: string;
           salt: string;
         }) => {
           const datetime = +note.datetime * 1000;
           const text = aesDecrypt(
-            account.password,
-            note.text,
+            account.passphrase,
+            note.ciphertext,
             note.salt,
             note.iv
           );

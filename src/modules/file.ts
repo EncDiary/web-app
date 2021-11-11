@@ -12,12 +12,17 @@ export const exportJson = (data: any, filename: string) => {
 export const exportDecryptedBackup = async (
   fetchedData: any,
   currentDate: string,
-  password: string
+  passphrase: string | CryptoJS.lib.WordArray
 ) => {
   const notes: { text: string; datetime: number }[] = [];
   fetchedData.notes.forEach(
-    (note: { text: string; datetime: string; iv: string; salt: string }) => {
-      const text = aesDecrypt(password, note.text, note.salt, note.iv);
+    (note: {
+      ciphertext: string;
+      datetime: string;
+      iv: string;
+      salt: string;
+    }) => {
+      const text = aesDecrypt(passphrase, note.ciphertext, note.salt, note.iv);
       notes.push({ text, datetime: +note.datetime });
     }
   );

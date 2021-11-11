@@ -48,14 +48,14 @@ const Notes: FC = () => {
       serverResponse.data.notes.forEach(
         (note: {
           id: string;
-          text: string;
+          ciphertext: string;
           datetime: string;
           iv: string;
           salt: string;
         }) => {
           const text = aesDecrypt(
-            account.password,
-            note.text,
+            account.passphrase,
+            note.ciphertext,
             note.salt,
             note.iv
           );

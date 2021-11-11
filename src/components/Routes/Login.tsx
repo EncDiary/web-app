@@ -1,44 +1,41 @@
 import { Link, useHistory } from "react-router-dom";
 import { useFormState } from "../../hooks/useFormState";
 import Button from "../Generic/Button";
-import { TextInput } from "../Generic/Input";
+import { FileInput, TextInput } from "../Generic/Input";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 import UnauthorizedWrapper from "../Generic/UnauthorizedWrapper";
 import "./Login.scss";
-import { aesDecrypt, getHashText, textToHex } from "../../modules/crypto";
 import { errorAlert } from "../../modules/sweetalert";
 import {
   authUserRequest,
   getDisposableKeyRequest,
 } from "../../modules/request";
 import store from "../../store";
+import JSEncrypt from "jsencrypt";
+import { enc } from "crypto-js";
+import { useFileInputState } from "../../hooks/useFileInputState";
 
 const Login = () => {
   const history = useHistory();
 
   const [formValues, changeHandler] = useFormState({
     username: "",
-    password: "",
   });
+
+  const [fileText, fileName, setFileText, setFileName] = useFileInputState();
 
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     const serverResponse = await getDisposableKeyRequest(formValues.username);
     if (!serverResponse) return;
 
-    const passwordHexText = textToHex(formValues.password);
-    const saltHexText = serverResponse.data.password_salt;
-    const saltyPasswordHashText = getHashText(passwordHexText + saltHexText);
+    const jse = new JSEncrypt();
+    jse.setPrivateKey(fileText);
 
-    const plaintext = aesDecrypt(
-      saltyPasswordHashText,
-      serverResponse.data.ciphertext,
-      serverResponse.data.salt,
-      serverResponse.data.iv
-    );
+    const plaintext = jse.decrypt(serverResponse.data.ciphertext);
 
-    if (!plaintext.length) {
+    if (!plaintext) {
       errorAlert("Неверный пароль");
       return;
     }
@@ -50,11 +47,16 @@ const Login = () => {
 
     if (!serverAuthResponse) return;
 
+    const privateKeyBase64 = jse.getPrivateKeyB64();
+    const privateKey = enc.Base64.parse(privateKeyBase64);
+
     store.appStore.setAccount(
       formValues.username.toLowerCase(),
-      formValues.password,
-      serverAuthResponse.data.token
+      jse,
+      serverAuthResponse.data.token,
+      privateKey
     );
+
     history.push("/write");
   };
 
@@ -69,13 +71,11 @@ const Login = () => {
           onChange={changeHandler}
           size="large"
         />
-        <TextInput
-          placeholder="Password"
-          type="password"
-          value={formValues.password}
-          name="password"
-          onChange={changeHandler}
-          size="large"
+        <FileInput
+          description="Приватный ключ"
+          fileName={fileName}
+          setFileName={setFileName}
+          setFileText={setFileText}
         />
         <TextBlock size="small">
           Your private key won't be uploaded to the servers.

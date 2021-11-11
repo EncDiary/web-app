@@ -12,6 +12,9 @@ interface TextInputProps {
 
 interface FileInputProps {
   description: string;
+  setFileText: (text: string) => void;
+  fileName: string;
+  setFileName: (name: string) => void;
 }
 
 interface SelectInputProps {
@@ -47,12 +50,37 @@ export const TextInput: FC<TextInputProps> = ({
   );
 };
 
-export const FileInput: FC<FileInputProps> = ({ description }) => {
+export const FileInput: FC<FileInputProps> = ({
+  description,
+  fileName,
+  setFileName,
+  setFileText,
+}) => {
+  const readFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.persist();
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      const fileText = fileReader.result;
+      if (typeof fileText === "string") {
+        setFileText(fileText);
+      }
+    };
+    const files = event.currentTarget.files;
+    if (files) {
+      fileReader.readAsText(files[0]);
+      setFileName(files[0].name);
+    }
+  };
+
   return (
     <label className="file-input">
-      <input type="file" className="file-input__field" />
+      <input
+        type="file"
+        className="file-input__field"
+        onChange={(event) => readFile(event)}
+      />
       <div className="file-input__description">{description}</div>
-      <div className="file-input__file-name">file_name.txt</div>
+      <div className="file-input__file-name">{fileName}</div>
     </label>
   );
 };

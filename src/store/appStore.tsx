@@ -1,8 +1,16 @@
+import JSEncrypt from "jsencrypt";
 import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
 
 class AppStore {
-  account: { username: string; password: string; token: string } | undefined;
+  account:
+    | {
+        username: string;
+        privateKey: JSEncrypt;
+        token: string;
+        passphrase: CryptoJS.lib.WordArray;
+      }
+    | undefined;
 
   rootStore: RootStore;
   constructor(rootStore: RootStore) {
@@ -10,8 +18,13 @@ class AppStore {
     this.rootStore = rootStore;
   }
 
-  setAccount(username: string, password: string, token: string) {
-    this.account = { username, password, token };
+  setAccount(
+    username: string,
+    privateKey: JSEncrypt,
+    token: string,
+    passphrase: CryptoJS.lib.WordArray
+  ) {
+    this.account = { username, privateKey, token, passphrase };
   }
 
   clearAccount() {
