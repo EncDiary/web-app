@@ -7,7 +7,7 @@ import RegisterSecret from "./RegisterSecret";
 import RegisterUsername from "./RegisterUsername";
 import { successAlert } from "../../modules/sweetalert";
 import { useHistory } from "react-router";
-import { registerRequest } from "../../modules/request";
+import { registerRequest } from "../../modules/request/userRequest";
 import JSEncrypt from "jsencrypt";
 import { useFileInputState } from "../../hooks/useFileInputState";
 
@@ -56,9 +56,6 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
   const [formValues, setFormValues] = useFormState({
     username: "",
   });
-
-  // const [fileText, setFileText] = useState("");
-  // const [fileName, setFileName] = useState("Выберите файл");
 
   const [fileText, fileName, setFileText, setFileName] = useFileInputState();
 

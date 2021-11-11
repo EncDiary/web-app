@@ -1,5 +1,6 @@
-import { FC, useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { observer } from "mobx-react-lite";
+import { FC, useState } from "react";
+import { Redirect } from "react-router";
 import store from "../../store";
 import { settingPanelEnum } from "../../types/setting";
 import Header from "../Generic/Header";
@@ -10,14 +11,11 @@ import SettingMain from "../Setting/SettingMain";
 import SettingSecure from "../Setting/SettingSecure";
 import SettingSidebar from "../Setting/SettingSidebar";
 
-const Setting: FC = () => {
-  const history = useHistory();
-
-  useEffect(() => {
-    if (!store.appStore.account) {
-      history.push("/login");
-    }
-  }, [history]);
+const Setting: FC = observer(() => {
+  const account = store.appStore.account;
+  if (!account) {
+    return <Redirect to="/login" />;
+  }
 
   const [currentSettingPanel, setCurrentSettingPanel] = useState(
     settingPanelEnum.main
@@ -28,7 +26,7 @@ const Setting: FC = () => {
       case settingPanelEnum.main:
         return <SettingMain />;
       case settingPanelEnum.security:
-        return <SettingSecure />;
+        return <SettingSecure account={account} />;
       case settingPanelEnum.hotkeys:
         return <SettingHotkey />;
     }
@@ -46,6 +44,6 @@ const Setting: FC = () => {
       </WithSidebar>
     </>
   );
-};
+});
 
 export default Setting;

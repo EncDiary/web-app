@@ -10,7 +10,7 @@ import { errorAlert } from "../../modules/sweetalert";
 import {
   authUserRequest,
   getDisposableKeyRequest,
-} from "../../modules/request";
+} from "../../modules/request/userRequest";
 import store from "../../store";
 import JSEncrypt from "jsencrypt";
 import { enc } from "crypto-js";

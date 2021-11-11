@@ -5,7 +5,7 @@ import Container from "../Generic/Container";
 import { EditorPanel, SetEditor } from "../Generic/Editor";
 import { errorAlert } from "../../modules/sweetalert";
 import "./CreateNote.scss";
-import { createNoteRequest } from "../../modules/request";
+import { createNoteRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
 
 const CreateNote: FC = () => {

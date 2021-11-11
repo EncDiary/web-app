@@ -12,16 +12,33 @@ import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 import SettingSection from "./SettingSection";
 import "./SettingSecure.scss";
-import { getBackupRequest } from "../../modules/request";
+import {
+  deleteAccountRequest,
+  getBackupRequest,
+} from "../../modules/request/userRequest";
 import store from "../../store";
+import {
+  errorAlert,
+  successAlert,
+  writeTextAlert,
+} from "../../modules/sweetalert";
+import { IAccount } from "../../types/account";
 
-const SettingSecure: FC = () => {
+interface SettingSecureProps {
+  account: IAccount;
+}
+
+interface SettingDeleteAccountProps {
+  account: IAccount;
+}
+
+const SettingSecure: FC<SettingSecureProps> = ({ account }) => {
   return (
     <>
       <Title text="Безопасность" align="left" />
       <SettingDownloadBackup />
       <SettingChangePassword />
-      <SettingDeleteAccount />
+      <SettingDeleteAccount account={account} />
     </>
   );
 };
@@ -117,16 +134,42 @@ const SettingChangePassword: FC = () => {
   );
 };
 
-const SettingDeleteAccount: FC = () => {
+const SettingDeleteAccount: FC<SettingDeleteAccountProps> = ({ account }) => {
+  const history = useHistory();
+
+  const deleteAccount = async () => {
+    const result = await writeTextAlert(
+      "Удаление аккаунта",
+      `Вы абсолютно уверены? Это действие не может быть отменено. Это приведет к безвозвратному удалению дневника <b>${account.username}</b>.
+      <br><br>Введите <b><u>Delete ${account.username}</u></b>`,
+      (value: string) => {
+        return value !== `Delete ${account.username}`
+          ? "Аккаунт не может быть удален без подтверждения"
+          : null;
+      }
+    );
+    if (result.isConfirmed) {
+      const serverDeleteAccountResponse = await deleteAccountRequest(
+        account.token
+      );
+
+      if (!serverDeleteAccountResponse) {
+        errorAlert("Ошибка при удалении дневника");
+      }
+      successAlert("Дневник удален успешно");
+      history.push("/login");
+    }
+  };
+
   return (
     <SettingSection>
       <Title text="Удаление аккаунта" size="medium" align="left" />
       <TextBlock>
-        Удаление учетной записи происходит безвозвратно. В дальнейшем логин
-        [username] может быть переиспользован кем угодно. Перед удалением
-        появится окно с подтвеждением действия
+        Удаление учетной записи происходит безвозвратно. Будьте уверены в своих
+        действиях. В дальнейшем логин [username] может быть переиспользован кем
+        угодно. (Перед удалением появится окно с подтвеждением действия)
       </TextBlock>
-      <Button text="Подтвердить удаление" />
+      <Button text="Подтвердить удаление" onClick={() => deleteAccount()} />
     </SettingSection>
   );
 };

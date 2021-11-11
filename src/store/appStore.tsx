@@ -1,16 +1,10 @@
 import JSEncrypt from "jsencrypt";
 import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
+import { IAccount } from "../types/account";
 
 class AppStore {
-  account:
-    | {
-        username: string;
-        privateKey: JSEncrypt;
-        token: string;
-        passphrase: CryptoJS.lib.WordArray;
-      }
-    | undefined;
+  account?: IAccount;
 
   rootStore: RootStore;
   constructor(rootStore: RootStore) {

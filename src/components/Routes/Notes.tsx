@@ -8,7 +8,7 @@ import MainContent from "../Generic/MainContent";
 import Pagination from "../Generic/Pagination";
 import Title from "../Generic/Title";
 import NoteList from "../Note/NoteList";
-import { getNotesWithLimit } from "../../modules/request";
+import { getNotesWithLimit } from "../../modules/request/noteRequest";
 import store from "../../store";
 
 const Notes: FC = () => {

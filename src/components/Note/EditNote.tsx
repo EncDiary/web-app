@@ -9,7 +9,7 @@ import Title from "../Generic/Title";
 import UnderWindow from "../Generic/UnderWindow";
 import "./CreateNote.scss";
 import "./EditNote.scss";
-import { editNoteRequest } from "../../modules/request";
+import { editNoteRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
 
 interface EditNoteProps {

@@ -41,3 +41,22 @@ export const successAlert = (title: string, text?: string) => {
     buttonsStyling: false,
   });
 };
+
+export const writeTextAlert = (title: string, text: string, validator: any) => {
+  return Swal.fire({
+    title,
+    input: "text",
+    html: text,
+    inputValue: "",
+    showCancelButton: true,
+    inputValidator: validator,
+    reverseButtons: true,
+    customClass: {
+      confirmButton: "button_primary button_medium",
+      cancelButton: "button_secondary button_medium",
+    },
+    buttonsStyling: false,
+    confirmButtonText: "Удалить",
+    cancelButtonText: "Отмена",
+  });
+};

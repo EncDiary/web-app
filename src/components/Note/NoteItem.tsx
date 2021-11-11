@@ -6,7 +6,7 @@ import "./NoteItem.scss";
 import EditNote from "./EditNote";
 import { confirmationAlert } from "../../modules/sweetalert";
 import { getLongDate, getShortWeekDay, getTime } from "../../modules/datetime";
-import { deleteNoteRequest } from "../../modules/request";
+import { deleteNoteRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
 
 interface NoteItemProps {

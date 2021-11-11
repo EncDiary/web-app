@@ -7,7 +7,7 @@ import Container from "../Generic/Container";
 import Title from "../Generic/Title";
 import NoteList from "./NoteList";
 import "./NoteToday.scss";
-import { getTodayNotesRequest } from "../../modules/request";
+import { getTodayNotesRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
 
 const NoteToday: FC = () => {
