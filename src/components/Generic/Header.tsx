@@ -9,7 +9,12 @@ import {
   SettingIcon,
 } from "../../assets/svg-icons";
 import store from "../../store";
+import { IAccount } from "../../types/account";
 import "./Header.scss";
+
+interface HeaderProps {
+  account: IAccount;
+}
 
 interface HeaderNavigationButtonProps {
   onClick?: () => void;
@@ -21,7 +26,7 @@ interface HeaderNavigationLinkProps {
   link: string;
 }
 
-const Header: FC = () => {
+const Header: FC<HeaderProps> = ({ account }) => {
   const history = useHistory();
 
   const logOut = () => {
@@ -32,7 +37,7 @@ const Header: FC = () => {
 
   return (
     <header className="header">
-      <div className="header__username">admin</div>
+      <div className="header__username">{account.username}</div>
       <div className="header__navigation">
         <HeaderNavigationLink link="/write" content={<EditIcon />} />
         <HeaderNavigationLink link="/notes" content={<BookIcon />} />

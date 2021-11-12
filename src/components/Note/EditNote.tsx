@@ -11,19 +11,19 @@ import "./CreateNote.scss";
 import "./EditNote.scss";
 import { editNoteRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
+import { IAccount } from "../../types/account";
 
 interface EditNoteProps {
+  account: IAccount;
   note: INote;
   closeHandler: () => void;
 }
 
-const EditNote: FC<EditNoteProps> = ({ note, closeHandler }) => {
+const EditNote: FC<EditNoteProps> = ({ account, note, closeHandler }) => {
   const editor = SetEditor(note.text);
 
   const submitHandler = async () => {
     const text = editor?.getHTML() || "";
-    const account = store.appStore.account;
-    if (!account) return;
 
     if (text.length < 8) {
       errorAlert("Сначала введите текст записи");

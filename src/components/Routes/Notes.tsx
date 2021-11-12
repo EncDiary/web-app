@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { aesDecrypt } from "../../modules/crypto";
 import { INote } from "../../types/note";
 import Container from "../Generic/Container";
@@ -12,14 +12,13 @@ import { getNotesWithLimit } from "../../modules/request/noteRequest";
 import store from "../../store";
 
 const Notes: FC = () => {
-  const history = useHistory();
-
-  const [pageNumber, setPageNumber] = useState(1);
-  const [areNotesOver, setAreNotesOver] = useState(false);
   const {
     settingStore: { notesNumberPerPage: limit },
     appStore: { account },
   } = store;
+
+  const [pageNumber, setPageNumber] = useState(1);
+  const [areNotesOver, setAreNotesOver] = useState(false);
 
   const startNumber = (pageNumber - 1) * limit;
   const endNumber = pageNumber * limit;
@@ -31,10 +30,7 @@ const Notes: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!account) {
-      history.push("/login");
-      return;
-    }
+    if (!account) return;
 
     const fetchNotes = async () => {
       const serverResponse = await getNotesWithLimit(
@@ -68,11 +64,15 @@ const Notes: FC = () => {
     };
 
     fetchNotes();
-  }, [pageNumber, limit, history, account]);
+  }, [pageNumber, limit, account]);
+
+  if (!account) {
+    return <Redirect to="/login" />;
+  }
 
   return (
     <>
-      <Header />
+      <Header account={account} />
       <MainContent type="note-list">
         <section className="history">
           <Container>
@@ -86,7 +86,7 @@ const Notes: FC = () => {
                   isBackDisabled={pageNumber < 2}
                   isNextDisabled={areNotesOver}
                 />
-                <NoteList />
+                <NoteList account={account} />
                 <Pagination
                   content={`${startNumber} – ${endNumber}`}
                   onClickBack={() => setPageNumber(pageNumber - 1)}

@@ -16,7 +16,6 @@ import {
   deleteAccountRequest,
   getBackupRequest,
 } from "../../modules/request/userRequest";
-import store from "../../store";
 import {
   errorAlert,
   successAlert,
@@ -28,6 +27,10 @@ interface SettingSecureProps {
   account: IAccount;
 }
 
+interface SettingDownloadBackupProps {
+  account: IAccount;
+}
+
 interface SettingDeleteAccountProps {
   account: IAccount;
 }
@@ -36,23 +39,15 @@ const SettingSecure: FC<SettingSecureProps> = ({ account }) => {
   return (
     <>
       <Title text="Безопасность" align="left" />
-      <SettingDownloadBackup />
+      <SettingDownloadBackup account={account} />
       <SettingChangePassword />
       <SettingDeleteAccount account={account} />
     </>
   );
 };
 
-const SettingDownloadBackup: FC = () => {
-  const history = useHistory();
-  const account = store.appStore.account;
-
+const SettingDownloadBackup: FC<SettingDownloadBackupProps> = ({ account }) => {
   const exportBackup = async (backupType: "encrypted" | "decrypted") => {
-    if (!account) {
-      history.push("/login");
-      return;
-    }
-
     const serverResponse = await getBackupRequest(account.token);
     if (!serverResponse) return;
     const currentDate = getDotSeparatedDate(new Date());
@@ -166,8 +161,9 @@ const SettingDeleteAccount: FC<SettingDeleteAccountProps> = ({ account }) => {
       <Title text="Удаление аккаунта" size="medium" align="left" />
       <TextBlock>
         Удаление учетной записи происходит безвозвратно. Будьте уверены в своих
-        действиях. В дальнейшем логин [username] может быть переиспользован кем
-        угодно. (Перед удалением появится окно с подтвеждением действия)
+        действиях. В дальнейшем логин <b>{account.username}</b> может быть
+        переиспользован кем угодно. (Перед удалением появится окно с
+        подтвеждением действия)
       </TextBlock>
       <Button text="Подтвердить удаление" onClick={() => deleteAccount()} />
     </SettingSection>

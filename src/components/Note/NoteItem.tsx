@@ -8,8 +8,10 @@ import { confirmationAlert } from "../../modules/sweetalert";
 import { getLongDate, getShortWeekDay, getTime } from "../../modules/datetime";
 import { deleteNoteRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
+import { IAccount } from "../../types/account";
 
 interface NoteItemProps {
+  account: IAccount;
   note: INote;
 }
 
@@ -18,13 +20,12 @@ interface NoteActionButtonProps {
   content: ReactElement;
 }
 
-const NoteItem: FC<NoteItemProps> = ({ note }) => {
+const NoteItem: FC<NoteItemProps> = ({ account, note }) => {
   const [isEdit, setIsEdit] = useState(false);
   const {
     settingStore: {
       noteActions: { isEditable, isDeletable },
     },
-    appStore: { account },
   } = store;
 
   const noteDatetime = new Date(note.datetime);
@@ -38,8 +39,6 @@ const NoteItem: FC<NoteItemProps> = ({ note }) => {
   };
 
   const confirmDeleteHandler = async () => {
-    if (!account) return;
-
     const result = await confirmationAlert(
       "Удаление записи",
       `Восстановление удаленных записей невозможно!\n${sliceText(
@@ -84,7 +83,13 @@ const NoteItem: FC<NoteItemProps> = ({ note }) => {
       </div>
       <div className="note__content">{parse(note.text)}</div>
 
-      {isEdit && <EditNote note={note} closeHandler={() => setIsEdit(false)} />}
+      {isEdit && (
+        <EditNote
+          account={account}
+          note={note}
+          closeHandler={() => setIsEdit(false)}
+        />
+      )}
     </article>
   );
 };

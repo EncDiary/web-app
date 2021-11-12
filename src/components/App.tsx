@@ -1,3 +1,4 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { useIdleTimer } from "react-idle-timer";
 import { Redirect, Route, Switch, useHistory } from "react-router";
@@ -9,7 +10,7 @@ import Register from "./Routes/Register";
 import Setting from "./Routes/Setting";
 import Write from "./Routes/Write";
 
-const App: React.FC = () => {
+const App: React.FC = observer(() => {
   const history = useHistory();
 
   const handleOnIdle = () => {
@@ -48,6 +49,6 @@ const App: React.FC = () => {
       <Redirect to="/login" />
     </Switch>
   );
-};
+});
 
 export default App;

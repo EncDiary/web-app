@@ -1,5 +1,4 @@
 import { FC, useEffect } from "react";
-import { useHistory } from "react-router";
 import { aesDecrypt } from "../../modules/crypto";
 import { INote } from "../../types/note";
 import { ButtonLink } from "../Generic/Button";
@@ -9,16 +8,14 @@ import NoteList from "./NoteList";
 import "./NoteToday.scss";
 import { getTodayNotesRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
+import { IAccount } from "../../types/account";
 
-const NoteToday: FC = () => {
-  const history = useHistory();
+interface NoteTodayProps {
+  account: IAccount;
+}
 
+const NoteToday: FC<NoteTodayProps> = ({ account }) => {
   useEffect(() => {
-    const account = store.appStore.account;
-    if (!account) {
-      history.push("/login");
-      return;
-    }
     store.noteStore.clearNotes();
 
     const fetchNotes = async () => {
@@ -63,7 +60,7 @@ const NoteToday: FC = () => {
     <section className="today-notes">
       <Container>
         <Title text="Сегодняшние записи" />
-        <NoteList />
+        <NoteList account={account} />
         <ButtonLink
           text="Все записи"
           link="/notes"

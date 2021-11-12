@@ -34,7 +34,7 @@ const Setting: FC = observer(() => {
 
   return (
     <>
-      <Header />
+      <Header account={account} />
       <WithSidebar>
         <SettingSidebar
           currentSettingPanel={currentSettingPanel}

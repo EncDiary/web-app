@@ -7,14 +7,16 @@ import { errorAlert } from "../../modules/sweetalert";
 import "./CreateNote.scss";
 import { createNoteRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
+import { IAccount } from "../../types/account";
 
-const CreateNote: FC = () => {
+interface CreateNoteProps {
+  account: IAccount;
+}
+
+const CreateNote: FC<CreateNoteProps> = ({ account }) => {
   const editor = SetEditor("");
 
   const submitHandler = async () => {
-    const account = store.appStore.account;
-    if (!account) return;
-
     const text = editor?.getHTML() || "";
     if (text.length < 8) {
       errorAlert("Сначала введите текст записи");

@@ -1,5 +1,6 @@
-import { FC, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import { FC } from "react";
+import { Redirect } from "react-router-dom";
 import store from "../../store";
 import Container from "../Generic/Container";
 import Header from "../Generic/Header";
@@ -7,18 +8,15 @@ import MainContent from "../Generic/MainContent";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 
-const Info: FC = () => {
-  const history = useHistory();
-
-  useEffect(() => {
-    if (!store.appStore.account) {
-      history.push("/login");
-    }
-  }, [history]);
+const Info: FC = observer(() => {
+  const account = store.appStore.account;
+  if (!account) {
+    return <Redirect to="/login" />;
+  }
 
   return (
     <>
-      <Header />
+      <Header account={account} />
       <MainContent type="info">
         <section className="info">
           <Container>
@@ -32,6 +30,6 @@ const Info: FC = () => {
       </MainContent>
     </>
   );
-};
+});
 
 export default Info;
