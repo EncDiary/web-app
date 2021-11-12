@@ -46,7 +46,7 @@ const NoteItem: FC<NoteItemProps> = ({ account, note }) => {
       )}`
     );
     if (result.isConfirmed) {
-      const serverResponse = await deleteNoteRequest(note.id, account.token);
+      const serverResponse = await deleteNoteRequest(note.id, account);
       if (!serverResponse) return;
       store.noteStore.delete(note.id);
     }

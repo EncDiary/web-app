@@ -36,7 +36,7 @@ const Notes: FC = () => {
       const serverResponse = await getNotesWithLimit(
         limit,
         (pageNumber - 1) * limit,
-        account.token
+        account
       );
       if (!serverResponse) return;
 

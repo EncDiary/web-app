@@ -24,7 +24,7 @@ const CreateNote: FC<CreateNoteProps> = ({ account }) => {
     }
 
     const cipherNote = aesEncrypt(account.passphrase, text);
-    const serverResponse = await createNoteRequest(cipherNote, account.token);
+    const serverResponse = await createNoteRequest(cipherNote, account);
     if (!serverResponse) return;
 
     store.noteStore.create({

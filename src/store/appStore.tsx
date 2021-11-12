@@ -21,6 +21,12 @@ class AppStore {
     this.account = { username, privateKey, token, passphrase };
   }
 
+  updateToken(token: string) {
+    if (this.account) {
+      this.account.token = token;
+    }
+  }
+
   clearAccount() {
     this.account = undefined;
   }

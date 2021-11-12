@@ -19,7 +19,7 @@ const NoteToday: FC<NoteTodayProps> = ({ account }) => {
     store.noteStore.clearNotes();
 
     const fetchNotes = async () => {
-      const serverResponse = await getTodayNotesRequest(account.token);
+      const serverResponse = await getTodayNotesRequest(account);
       if (!serverResponse) return;
 
       const today = new Date();

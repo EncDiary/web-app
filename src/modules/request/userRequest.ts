@@ -1,5 +1,7 @@
 import axios, { AxiosError } from "axios";
 import qs from "qs";
+import { IAccount } from "../../types/account";
+import { updateJwtToken } from "../jwt";
 import { errorAlert } from "../sweetalert";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -48,23 +50,27 @@ export const authUserRequest = (username: string, plaintext: string) => {
   });
 };
 
-export const getBackupRequest = (jwtToken: string) => {
+export const getBackupRequest = async (account: IAccount) => {
+  await updateJwtToken(account);
+
   return axios({
     method: "get",
     baseURL: serverUrl,
     url: "/backup",
-    headers: { Authorization: `Bearer ${jwtToken}` },
+    headers: { Authorization: `Bearer ${account.token}` },
   }).catch((error: AxiosError) => {
     errorAlert(getErrorMessage(error));
   });
 };
 
-export const deleteAccountRequest = (jwtToken: string) => {
+export const deleteAccountRequest = async (account: IAccount) => {
+  await updateJwtToken(account);
+
   return axios({
     method: "delete",
     baseURL: serverUrl,
     url: `/delete_account`,
-    headers: { Authorization: `Bearer ${jwtToken}` },
+    headers: { Authorization: `Bearer ${account.token}` },
   }).catch((error: AxiosError) => {
     errorAlert(getErrorMessage(error));
   });

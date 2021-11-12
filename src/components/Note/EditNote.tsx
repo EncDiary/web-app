@@ -37,11 +37,7 @@ const EditNote: FC<EditNoteProps> = ({ account, note, closeHandler }) => {
     }
 
     const cipherNote = aesEncrypt(account.passphrase, text);
-    const serverResponse = await editNoteRequest(
-      note.id,
-      cipherNote,
-      account.token
-    );
+    const serverResponse = await editNoteRequest(note.id, cipherNote, account);
     if (!serverResponse) return;
 
     store.noteStore.edit(note.id, text);

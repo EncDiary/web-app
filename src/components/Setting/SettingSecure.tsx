@@ -48,7 +48,7 @@ const SettingSecure: FC<SettingSecureProps> = ({ account }) => {
 
 const SettingDownloadBackup: FC<SettingDownloadBackupProps> = ({ account }) => {
   const exportBackup = async (backupType: "encrypted" | "decrypted") => {
-    const serverResponse = await getBackupRequest(account.token);
+    const serverResponse = await getBackupRequest(account);
     if (!serverResponse) return;
     const currentDate = getDotSeparatedDate(new Date());
 
@@ -144,9 +144,7 @@ const SettingDeleteAccount: FC<SettingDeleteAccountProps> = ({ account }) => {
       }
     );
     if (result.isConfirmed) {
-      const serverDeleteAccountResponse = await deleteAccountRequest(
-        account.token
-      );
+      const serverDeleteAccountResponse = await deleteAccountRequest(account);
 
       if (!serverDeleteAccountResponse) {
         errorAlert("Ошибка при удалении дневника");
