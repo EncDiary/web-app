@@ -12,6 +12,7 @@ import "./EditNote.scss";
 import { editNoteRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
 import { IAccount } from "../../types/account";
+import ReactDOM from "react-dom";
 
 interface EditNoteProps {
   account: IAccount;
@@ -47,7 +48,7 @@ const EditNote: FC<EditNoteProps> = ({ account, note, closeHandler }) => {
     closeHandler();
   };
 
-  return (
+  return ReactDOM.createPortal(
     <UnderWindow>
       <section className="edit-note">
         <Container>
@@ -68,7 +69,8 @@ const EditNote: FC<EditNoteProps> = ({ account, note, closeHandler }) => {
           </div>
         </Container>
       </section>
-    </UnderWindow>
+    </UnderWindow>,
+    document.body
   );
 };
 
