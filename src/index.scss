@@ -34,6 +34,10 @@ body {
   background-color: $background-color;
 }
 
+body .blur {
+  filter: blur(7px);
+}
+
 hr {
   border-top: 1px solid $medium-gray;
 }

@@ -15,6 +15,7 @@ import store from "../../store";
 import JSEncrypt from "jsencrypt";
 import { enc } from "crypto-js";
 import { useFileInputState } from "../../hooks/useFileInputState";
+import { disableIsLoading } from "../../modules/loading";
 
 const Login = () => {
   const history = useHistory();
@@ -36,6 +37,7 @@ const Login = () => {
     const plaintext = jse.decrypt(serverResponse.data.ciphertext);
 
     if (!plaintext) {
+      disableIsLoading();
       errorAlert("Неверный пароль");
       return;
     }

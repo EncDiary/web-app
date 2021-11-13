@@ -70,7 +70,11 @@ const NoteItem: FC<NoteItemProps> = ({ account, note }) => {
           {isEditable && (
             <NoteActionButton
               content={<EditIcon />}
-              onClick={() => setIsEdit(!isEdit)}
+              onClick={() => {
+                setIsEdit(true);
+                document.body.style.overflow = "hidden";
+                store.appStore.setIsAppBlur(true);
+              }}
             />
           )}
           {isDeletable && (
@@ -83,13 +87,16 @@ const NoteItem: FC<NoteItemProps> = ({ account, note }) => {
       </div>
       <div className="note__content">{parse(note.text)}</div>
 
-      {isEdit && (
-        <EditNote
-          account={account}
-          note={note}
-          closeHandler={() => setIsEdit(false)}
-        />
-      )}
+      <EditNote
+        account={account}
+        note={note}
+        isOpen={isEdit}
+        setIsOpen={(isOpen: boolean) => {
+          setIsEdit(isOpen);
+          document.body.style.overflow = isOpen ? "hidden" : "auto";
+          store.appStore.setIsAppBlur(isOpen);
+        }}
+      />
     </article>
   );
 };

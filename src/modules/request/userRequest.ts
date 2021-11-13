@@ -2,6 +2,7 @@ import axios, { AxiosError } from "axios";
 import qs from "qs";
 import { IAccount } from "../../types/account";
 import { updateJwtToken } from "../jwt";
+import { disableIsLoading, enableIsLoading } from "../loading";
 import { errorAlert } from "../sweetalert";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -10,6 +11,8 @@ const getErrorMessage = (error: AxiosError) =>
   error.response?.data.message ?? "Неизвестная ошибка";
 
 export const registerRequest = (username: string, publicKey: string) => {
+  enableIsLoading();
+
   return axios({
     method: "post",
     baseURL: serverUrl,
@@ -18,12 +21,16 @@ export const registerRequest = (username: string, publicKey: string) => {
       username,
       public_key: publicKey,
     }),
-  }).catch((error: AxiosError) => {
-    errorAlert(getErrorMessage(error));
-  });
+  })
+    .catch((error: AxiosError) => {
+      errorAlert(getErrorMessage(error));
+    })
+    .finally(disableIsLoading);
 };
 
 export const getDisposableKeyRequest = (username: string) => {
+  enableIsLoading();
+
   return axios({
     method: "post",
     baseURL: serverUrl,
@@ -33,10 +40,13 @@ export const getDisposableKeyRequest = (username: string) => {
     }),
   }).catch((error: AxiosError) => {
     errorAlert(getErrorMessage(error));
+    disableIsLoading();
   });
 };
 
 export const authUserRequest = (username: string, plaintext: string) => {
+  enableIsLoading();
+
   return axios({
     method: "post",
     baseURL: serverUrl,
@@ -45,12 +55,15 @@ export const authUserRequest = (username: string, plaintext: string) => {
       username,
       plain: plaintext,
     }),
-  }).catch((error: AxiosError) => {
-    errorAlert(getErrorMessage(error));
-  });
+  })
+    .catch((error: AxiosError) => {
+      errorAlert(getErrorMessage(error));
+    })
+    .finally(disableIsLoading);
 };
 
 export const getBackupRequest = async (account: IAccount) => {
+  enableIsLoading();
   await updateJwtToken(account);
 
   return axios({
@@ -58,12 +71,15 @@ export const getBackupRequest = async (account: IAccount) => {
     baseURL: serverUrl,
     url: "/backup",
     headers: { Authorization: `Bearer ${account.token}` },
-  }).catch((error: AxiosError) => {
-    errorAlert(getErrorMessage(error));
-  });
+  })
+    .catch((error: AxiosError) => {
+      errorAlert(getErrorMessage(error));
+    })
+    .finally(disableIsLoading);
 };
 
 export const deleteAccountRequest = async (account: IAccount) => {
+  enableIsLoading();
   await updateJwtToken(account);
 
   return axios({
@@ -71,7 +87,9 @@ export const deleteAccountRequest = async (account: IAccount) => {
     baseURL: serverUrl,
     url: `/delete_account`,
     headers: { Authorization: `Bearer ${account.token}` },
-  }).catch((error: AxiosError) => {
-    errorAlert(getErrorMessage(error));
-  });
+  })
+    .catch((error: AxiosError) => {
+      errorAlert(getErrorMessage(error));
+    })
+    .finally(disableIsLoading);
 };

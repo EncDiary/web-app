@@ -6,21 +6,21 @@ import Container from "../Generic/Container";
 import { EditorPanel, SetEditor } from "../Generic/Editor";
 import { errorAlert } from "../../modules/sweetalert";
 import Title from "../Generic/Title";
-import UnderWindow from "../Generic/UnderWindow";
 import "./CreateNote.scss";
 import "./EditNote.scss";
 import { editNoteRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
 import { IAccount } from "../../types/account";
-import ReactDOM from "react-dom";
+import Modal from "../Generic/Modal";
 
 interface EditNoteProps {
   account: IAccount;
   note: INote;
-  closeHandler: () => void;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-const EditNote: FC<EditNoteProps> = ({ account, note, closeHandler }) => {
+const EditNote: FC<EditNoteProps> = ({ account, note, isOpen, setIsOpen }) => {
   const editor = SetEditor(note.text);
 
   const submitHandler = async () => {
@@ -32,7 +32,7 @@ const EditNote: FC<EditNoteProps> = ({ account, note, closeHandler }) => {
     }
 
     if (text === note.text) {
-      closeHandler();
+      setIsOpen(false);
       return;
     }
 
@@ -41,11 +41,11 @@ const EditNote: FC<EditNoteProps> = ({ account, note, closeHandler }) => {
     if (!serverResponse) return;
 
     store.noteStore.edit(note.id, text);
-    closeHandler();
+    setIsOpen(false);
   };
 
-  return ReactDOM.createPortal(
-    <UnderWindow>
+  return (
+    <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
       <section className="edit-note">
         <Container>
           <Title text="Редактирование записи" />
@@ -54,7 +54,7 @@ const EditNote: FC<EditNoteProps> = ({ account, note, closeHandler }) => {
             <Button
               text="Отмена"
               colorTheme="secondary"
-              onClick={closeHandler}
+              onClick={() => setIsOpen(false)}
               className="edit-note__buttons-item"
             />
             <Button
@@ -65,8 +65,7 @@ const EditNote: FC<EditNoteProps> = ({ account, note, closeHandler }) => {
           </div>
         </Container>
       </section>
-    </UnderWindow>,
-    document.body
+    </Modal>
   );
 };
 
