@@ -17,7 +17,7 @@ interface ButtonLinkProps {
   text: string;
   colorTheme?: "primary" | "secondary";
   size?: "medium" | "large";
-  className: string;
+  className?: string;
 }
 
 const Button: FC<ButtonProps> = ({

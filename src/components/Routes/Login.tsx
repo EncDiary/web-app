@@ -1,6 +1,6 @@
 import { Link, useHistory } from "react-router-dom";
 import { useFormState } from "../../hooks/useFormState";
-import Button from "../Generic/Button";
+import Button, { ButtonLink } from "../Generic/Button";
 import { FileInput, TextInput } from "../Generic/Input";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
@@ -64,13 +64,13 @@ const Login = () => {
     if (!serverAuthResponse) return;
 
     const privateKeyBase64 = jse.getPrivateKeyB64();
-    const privateKey = enc.Base64.parse(privateKeyBase64);
+    const passphrase = enc.Base64.parse(privateKeyBase64);
 
     store.appStore.setAccount(
       formValues.username.toLowerCase(),
       jse,
       serverAuthResponse.data.token,
-      privateKey
+      passphrase
     );
 
     history.push("/write");
@@ -108,6 +108,12 @@ const Login = () => {
       <TextBlock size="small">
         Don't have account? <Link to="/register">Register</Link>
       </TextBlock>
+      <ButtonLink
+        text="Попробовать Демоверсию"
+        link="/demo"
+        colorTheme="secondary"
+        className="login__demo-version"
+      />
     </UnauthorizedWrapper>
   );
 };

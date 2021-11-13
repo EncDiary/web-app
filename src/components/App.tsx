@@ -4,6 +4,7 @@ import { useIdleTimer } from "react-idle-timer";
 import { Redirect, Route, Switch, useHistory } from "react-router";
 import store from "../store";
 import { Loading } from "./Generic/Spinner";
+import Demo from "./Routes/Demo";
 import Info from "./Routes/Info";
 import Login from "./Routes/Login";
 import Notes from "./Routes/Notes";
@@ -48,6 +49,9 @@ const App: React.FC = observer(() => {
         </Route>
         <Route path="/setting" exact>
           <Setting />
+        </Route>
+        <Route path="/demo" exact>
+          <Demo />
         </Route>
         <Redirect to="/login" />
       </Switch>
