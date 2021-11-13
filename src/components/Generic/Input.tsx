@@ -73,15 +73,18 @@ export const FileInput: FC<FileInputProps> = ({
   };
 
   return (
-    <label className="file-input">
+    <div className="uploader">
       <input
         type="file"
-        className="file-input__field"
+        className="uploader__input"
         onChange={(event) => readFile(event)}
+        id="login-upload-privkey"
       />
-      <div className="file-input__description">{description}</div>
-      <div className="file-input__file-name">{fileName}</div>
-    </label>
+      <label className="uploader__label" htmlFor="login-upload-privkey">
+        <div className="uploader__label-description">{description}</div>
+        <div className="uploader__label-filename">{fileName}</div>
+      </label>
+    </div>
   );
 };
 

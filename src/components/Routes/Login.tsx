@@ -16,6 +16,7 @@ import JSEncrypt from "jsencrypt";
 import { enc } from "crypto-js";
 import { useFileInputState } from "../../hooks/useFileInputState";
 import { disableIsLoading } from "../../modules/loading";
+import { useEffect, useState } from "react";
 
 const Login = () => {
   const history = useHistory();
@@ -26,8 +27,21 @@ const Login = () => {
 
   const [fileText, fileName, setFileText, setFileName] = useFileInputState();
 
+  const valueValidators = {
+    username: /^[a-z0-9][a-z0-9_]{3,30}[a-z0-9]$/i.test(formValues.username),
+    privateKey: fileText.length > 0,
+  };
+
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    setIsFormValid(valueValidators.username && valueValidators.privateKey);
+  }, [valueValidators.username, valueValidators.privateKey]);
+
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!(valueValidators.username && valueValidators.privateKey)) return;
+
     const serverResponse = await getDisposableKeyRequest(formValues.username);
     if (!serverResponse) return;
 
@@ -87,6 +101,7 @@ const Login = () => {
           size="large"
           type="submit"
           className="login__button"
+          disabled={!isFormValid}
         />
       </form>
       <hr />

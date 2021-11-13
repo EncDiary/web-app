@@ -1,4 +1,5 @@
 import { Dispatch, FC, SetStateAction } from "react";
+import { Link } from "react-router-dom";
 import { registerPanelEnum } from "../../types/register";
 import Button from "../Generic/Button";
 import { NextNavigation } from "../Generic/NextBackNavigation";
@@ -26,6 +27,10 @@ const RegisterStart: FC<RegisterStartProps> = ({ setCurrentRegisterPanel }) => {
           onClick={() => setCurrentRegisterPanel(registerPanelEnum.username)}
         />
       </NextNavigation>
+      <hr />
+      <TextBlock size="small">
+        Уже есть аккаунт? <Link to="/login">Логин</Link>
+      </TextBlock>
     </>
   );
 };

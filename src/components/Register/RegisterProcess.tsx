@@ -30,7 +30,7 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
             setCurrentRegisterPanel={setCurrentRegisterPanel}
             username={formValues.username}
             setFormValues={setFormValues}
-            isValidate={valueValidators.username}
+            isValid={valueValidators.username}
           />
         );
       case registerPanelEnum.secret:
@@ -60,13 +60,15 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
   const [fileText, fileName, setFileText, setFileName] = useFileInputState();
 
   const valueValidators = {
-    username: /^[a-z][a-z0-9_]{4,31}$/i.test(formValues.username),
+    username: /^[a-z0-9][a-z0-9_]{3,30}[a-z0-9]$/i.test(formValues.username),
     privateKey: fileText.length > 0,
   };
 
   const [currentPanelNumber, setCurrentPanelNumber] = useState(1);
 
   const submitHandler = async () => {
+    if (!(valueValidators.username && valueValidators.privateKey)) return;
+
     const jse = new JSEncrypt();
     jse.setPrivateKey(fileText);
 

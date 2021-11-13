@@ -10,14 +10,14 @@ interface RegisterUsernameProps {
   setCurrentRegisterPanel: Dispatch<SetStateAction<registerPanelEnum>>;
   username: string;
   setFormValues: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  isValidate: boolean;
+  isValid: boolean;
 }
 
 const RegisterUsername: FC<RegisterUsernameProps> = ({
   setCurrentRegisterPanel,
   username,
   setFormValues,
-  isValidate,
+  isValid,
 }) => {
   return (
     <>
@@ -39,7 +39,7 @@ const RegisterUsername: FC<RegisterUsernameProps> = ({
           text="Next"
           size="large"
           onClick={() => setCurrentRegisterPanel(registerPanelEnum.secret)}
-          disabled={!isValidate}
+          disabled={!isValid}
         />
       </NextNavigation>
     </>
