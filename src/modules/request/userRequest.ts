@@ -10,7 +10,11 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 const getErrorMessage = (error: AxiosError) =>
   error.response?.data.message ?? "Неизвестная ошибка";
 
-export const registerRequest = (username: string, publicKey: string) => {
+export const registerRequest = (
+  username: string,
+  publicKey: string,
+  passphraseSalt: string
+) => {
   enableIsLoading();
 
   return axios({
@@ -20,6 +24,7 @@ export const registerRequest = (username: string, publicKey: string) => {
     data: qs.stringify({
       username,
       public_key: publicKey,
+      passphrase_salt: passphraseSalt,
     }),
   })
     .catch((error: AxiosError) => {

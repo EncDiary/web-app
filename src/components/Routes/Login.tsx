@@ -17,6 +17,10 @@ import { enc } from "crypto-js";
 import { useFileInputState } from "../../hooks/useFileInputState";
 import { disableIsLoading } from "../../modules/loading";
 import { useEffect, useState } from "react";
+import {
+  checkPrivateKeyValidity,
+  checkUsernameValidity,
+} from "../../modules/validator";
 
 const Login = () => {
   const history = useHistory();
@@ -27,20 +31,18 @@ const Login = () => {
 
   const [fileText, fileName, setFileText, setFileName] = useFileInputState();
 
-  const valueValidators = {
-    username: /^[a-z0-9][a-z0-9_]{3,30}[a-z0-9]$/i.test(formValues.username),
-    privateKey: fileText.length > 0,
-  };
-
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
-    setIsFormValid(valueValidators.username && valueValidators.privateKey);
-  }, [valueValidators.username, valueValidators.privateKey]);
+    setIsFormValid(
+      checkUsernameValidity(formValues.username) &&
+        checkPrivateKeyValidity(fileText)
+    );
+  }, [formValues.username, fileText]);
 
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!(valueValidators.username && valueValidators.privateKey)) return;
+    if (!isFormValid) return;
 
     const serverResponse = await getDisposableKeyRequest(formValues.username);
     if (!serverResponse) return;
@@ -63,8 +65,12 @@ const Login = () => {
 
     if (!serverAuthResponse) return;
 
-    const privateKeyBase64 = jse.getPrivateKeyB64();
-    const passphrase = enc.Base64.parse(privateKeyBase64);
+    const privateKeyData = enc.Base64.parse(jse.getPrivateKeyB64());
+
+    const passphraseSalt = enc.Base64.parse(
+      serverAuthResponse.data.passphrase_salt
+    );
+    const passphrase = privateKeyData.concat(passphraseSalt);
 
     store.appStore.setAccount(
       formValues.username.toLowerCase(),

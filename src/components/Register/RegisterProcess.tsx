@@ -5,11 +5,17 @@ import RegisterBullet from "./RegisterBullet";
 import RegisterDonate from "./RegisterDonate";
 import RegisterSecret from "./RegisterSecret";
 import RegisterUsername from "./RegisterUsername";
-import { successAlert } from "../../modules/sweetalert";
+import { errorAlert, successAlert } from "../../modules/sweetalert";
 import { useHistory } from "react-router";
 import { registerRequest } from "../../modules/request/userRequest";
 import JSEncrypt from "jsencrypt";
 import { useFileInputState } from "../../hooks/useFileInputState";
+import {
+  checkPrivateKeyValidity,
+  checkUsernameValidity,
+} from "../../modules/validator";
+import { generateRandomBytes } from "../../modules/crypto";
+import CryptoJS from "crypto-js";
 
 interface RegisterProcessProps {
   currentRegisterPanel: registerPanelEnum;
@@ -30,14 +36,14 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
             setCurrentRegisterPanel={setCurrentRegisterPanel}
             username={formValues.username}
             setFormValues={setFormValues}
-            isValid={valueValidators.username}
+            isValid={isUsernameValid}
           />
         );
       case registerPanelEnum.secret:
         return (
           <RegisterSecret
             setCurrentRegisterPanel={setCurrentRegisterPanel}
-            isValidate={valueValidators.privateKey}
+            isValidate={isPrivateKeyValid}
             setFileText={setFileText}
             fileName={fileName}
             setFileName={setFileName}
@@ -59,22 +65,30 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
 
   const [fileText, fileName, setFileText, setFileName] = useFileInputState();
 
-  const valueValidators = {
-    username: /^[a-z0-9][a-z0-9_]{3,30}[a-z0-9]$/i.test(formValues.username),
-    privateKey: fileText.length > 0,
-  };
-
   const [currentPanelNumber, setCurrentPanelNumber] = useState(1);
 
   const submitHandler = async () => {
-    if (!(valueValidators.username && valueValidators.privateKey)) return;
+    if (!(isUsernameValid && isPrivateKeyValid)) return;
+
+    if (fileText.length > 500) {
+      errorAlert(
+        "Слишком большой размер ключа",
+        "EncDiary не поддерживает размер ключа больше, чем 2048 бит. Ограничение связано с повышенной нагрузкой на сервер"
+      );
+      return;
+    }
 
     const jse = new JSEncrypt();
     jse.setPrivateKey(fileText);
 
+    const passphraseSalt = CryptoJS.enc.Base64.stringify(
+      generateRandomBytes(256)
+    );
+
     const serverResponse = await registerRequest(
       formValues.username.toLowerCase(),
-      jse.getPublicKey()
+      jse.getPublicKey(),
+      passphraseSalt
     );
 
     if (!serverResponse) return;
@@ -82,15 +96,26 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
     history.push("/login");
   };
 
+  const [isUsernameValid, setIsUsernameValid] = useState(false);
+  const [isPrivateKeyValid, setIsPrivateKeyValid] = useState(false);
+
   useEffect(() => {
-    if (!valueValidators.username) {
+    const isFormValid = {
+      username: checkUsernameValidity(formValues.username),
+      privateKey: checkPrivateKeyValidity(fileText),
+    };
+
+    setIsUsernameValid(isFormValid.username);
+    setIsPrivateKeyValid(isFormValid.privateKey);
+
+    if (!isFormValid.username) {
       setCurrentPanelNumber(1);
-    } else if (!valueValidators.privateKey) {
+    } else if (!isFormValid.privateKey) {
       setCurrentPanelNumber(2);
     } else {
       setCurrentPanelNumber(3);
     }
-  }, [formValues, valueValidators.username, valueValidators.privateKey]);
+  }, [formValues, fileText]);
 
   return (
     <>

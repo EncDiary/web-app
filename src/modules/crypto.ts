@@ -27,8 +27,8 @@ export const aesEncrypt = (
   passphrase: string | CryptoJS.lib.WordArray,
   plaintext: string
 ) => {
-  const salt = CryptoJS.lib.WordArray.random(256);
-  const iv = CryptoJS.lib.WordArray.random(16);
+  const salt = generateRandomBytes(256);
+  const iv = generateRandomBytes(16);
 
   const key = CryptoJS.PBKDF2(passphrase, salt, {
     hasher: CryptoJS.algo.SHA512,
@@ -43,4 +43,8 @@ export const aesEncrypt = (
     salt: CryptoJS.enc.Hex.stringify(salt),
     iv: CryptoJS.enc.Hex.stringify(iv),
   };
+};
+
+export const generateRandomBytes = (bytesNumber: number) => {
+  return CryptoJS.lib.WordArray.random(bytesNumber);
 };
