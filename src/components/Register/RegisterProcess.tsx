@@ -12,6 +12,7 @@ import JSEncrypt from "jsencrypt";
 import { useFileInputState } from "../../hooks/useFileInputState";
 import {
   checkPrivateKeyValidity,
+  checkPublicKeyValidity,
   checkUsernameValidity,
 } from "../../modules/validator";
 import { generateRandomBytes } from "../../modules/crypto";
@@ -43,10 +44,13 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
         return (
           <RegisterSecret
             setCurrentRegisterPanel={setCurrentRegisterPanel}
-            isValidate={isPrivateKeyValid}
-            setFileText={setFileText}
-            fileName={fileName}
-            setFileName={setFileName}
+            isValid={isPrivateKeyValid && isPublicKeyValid}
+            setPrivateKeyText={setPrivateKeyText}
+            privateKeyName={privateKeyName}
+            setPrivateKeyName={setPrivateKeyName}
+            setPublicKeyText={setPublicKeyText}
+            publicKeyName={publicKeyName}
+            setPublicKeyName={setPublicKeyName}
           />
         );
       case registerPanelEnum.donate:
@@ -63,14 +67,17 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
     username: "",
   });
 
-  const [fileText, fileName, setFileText, setFileName] = useFileInputState();
+  const [privateKeyText, privateKeyName, setPrivateKeyText, setPrivateKeyName] =
+    useFileInputState();
+  const [publicKeyText, publicKeyName, setPublicKeyText, setPublicKeyName] =
+    useFileInputState();
 
   const [currentPanelNumber, setCurrentPanelNumber] = useState(1);
 
   const submitHandler = async () => {
-    if (!(isUsernameValid && isPrivateKeyValid)) return;
+    if (!(isUsernameValid && isPrivateKeyValid && isPublicKeyValid)) return;
 
-    if (fileText.length > 500) {
+    if (publicKeyText.length > 500) {
       errorAlert(
         "Слишком большой размер ключа",
         "EncDiary не поддерживает размер ключа больше, чем 2048 бит. Ограничение связано с повышенной нагрузкой на сервер"
@@ -79,7 +86,18 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
     }
 
     const jse = new JSEncrypt();
-    jse.setPrivateKey(fileText);
+    jse.setPrivateKey(privateKeyText);
+
+    const jsePublicKey = new JSEncrypt();
+    jsePublicKey.setPublicKey(publicKeyText);
+
+    if (jse.getPublicKeyB64() !== jsePublicKey.getPublicKeyB64()) {
+      errorAlert(
+        "Ошибка проверки пары ключей",
+        "Проверьте ключи на соответствие"
+      );
+      return;
+    }
 
     const passphraseSalt = CryptoJS.enc.Base64.stringify(
       generateRandomBytes(256)
@@ -98,24 +116,27 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
 
   const [isUsernameValid, setIsUsernameValid] = useState(false);
   const [isPrivateKeyValid, setIsPrivateKeyValid] = useState(false);
+  const [isPublicKeyValid, setIsPublicKeyValid] = useState(false);
 
   useEffect(() => {
     const isFormValid = {
       username: checkUsernameValidity(formValues.username),
-      privateKey: checkPrivateKeyValidity(fileText),
+      privateKey: checkPrivateKeyValidity(privateKeyText),
+      publicKey: checkPublicKeyValidity(publicKeyText),
     };
 
     setIsUsernameValid(isFormValid.username);
     setIsPrivateKeyValid(isFormValid.privateKey);
+    setIsPublicKeyValid(isFormValid.publicKey);
 
     if (!isFormValid.username) {
       setCurrentPanelNumber(1);
-    } else if (!isFormValid.privateKey) {
+    } else if (!(isFormValid.privateKey && isFormValid.publicKey)) {
       setCurrentPanelNumber(2);
     } else {
       setCurrentPanelNumber(3);
     }
-  }, [formValues, fileText]);
+  }, [formValues, privateKeyText, publicKeyText]);
 
   return (
     <>

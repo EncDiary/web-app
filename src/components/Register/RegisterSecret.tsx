@@ -8,34 +8,48 @@ import Title from "../Generic/Title";
 
 interface RegisterSecretProps {
   setCurrentRegisterPanel: Dispatch<SetStateAction<registerPanelEnum>>;
-  isValidate: boolean;
-  setFileText: (text: string) => void;
-  fileName: string;
-  setFileName: (name: string) => void;
+  isValid: boolean;
+  setPrivateKeyText: (text: string) => void;
+  privateKeyName: string;
+  setPrivateKeyName: (name: string) => void;
+  setPublicKeyText: (text: string) => void;
+  publicKeyName: string;
+  setPublicKeyName: (name: string) => void;
 }
 
 const RegisterSecret: FC<RegisterSecretProps> = ({
   setCurrentRegisterPanel,
-  isValidate,
-  setFileText,
-  fileName,
-  setFileName,
+  isValid,
+  setPrivateKeyText,
+  privateKeyName,
+  setPrivateKeyName,
+  setPublicKeyText,
+  publicKeyName,
+  setPublicKeyName,
 }) => {
   return (
     <>
       <Title text="Secret" size="largest" />
       <FileInput
+        id="register-upload-privkey"
         description="Приватный ключ"
-        fileName={fileName}
-        setFileName={setFileName}
-        setFileText={setFileText}
+        fileName={privateKeyName}
+        setFileName={setPrivateKeyName}
+        setFileText={setPrivateKeyText}
+      />
+      <FileInput
+        id="register-upload-pubkey"
+        description="Публичный ключ"
+        fileName={publicKeyName}
+        setFileName={setPublicKeyName}
+        setFileText={setPublicKeyText}
       />
       <TextBlock size="small">
-        Хороший пароль должен содержать как минимум: 16 символов, 2 заглавные
-        буквы, 2 строчные, 2 цифры и 2 специальных символа
+        EncDiary проверим соответствие ваших ключей друг другу, используя ваш
+        закрытый ключ прямо браузере, прежде чем создавать учетную запись.
       </TextBlock>
       <TextBlock size="small">
-        WebDiary не хранит ваши пароли. Отнеситесь к хранению и созданию очень
+        EncDiary не хранит ваши пароли. Отнеситесь к хранению и созданию очень
         ответственно. При утере пароля невозможно восстановить ваши записи.
         Используя ненадежный пароль вы рискуете скомпрометировать свои записи.
         Разработчик за ваши данные ответственности не несет
@@ -51,7 +65,7 @@ const RegisterSecret: FC<RegisterSecretProps> = ({
           text="Next"
           size="large"
           onClick={() => setCurrentRegisterPanel(registerPanelEnum.donate)}
-          disabled={!isValidate}
+          disabled={!isValid}
         />
       </NextBackNavigation>
     </>

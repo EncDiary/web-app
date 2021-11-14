@@ -7,3 +7,9 @@ export const checkPrivateKeyValidity = (privateKey: string) => {
     privateKey
   );
 };
+
+export const checkPublicKeyValidity = (publicKey: string) => {
+  return /^-----BEGIN PUBLIC KEY-----(.|\n|\r)+-----END PUBLIC KEY-----$/.test(
+    publicKey
+  );
+};

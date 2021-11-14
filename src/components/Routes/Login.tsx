@@ -94,6 +94,7 @@ const Login = () => {
           size="large"
         />
         <FileInput
+          id="login-upload-privkey"
           description="Приватный ключ"
           fileName={fileName}
           setFileName={setFileName}

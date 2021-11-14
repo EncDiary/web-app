@@ -15,6 +15,7 @@ interface FileInputProps {
   setFileText: (text: string) => void;
   fileName: string;
   setFileName: (name: string) => void;
+  id: string;
 }
 
 interface SelectInputProps {
@@ -55,6 +56,7 @@ export const FileInput: FC<FileInputProps> = ({
   fileName,
   setFileName,
   setFileText,
+  id,
 }) => {
   const readFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist();
@@ -78,9 +80,9 @@ export const FileInput: FC<FileInputProps> = ({
         type="file"
         className="uploader__input"
         onChange={(event) => readFile(event)}
-        id="login-upload-privkey"
+        id={id}
       />
-      <label className="uploader__label" htmlFor="login-upload-privkey">
+      <label className="uploader__label" htmlFor={id}>
         <div className="uploader__label-description">{description}</div>
         <div className="uploader__label-filename">{fileName}</div>
       </label>
