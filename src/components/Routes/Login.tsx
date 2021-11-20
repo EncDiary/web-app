@@ -67,10 +67,7 @@ const Login = () => {
 
     const privateKeyData = enc.Base64.parse(jse.getPrivateKeyB64());
 
-    const passphraseSalt = enc.Base64.parse(
-      serverAuthResponse.data.passphrase_salt
-    );
-    const passphrase = privateKeyData.concat(passphraseSalt);
+    const passphrase = privateKeyData;
 
     store.appStore.setAccount(
       formValues.username.toLowerCase(),

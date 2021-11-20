@@ -15,8 +15,6 @@ import {
   checkPublicKeyValidity,
   checkUsernameValidity,
 } from "../../modules/validator";
-import { generateRandomBytes } from "../../modules/crypto";
-import CryptoJS from "crypto-js";
 
 interface RegisterProcessProps {
   currentRegisterPanel: registerPanelEnum;
@@ -99,14 +97,10 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
       return;
     }
 
-    const passphraseSalt = CryptoJS.enc.Base64.stringify(
-      generateRandomBytes(256)
-    );
 
     const serverResponse = await registerRequest(
       formValues.username.toLowerCase(),
-      jse.getPublicKey(),
-      passphraseSalt
+      jse.getPublicKey()
     );
 
     if (!serverResponse) return;

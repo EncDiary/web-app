@@ -8,12 +8,7 @@ export const aesDecrypt = (
 ) => {
   const salt = CryptoJS.enc.Hex.parse(saltString);
   const iv = CryptoJS.enc.Hex.parse(ivString);
-
-  const key = CryptoJS.PBKDF2(passphrase, salt, {
-    hasher: CryptoJS.algo.SHA512,
-    keySize: 64 / 8,
-    iterations: 999,
-  });
+  const key = passphraseToKey(passphrase, salt);
 
   const decrypted = CryptoJS.AES.decrypt(encrypted, key, { iv });
   try {
@@ -29,12 +24,7 @@ export const aesEncrypt = (
 ) => {
   const salt = generateRandomBytes(256);
   const iv = generateRandomBytes(16);
-
-  const key = CryptoJS.PBKDF2(passphrase, salt, {
-    hasher: CryptoJS.algo.SHA512,
-    keySize: 64 / 8,
-    iterations: 999,
-  });
+  const key = passphraseToKey(passphrase, salt);
 
   const encrypted = CryptoJS.AES.encrypt(plaintext, key, { iv });
 
@@ -45,6 +35,17 @@ export const aesEncrypt = (
   };
 };
 
-export const generateRandomBytes = (bytesNumber: number) => {
+const generateRandomBytes = (bytesNumber: number) => {
   return CryptoJS.lib.WordArray.random(bytesNumber);
+};
+
+const passphraseToKey = (
+  passphrase: string | CryptoJS.lib.WordArray,
+  salt: CryptoJS.lib.WordArray
+) => {
+  return CryptoJS.PBKDF2(passphrase, salt, {
+    hasher: CryptoJS.algo.SHA512,
+    keySize: 64 / 8,
+    iterations: 5000,
+  });
 };

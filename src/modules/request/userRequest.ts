@@ -12,8 +12,7 @@ const getErrorMessage = (error: AxiosError) =>
 
 export const registerRequest = (
   username: string,
-  publicKey: string,
-  passphraseSalt: string
+  publicKey: string
 ) => {
   enableIsLoading();
 
@@ -23,8 +22,7 @@ export const registerRequest = (
     url: "/register",
     data: qs.stringify({
       username,
-      public_key: publicKey,
-      passphrase_salt: passphraseSalt,
+      public_key: publicKey
     }),
   })
     .catch((error: AxiosError) => {
