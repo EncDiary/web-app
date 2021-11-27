@@ -1,0 +1,129 @@
+@import "/src/assets/styles/colors.scss";
+@import "/src/assets/styles/mediaQueries.scss";
+
+@mixin label-top($font-size) {
+  font-size: $font-size;
+  top: 0;
+  left: 0;
+}
+
+.form__group {
+  position: relative;
+  &:hover > .form__group-label {
+    color: $dark-gray;
+  }
+  &-field {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    border: 0;
+    border-bottom: 2px solid $medium-gray;
+    outline: none !important;
+    color: $dark-gray;
+    background: transparent;
+    transition: border-color 0.2s;
+    &::placeholder {
+      color: transparent;
+    }
+    &:placeholder-shown ~ .form__group-label {
+      cursor: text;
+    }
+    &:hover {
+      border-bottom: 2px solid $dark-gray;
+      box-shadow: inset 0px -1px 0px $medium-gray;
+      color: $light-black;
+    }
+    &:focus {
+      ~ .form__group-label {
+        color: $dark-gray;
+      }
+      color: $black;
+      border-bottom: 2px solid $light-black;
+      box-shadow: inset 0px -1px 0px $medium-gray;
+    }
+    &:required,
+    &:invalid {
+      box-shadow: none;
+    }
+  }
+  &-label {
+    position: absolute;
+    display: block;
+    transition: 0.2s;
+    font-weight: bold;
+    color: $medium-gray;
+    user-select: none;
+  }
+}
+
+.form__group_large {
+  padding: 20px 0 0;
+  margin: 12px 0 24px;
+  > .form__group-field {
+    font-size: 24px;
+    padding: 5px;
+    @include _768 {
+      font-size: 22px;
+    }
+    @include _430 {
+      font-size: 20px;
+    }
+    &:placeholder-shown ~ .form__group-label {
+      font-size: 24px;
+      top: 25px;
+      left: 6px;
+      @include _768 {
+        font-size: 22px;
+        top: 22px;
+        left: 5px;
+      }
+      @include _430 {
+        font-size: 20px;
+      }
+    }
+    &:focus {
+      ~ .form__group-label {
+        @include label-top($font-size: 20px);
+        @include _768 {
+          font-size: 18px;
+        }
+        @include _430 {
+          font-size: 18px;
+        }
+      }
+      padding-bottom: 5px;
+    }
+  }
+  > .form__group-label {
+    @include label-top($font-size: 20px);
+    @include _768 {
+      font-size: 18px;
+    }
+    @include _430 {
+      font-size: 18px;
+    }
+  }
+}
+
+.form__group_medium {
+  padding: 16px 0 0;
+  margin: 11px 0 21px;
+  > .form__group-field {
+    font-size: 18px;
+    padding: 5px;
+    &:placeholder-shown ~ .form__group-label {
+      font-size: 18px;
+      top: 20px;
+      left: 3px;
+    }
+    &:focus {
+      ~ .form__group-label {
+        @include label-top($font-size: 16px);
+      }
+      padding-bottom: 5px;
+    }
+  }
+  > .form__group-label {
+    @include label-top($font-size: 16px);
+  }
+}

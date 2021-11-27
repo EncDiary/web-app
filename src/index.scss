@@ -34,7 +34,11 @@ body {
   background-color: $background-color;
 }
 
-body .blur {
+#app {
+  transition: filter 0.2s;
+}
+
+.blur {
   filter: blur(7px);
 }
 

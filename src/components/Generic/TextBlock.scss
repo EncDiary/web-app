@@ -1,21 +1,47 @@
+@import "/src/assets/styles/mediaQueries.scss";
+
 .text-block {
   &_largest {
     font-size: 32px;
     margin-bottom: 24px;
+    @include _768 {
+      font-size: 30px;
+    }
+    @include _576 {
+      font-size: 28px;
+    }
+    @include _430 {
+      font-size: 26px;
+    }
   }
   &_large {
     font-size: 20px;
     margin-bottom: 15px;
-    line-height: 25px;
+    line-height: 1.25;
+    @include _768 {
+      font-size: 19px;
+    }
+    @include _576 {
+      font-size: 18px;
+    }
   }
   &_medium {
     font-size: 18px;
     margin-bottom: 15px;
-    line-height: 24px;
+    line-height: 1.35;
+    @include _576 {
+      font-size: 17px;
+    }
+    @include _430 {
+      font-size: 16px;
+    }
   }
   &_small {
     margin-bottom: 10px;
     font-size: 14px;
-    line-height: 18px;
+    line-height: 1.3;
+    @include _430 {
+      font-size: 13px;
+    }
   }
 }

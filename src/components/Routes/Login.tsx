@@ -1,7 +1,8 @@
 import { Link, useHistory } from "react-router-dom";
 import { useFormState } from "../../hooks/useFormState";
 import Button, { ButtonLink } from "../Generic/Button";
-import { FileInput, TextInput } from "../Generic/Input";
+import FileInput from "../Generic/Input/FileInput";
+import TextInput from "../Generic/Input/TextInput";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 import UnauthorizedWrapper from "../Generic/UnauthorizedWrapper";

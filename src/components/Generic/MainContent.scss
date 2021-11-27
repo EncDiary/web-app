@@ -1,3 +1,5 @@
+@import "/src/assets/styles/mediaQueries.scss";
+
 main {
   padding: 67.4px 0 0;
 }
@@ -7,5 +9,17 @@ main {
     padding: 10px 30px !important;
     overflow-y: auto;
     flex: 1;
+    @include _768 {
+      box-sizing: border-box;
+      margin: auto;
+      width: 576px;
+      padding: 0 30px;
+    }
+    @include _576 {
+      width: 100%;
+    }
+    @include _430 {
+      padding: 0 18px;
+    }
   }
 }

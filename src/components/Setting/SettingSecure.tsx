@@ -7,7 +7,7 @@ import {
   exportEncryptedBackup,
 } from "../../modules/file";
 import Button from "../Generic/Button";
-import { TextInput } from "../Generic/Input";
+import TextInput from "../Generic/Input/TextInput";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 import SettingSection from "./SettingSection";

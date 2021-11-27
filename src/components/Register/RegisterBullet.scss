@@ -1,4 +1,5 @@
 @import "/src/assets/styles/colors.scss";
+@import "/src/assets/styles/mediaQueries.scss";
 
 .bullets {
   display: flex;
@@ -14,6 +15,11 @@
   margin: 7px;
   padding: 0;
   box-sizing: content-box;
+  @include _576 {
+    width: 24px;
+    height: 24px;
+    margin: 6px;
+  }
   &:disabled {
     opacity: 0.5;
   }

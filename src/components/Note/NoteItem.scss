@@ -1,9 +1,16 @@
 @import "/src/assets/styles/colors.scss";
+@import "/src/assets/styles/mediaQueries.scss";
 
 .note {
   border-radius: 20px;
   border: 3px solid $medium-gray;
   margin-bottom: 20px;
+  @include _576 {
+    margin-bottom: 18px;
+  }
+  @include _430 {
+    margin-bottom: 16px;
+  }
   &__header {
     padding: 16px 20px;
     display: flex;
@@ -12,6 +19,12 @@
     border-bottom: 3px solid $medium-gray;
     &-title {
       font-size: 24px;
+      @include _768 {
+        font-size: 22px;
+      }
+      @include _430 {
+        font-size: 21px;
+      }
       &-date {
         padding-bottom: 8px;
         display: flex;
@@ -25,6 +38,16 @@
           border-radius: 10px;
           padding: 4px 7px;
           margin-left: 15px;
+          font-size: 17px;
+          padding: 3px 6px;
+          @include _576 {
+            display: none;
+          }
+        }
+      }
+      &-time {
+        @include _430 {
+          font-size: 20px;
         }
       }
     }
@@ -38,9 +61,21 @@
         display: block;
         padding: 10px;
         border-radius: 15px;
+        @include _576 {
+          padding: 8px;
+          border-radius: 12px;
+        }
         &-icon {
           width: 32px;
           height: 32px;
+          @include _576 {
+            width: 30px;
+            height: 30px;
+          }
+          @include _430 {
+            width: 28px;
+            height: 28px;
+          }
         }
         &:hover {
           background-color: $lightest-gray;
@@ -49,6 +84,13 @@
     }
   }
   &__content {
-    padding: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+    @include _768 {
+      font-size: 17px;
+    }
+    @include _430 {
+      font-size: 16px;
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import { registerPanelEnum } from "../../types/register";
 import Button from "../Generic/Button";
-import { TextInput } from "../Generic/Input";
+import TextInput from "../Generic/Input/TextInput";
 import { NextNavigation } from "../Generic/NextBackNavigation";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";

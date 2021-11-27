@@ -1,4 +1,5 @@
 @import "/src/assets/styles/colors.scss";
+@import "/src/assets/styles/mediaQueries.scss";
 
 .header {
   background-color: $lightest-gray;
@@ -17,19 +18,33 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    @include _768 {
+      font-size: 21px;
+    }
+    @include _576 {
+      display: none;
+    }
   }
   &__navigation {
     display: flex;
     align-items: stretch;
+    @include _576 {
+      width: 100%;
+    }
     &-item {
       display: flex;
       align-items: center;
-
       margin: 0;
       border: none;
       cursor: pointer;
       background-color: transparent;
-      padding: 0 18px;
+      min-width: 71px;
+      padding: 0;
+      justify-content: center;
+      @include _576 {
+        width: 100%;
+        min-width: unset;
+      }
       &:hover {
         background-color: $light-gray;
         border: none;

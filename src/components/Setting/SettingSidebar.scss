@@ -1,39 +1,116 @@
 @import "/src/assets/styles/colors.scss";
-
-@mixin sidebar-button($background) {
-  text-align: left;
-  margin: 0;
-  border: none;
-  display: block;
-  background-color: $background;
-  width: 100%;
-  padding: 15px 10px;
-  font-size: 24px;
-  border-bottom: 3px solid $dark-gray;
-  display: flex;
-}
+@import "/src/assets/styles/mediaQueries.scss";
 
 .sidebar {
   border-right: 3px solid $dark-gray;
   overflow-y: auto;
   background-color: $lightest-gray;
   width: 300px;
+  @include _768 {
+    width: 450px;
+    margin: 20px auto 0;
+    border-radius: 20px;
+    border: 3px solid $dark-gray;
+  }
+  @include _576 {
+    width: 400px;
+    max-width: 80%;
+  }
 
-  &__button {
-    @include sidebar-button($lightest-gray);
+  &__open-button {
+    display: none;
+    cursor: pointer;
     &:hover {
       background-color: $light-gray;
+    }
+    @include _768 {
+      box-sizing: border-box;
+      margin: 0;
+      border: none;
+      background-color: transparent;
+      width: 100%;
+      font-size: 24px;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+    @include _576 {
+      font-size: 22px;
+    }
+    @include _430 {
+      font-size: 21px;
+    }
+    svg {
+      width: 24px;
+      height: 24px;
+      @include _430 {
+        width: 22px;
+        height: 22px;
+      }
+    }
+  }
+
+  &__links {
+    @include _768 {
+      border-top: 3px solid $dark-gray;
+      display: none;
+      &_show {
+        display: block;
+      }
+    }
+  }
+
+  &__link {
+    text-align: left;
+    margin: 0;
+    border: none;
+    display: block;
+    background-color: $lightest-gray;
+    width: 100%;
+    padding: 15px 10px;
+    font-size: 24px;
+    border-bottom: 3px solid $dark-gray;
+    display: flex;
+    box-sizing: border-box;
+    @include _768 {
+      border-bottom: none;
+      padding: 10px 12px;
+      font-size: 24px;
+    }
+    @include _576 {
+      font-size: 22px;
+    }
+    @include _430 {
+      font-size: 21px;
+    }
+    &:hover {
+      background-color: $light-gray;
+      @include _768 {
+        border-bottom: none;
+      }
     }
     &-icon {
       width: 30px;
       height: 30px;
       margin-right: 10px;
+      @include _768 {
+        width: 28px;
+        height: 28px;
+        margin-right: 13px;
+      }
+      @include _430 {
+        width: 26px;
+        height: 26px;
+      }
       svg {
         stroke-width: 2.5;
       }
     }
     &_active {
-      @include sidebar-button($light-gray);
+      @extend .sidebar__link;
+      background-color: $light-gray;
       &:hover {
         background-color: $medium-gray;
       }

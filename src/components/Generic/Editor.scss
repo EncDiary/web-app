@@ -1,4 +1,5 @@
 @import "/src/assets/styles/colors.scss";
+@import "/src/assets/styles/mediaQueries.scss";
 
 .wysiwyg {
   &__menu {
@@ -24,7 +25,25 @@
     min-height: 380px;
     border: 3px solid $medium-gray;
     border-radius: 1rem;
-    padding: 8px 20px;
+    padding: 12px 26px;
+    font-size: 18px;
+    @include _992 {
+      min-height: 330px;
+    }
+    @include _768 {
+      min-height: 280px;
+      font-size: 17px;
+      padding: 10px 22px;
+    }
+    @include _576 {
+      min-height: 260px;
+      padding: 9px 20px;
+    }
+    @include _430 {
+      min-height: 220px;
+      font-size: 16px;
+      padding: 9px 18px;
+    }
     &:focus {
       box-shadow: 0 0 5px 3px $light-gray;
     }

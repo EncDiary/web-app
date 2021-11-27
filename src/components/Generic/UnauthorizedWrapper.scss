@@ -1,6 +1,25 @@
+@import "/src/assets/styles/mediaQueries.scss";
+
 .unauthorized-wrapper {
-  width: 500px;
+  width: 992px;
   margin: 0 auto;
-  padding: 100px 0;
+  padding: 100px 246px;
   text-align: center;
+  box-sizing: border-box;
+  @include _992 {
+    width: 768px;
+    padding: 80px 134px;
+  }
+  @include _768 {
+    width: 576px;
+    padding: 70px 53px;
+  }
+  @include _576 {
+    width: 430px;
+    padding: 50px 18px;
+  }
+  @include _430 {
+    width: 100%;
+    padding: 35px 18px;
+  }
 }

@@ -1,3 +1,5 @@
+@import "/src/assets/styles/mediaQueries.scss";
+
 .pagination {
   display: flex;
   align-items: center;
@@ -5,13 +7,34 @@
   margin: 30px auto;
   &__row {
     padding: 3px 7px;
+    @include _576 {
+      padding: 2px 6px;
+    }
+    @include _430 {
+      padding: 2px 5px;
+    }
     &-icon {
       width: 30px;
       height: 30px;
+      @include _576 {
+        width: 25px;
+        height: 25px;
+      }
+      @include _430 {
+        width: 24px;
+        height: 24px;
+      }
     }
   }
   &__title {
     font-size: 24px;
     padding: 0 12px;
+    @include _576 {
+      font-size: 23px;
+    }
+    @include _430 {
+      font-size: 21px;
+      padding: 0 10px;
+    }
   }
 }

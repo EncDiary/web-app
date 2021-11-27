@@ -1,21 +1,49 @@
 @import "/src/assets/styles/colors.scss";
+@import "/src/assets/styles/mediaQueries.scss";
 
-.ReactModal__Overlay {
-  z-index: 6;
-  background-color: #0001 !important;
-}
-
-.ReactModal__Content {
-  background-color: $background-color !important;
-  position: absolute;
-  inset: 40px;
-  border: 1px solid rgb(204, 204, 204);
-  background: rgb(255, 255, 255) none repeat scroll 0% 0%;
-  background-color: rgb(255, 255, 255);
-  overflow: auto;
-  border-radius: 4px;
-  outline: currentcolor none medium;
-  padding: 20px;
+.ReactModal {
+  &__Overlay {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 6;
+    background-color: #0001 !important;
+    overflow-y: auto;
+    &--after-open {
+      opacity: 1;
+    }
+    &--before-close {
+      opacity: 0;
+    }
+  }
+  &__Content {
+    box-sizing: border-box;
+    background: $background-color !important;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 4px;
+    overflow: auto;
+    outline: currentcolor none medium;
+    margin: 40px auto;
+    position: relative !important;
+    inset: 0px !important;
+    width: 750px + 40px * 2;
+    padding: 20px 40px !important;
+    @include _992 {
+      width: 668px + 30px * 2;
+      padding: 20px 30px !important;
+    }
+    @include _768 {
+      width: 492px + 30px * 2;
+      padding: 20px 20px !important;
+    }
+    @include _576 {
+      width: 100%;
+      padding: 20px 18px;
+      margin: 30px auto;
+    }
+    @include _430 {
+      margin: 25px auto;
+    }
+  }
 }
 
 .modal__cross {
@@ -30,12 +58,21 @@
   top: 20px;
   right: 20px;
   color: $medium-gray;
+  line-height: 0;
   &:hover {
     color: $dark-gray;
   }
   svg {
     width: 35px;
     height: 35px;
-    padding: 6px 8px;
+    padding: 8px 8px;
+    @include _576 {
+      width: 32px;
+      height: 32px;
+    }
+    @include _430 {
+      width: 30px;
+      height: 30px;
+    }
   }
 }

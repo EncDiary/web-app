@@ -47,7 +47,7 @@ const App: React.FC = observer(() => {
         <Route path="/info" exact>
           <Info />
         </Route>
-        <Route path="/setting" exact>
+        <Route path="/setting">
           <Setting />
         </Route>
         <Route path="/demo" exact>

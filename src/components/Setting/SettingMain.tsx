@@ -3,7 +3,7 @@ import ToggleSwitch from "../Generic/ToggleSwitch";
 import Title from "../Generic/Title";
 import SettingSection from "./SettingSection";
 import { observer } from "mobx-react-lite";
-import { SelectInput } from "../Generic/Input";
+import SelectInput from "../Generic/Input/SelectInput";
 import TextBlock from "../Generic/TextBlock";
 import store from "../../store";
 

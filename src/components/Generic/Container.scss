@@ -1,4 +1,22 @@
+@import "/src/assets/styles/mediaQueries.scss";
+
 .container {
-  width: 640px;
+  width: 992px;
+  padding: 0 121px;
+  box-sizing: border-box;
   margin: auto;
+  @include _992 {
+    width: 768px;
+    padding: 0 50px;
+  }
+  @include _768 {
+    width: 576px;
+    padding: 0 30px;
+  }
+  @include _576 {
+    width: 100%;
+  }
+  @include _430 {
+    padding: 0 18px;
+  }
 }

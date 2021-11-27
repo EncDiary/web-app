@@ -20,11 +20,12 @@ const Modal: FC<ModalProps> = observer(({ isOpen, closeModal, children }) => {
       onRequestClose={closeModal}
       shouldCloseOnOverlayClick={true}
       className={store.appStore.isLoading ? "blur" : ""}
+      closeTimeoutMS={200}
     >
       <button className="modal__cross" onClick={closeModal}>
         <CrossIcon />
       </button>
-      {children}
+      <div className="modal__content">{children}</div>
     </ReactModal>
   );
 });

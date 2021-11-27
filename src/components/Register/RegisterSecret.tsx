@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import { registerPanelEnum } from "../../types/register";
 import Button from "../Generic/Button";
-import { FileInput } from "../Generic/Input";
+import FileInput from "../Generic/Input/FileInput";
 import { NextBackNavigation } from "../Generic/NextBackNavigation";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";

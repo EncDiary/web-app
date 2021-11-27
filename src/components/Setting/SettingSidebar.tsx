@@ -1,69 +1,68 @@
-import { FC, ReactElement } from "react";
-import { CommandIcon, LockIcon, ToolIcon } from "../../assets/svg-icons";
-import { settingPanelEnum } from "../../types/setting";
+import { FC, ReactElement, useState } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  CommandIcon,
+  LockIcon,
+  MenuIcon,
+  ToolIcon,
+} from "../../assets/svg-icons";
 import "./SettingSidebar.scss";
 
-interface SettingSidebarProps {
-  currentSettingPanel: settingPanelEnum;
-  setCurrentSettingPanel: React.Dispatch<
-    React.SetStateAction<settingPanelEnum>
-  >;
-}
+interface SettingSidebarProps {}
 
 interface SettingSidebarButtonProps {
-  onClick: () => void;
   text: string;
-  currentPanel: settingPanelEnum;
-  panel: settingPanelEnum;
   icon?: ReactElement;
+  link: string;
 }
 
-const SettingSidebar: FC<SettingSidebarProps> = ({
-  currentSettingPanel,
-  setCurrentSettingPanel,
-}) => {
+const SettingSidebar: FC<SettingSidebarProps> = ({}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <aside className="sidebar">
-      <SettingSidebarButton
-        text="Основное"
-        currentPanel={currentSettingPanel}
-        onClick={() => setCurrentSettingPanel(settingPanelEnum.main)}
-        panel={settingPanelEnum.main}
-        icon={<ToolIcon />}
-      />
-      <SettingSidebarButton
-        text="Безопасность"
-        currentPanel={currentSettingPanel}
-        onClick={() => setCurrentSettingPanel(settingPanelEnum.security)}
-        panel={settingPanelEnum.security}
-        icon={<LockIcon />}
-      />
-      <SettingSidebarButton
-        text="Горячие клавиши"
-        currentPanel={currentSettingPanel}
-        onClick={() => setCurrentSettingPanel(settingPanelEnum.hotkeys)}
-        panel={settingPanelEnum.hotkeys}
-        icon={<CommandIcon />}
-      />
+      <button
+        className={"sidebar__open-button"}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <MenuIcon />
+        Меню настроек
+      </button>
+      <div className={`sidebar__links ${isOpen ? "sidebar__links_show" : ""}`}>
+        <SettingSidebarButton
+          text="Основное"
+          icon={<ToolIcon />}
+          link="/setting/main"
+        />
+        <SettingSidebarButton
+          text="Безопасность"
+          icon={<LockIcon />}
+          link="/setting/secure"
+        />
+        <SettingSidebarButton
+          text="Горячие клавиши"
+          icon={<CommandIcon />}
+          link="/setting/hotkey"
+        />
+      </div>
     </aside>
   );
 };
 
 const SettingSidebarButton: FC<SettingSidebarButtonProps> = ({
-  onClick,
   text,
-  currentPanel,
-  panel,
   icon,
+  link,
 }) => {
   return (
-    <button
-      className={`sidebar__button${currentPanel === panel ? "_active" : ""}`}
-      onClick={onClick}
+    <NavLink
+      to={link}
+      className="sidebar__link"
+      activeClassName="sidebar__link_active"
     >
-      <div className="sidebar__button-icon">{icon}</div>
-      <div className="sidebar__button-text">{text}</div>
-    </button>
+      <div className="sidebar__link-icon">{icon}</div>
+      <div className="sidebar__link-text">{text}</div>
+    </NavLink>
   );
 };
 

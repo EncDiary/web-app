@@ -1,8 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { FC, useState } from "react";
-import { Redirect } from "react-router";
+import { Redirect, Route, Switch } from "react-router";
 import store from "../../store";
-import { settingPanelEnum } from "../../types/setting";
 import Header from "../Generic/Header";
 import MainContent from "../Generic/MainContent";
 import WithSidebar from "../Generic/WithSidebar";
@@ -17,30 +16,24 @@ const Setting: FC = observer(() => {
     return <Redirect to="/login" />;
   }
 
-  const [currentSettingPanel, setCurrentSettingPanel] = useState(
-    settingPanelEnum.main
-  );
-
-  const getCurrentSettingPanel = () => {
-    switch (currentSettingPanel) {
-      case settingPanelEnum.main:
-        return <SettingMain />;
-      case settingPanelEnum.security:
-        return <SettingSecure account={account} />;
-      case settingPanelEnum.hotkeys:
-        return <SettingHotkey />;
-    }
-  };
-
   return (
     <>
       <Header account={account} />
       <WithSidebar>
-        <SettingSidebar
-          currentSettingPanel={currentSettingPanel}
-          setCurrentSettingPanel={setCurrentSettingPanel}
-        />
-        <MainContent type="setting">{getCurrentSettingPanel()}</MainContent>
+        <SettingSidebar />
+        <MainContent type="setting">
+          <Switch>
+            <Route path="/setting/secure">
+              <SettingSecure account={account} />
+            </Route>
+            <Route path="/setting/hotkey">
+              <SettingHotkey />
+            </Route>
+            <Route>
+              <SettingMain />
+            </Route>
+          </Switch>
+        </MainContent>
       </WithSidebar>
     </>
   );

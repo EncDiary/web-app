@@ -46,25 +46,21 @@ const EditNote: FC<EditNoteProps> = ({ account, note, isOpen, setIsOpen }) => {
 
   return (
     <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
-      <section className="edit-note">
-        <Container>
-          <Title text="Редактирование записи" />
-          <EditorPanel editor={editor} />
-          <div className="edit-note__buttons">
-            <Button
-              text="Отмена"
-              colorTheme="secondary"
-              onClick={() => setIsOpen(false)}
-              className="edit-note__buttons-item"
-            />
-            <Button
-              text="Сохранить"
-              onClick={() => submitHandler()}
-              className="edit-note__buttons-item"
-            />
-          </div>
-        </Container>
-      </section>
+      <Title text="Редактирование записи" size="medium" />
+      <EditorPanel editor={editor} />
+      <div className="edit-note__buttons">
+        <Button
+          text="Отмена"
+          colorTheme="secondary"
+          onClick={() => setIsOpen(false)}
+          className="edit-note__buttons-item"
+        />
+        <Button
+          text="Сохранить"
+          onClick={() => submitHandler()}
+          className="edit-note__buttons-item"
+        />
+      </div>
     </Modal>
   );
 };
