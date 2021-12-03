@@ -2,7 +2,6 @@ import { FC } from "react";
 import { aesEncrypt } from "../../modules/crypto";
 import { INote } from "../../types/note";
 import Button from "../Generic/Button";
-import Container from "../Generic/Container";
 import { EditorPanel, SetEditor } from "../Generic/Editor";
 import { errorAlert } from "../../modules/sweetalert";
 import Title from "../Generic/Title";

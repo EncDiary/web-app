@@ -8,15 +8,13 @@ import {
 } from "../../assets/svg-icons";
 import "./SettingSidebar.scss";
 
-interface SettingSidebarProps {}
-
 interface SettingSidebarButtonProps {
   text: string;
   icon?: ReactElement;
   link: string;
 }
 
-const SettingSidebar: FC<SettingSidebarProps> = ({}) => {
+const SettingSidebar: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

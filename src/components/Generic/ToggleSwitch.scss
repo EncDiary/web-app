@@ -37,7 +37,7 @@
       &:checked ~ .switch__control-inner {
         background-color: $medium-gray;
         &:after {
-          left: 35px;
+          left: 36px;
           @include _576 {
             left: 32px;
           }
@@ -67,8 +67,8 @@
         box-sizing: border-box;
         content: "";
         position: absolute;
-        left: 4px;
-        top: 3px;
+        left: 3.5px;
+        top: 2.8px;
         width: 24px;
         height: 24px;
         border-radius: 17px;

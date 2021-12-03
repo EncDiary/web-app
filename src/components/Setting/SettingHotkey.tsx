@@ -1,11 +1,7 @@
 import { FC } from "react";
+import { TableHotkeys } from "../Generic/Table";
 import Title from "../Generic/Title";
-import "./SettingHotkey.scss";
 import SettingSection from "./SettingSection";
-
-interface HotkeyCodeProps {
-  text: string;
-}
 
 const SettingHotkey: FC = () => {
   return (
@@ -13,41 +9,26 @@ const SettingHotkey: FC = () => {
       <Title text="Горячие клавиши" align="left" />
       <SettingSection>
         <Title text="Для текстового редактора" size="medium" align="left" />
-        <ul className="hotkeys">
-          <HotkeyItem>
-            <HotkeyCode text="Ctrl + B" /> или <HotkeyCode text="__text__" />{" "}
-            или <HotkeyCode text="**text**" /> – Жирный шрифт
-          </HotkeyItem>
-          <HotkeyItem>
-            <HotkeyCode text="Ctrl + I" /> или <HotkeyCode text="_text_" /> или{" "}
-            <HotkeyCode text="*text*" /> – Курсив
-          </HotkeyItem>
-          <HotkeyItem>
-            <HotkeyCode text="Ctrl + Shift + 7" /> или{" "}
-            <HotkeyCode text="1. text" /> – Нумерованный список
-          </HotkeyItem>
-          <HotkeyItem>
-            <HotkeyCode text="Ctrl + Shift + 8" /> или{" "}
-            <HotkeyCode text="- text" /> – Ненумерованный список
-          </HotkeyItem>
-          <HotkeyItem>
-            <HotkeyCode text="Ctrl + Z" /> – Отменить действие
-          </HotkeyItem>
-          <HotkeyItem>
-            <HotkeyCode text="Ctrl + Shift + Z" /> – Повторить действие
-          </HotkeyItem>
-        </ul>
+        <TableHotkeys
+          header={["Действие", "Горячая клавиша"]}
+          rows={[
+            { action: "Жирный", hotkeys: ["Ctrl + B", "__text__", "**text**"] },
+            { action: "Курсив", hotkeys: ["Ctrl + I", "_text_", "*text*"] },
+            {
+              action: "Нумерованный список",
+              hotkeys: ["Ctrl + Shift + 7", "1. text"],
+            },
+            {
+              action: "Ненумерованный список",
+              hotkeys: ["Ctrl + Shift + 8", "- text"],
+            },
+            { action: "Отменить действие", hotkeys: ["Ctrl + Z"] },
+            { action: "Повторить действие", hotkeys: ["Ctrl + Shift + Z"] },
+          ]}
+        />
       </SettingSection>
     </>
   );
-};
-
-const HotkeyItem: FC = ({ children }) => {
-  return <li className="hotkey">{children}</li>;
-};
-
-const HotkeyCode: FC<HotkeyCodeProps> = ({ text }) => {
-  return <span className="hotkey__code">{text}</span>;
 };
 
 export default SettingHotkey;

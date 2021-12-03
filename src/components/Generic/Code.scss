@@ -1,0 +1,12 @@
+@import "/src/assets/styles/colors.scss";
+
+.code {
+  padding: 3px 8px;
+  font-weight: normal;
+  background: $lightest-gray;
+  border-radius: 10px;
+  border: 1.5px solid $dark-gray;
+  font-family: "Roboto Mono";
+  display: inline-block;
+  margin: 3px 4px;
+}

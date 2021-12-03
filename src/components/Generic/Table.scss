@@ -1,0 +1,46 @@
+@import "/src/assets/styles/colors.scss";
+@import "/src/assets/styles/mediaQueries.scss";
+
+.table {
+  width: 100%;
+  thead {
+    font-size: 20px;
+    @include _576 {
+      font-size: 19px;
+    }
+    @include _430 {
+      font-size: 18px;
+    }
+  }
+  tbody {
+    font-size: 18px;
+    @include _576 {
+      font-size: 17px;
+    }
+    @include _430 {
+      font-size: 16px;
+    }
+  }
+  border-collapse: collapse;
+  th {
+    border-bottom: 3px solid $dark-gray;
+  }
+  &__cell {
+    border-right: 2px solid $medium-gray;
+    padding: 10px 15px;
+    &:last-child {
+      border-right: none;
+    }
+  }
+  &__row {
+    border-bottom: 2px solid $medium-gray;
+
+    &_last {
+      @extend .table__row;
+      border-bottom: 3px solid $medium-gray;
+    }
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
