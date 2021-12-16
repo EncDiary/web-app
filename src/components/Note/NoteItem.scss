@@ -5,6 +5,7 @@
   border-radius: 20px;
   border: 3px solid $medium-gray;
   margin-bottom: 20px;
+  background-color: $background-color-dark;
   @include _576 {
     margin-bottom: 18px;
   }
@@ -86,6 +87,7 @@
   &__content {
     padding: 10px 20px;
     font-size: 18px;
+    word-wrap: break-word;
     @include _768 {
       font-size: 17px;
     }

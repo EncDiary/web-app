@@ -41,13 +41,13 @@ const Demo: FC = () => {
       if (!serverAuthResponse) return;
 
       const privateKeyBase64 = jse.getPrivateKeyB64();
-      const passpharase = enc.Base64.parse(privateKeyBase64);
+      const passphrase = enc.Base64.parse(privateKeyBase64);
 
       store.appStore.setAccount(
         username.toLowerCase(),
         jse,
         serverAuthResponse.data.token,
-        passpharase
+        passphrase
       );
 
       history.push("/write");

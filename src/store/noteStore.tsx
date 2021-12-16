@@ -25,9 +25,7 @@ class NoteStore {
   }
 
   edit(id: string, text: string) {
-    const note = this.notes.find((item) => {
-      return item.id === id;
-    });
+    const note = this.notes.find((item) => item.id === id);
     if (note) {
       note.text = text;
     }

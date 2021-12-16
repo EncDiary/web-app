@@ -46,6 +46,6 @@ const passphraseToKey = (
   return CryptoJS.PBKDF2(passphrase, salt, {
     hasher: CryptoJS.algo.SHA512,
     keySize: 64 / 8,
-    iterations: 5000,
+    iterations: 1000,
   });
 };

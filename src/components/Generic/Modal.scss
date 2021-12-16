@@ -41,7 +41,8 @@
       margin: 30px auto;
     }
     @include _430 {
-      margin: 25px auto;
+      margin: 0 auto;
+      height: 100%;
     }
   }
 }

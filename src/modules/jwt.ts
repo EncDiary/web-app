@@ -8,16 +8,8 @@ import {
 import { errorAlert } from "./sweetalert";
 
 export const updateJwtToken = async (account: IAccount) => {
-  const decodeToken = jwt.decode(account.token);
-
-  if (
-    !decodeToken ||
-    typeof decodeToken === "string" ||
-    typeof decodeToken.exp !== "number" ||
-    Date.now() < (decodeToken.exp - 30) * 1000
-  ) {
-    return;
-  }
+  const decodedToken = jwt.decode(account.token);
+  if (!checkIsTokenExpired(decodedToken)) return;
 
   const serverResponse = await getDisposableKeyRequest(account.username);
   if (!serverResponse) return;
@@ -32,4 +24,13 @@ export const updateJwtToken = async (account: IAccount) => {
   if (!serverAuthResponse) return;
 
   store.appStore.updateToken(serverAuthResponse.data.token);
+};
+
+const checkIsTokenExpired = (token: string | jwt.JwtPayload | null) => {
+  return !(
+    token &&
+    typeof token !== "string" &&
+    typeof token.exp === "number" &&
+    Date.now() < (token.exp - 30) * 1000
+  );
 };
