@@ -1,0 +1,52 @@
+@import "/src/assets/styles/colors.scss";
+@import "/src/assets/styles/mediaQueries.scss";
+
+.donate-crypto {
+  margin: 20px auto;
+  border: 3px solid $dark-gray;
+  border-radius: 30px;
+  max-width: 280px;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #fff;
+  &__qr {
+    width: 100%;
+  }
+  &__address {
+    display: flex;
+    align-items: center;
+    word-break: break-all;
+    align-items: flex-start;
+    width: 100%;
+    padding: 3px 5px 5px;
+    box-sizing: border-box;
+    font-family: "Roboto Mono";
+    &-copy {
+      padding: 5px;
+      margin-left: 5px;
+      line-height: 0;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      transition: 0.2s;
+      cursor: pointer;
+      &:hover {
+        color: $medium-gray;
+        svg {
+          stroke-width: 3;
+        }
+      }
+      svg {
+        stroke-width: 2.5;
+        width: 20px;
+        height: 20px;
+      }
+      &_copied {
+        border-color: $medium-gray;
+        background-color: $lightest-gray;
+        &:hover {
+          color: $dark-gray;
+        }
+      }
+    }
+  }
+}

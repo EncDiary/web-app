@@ -1,0 +1,58 @@
+@import "/src/assets/styles/colors.scss";
+@import "/src/assets/styles/mediaQueries.scss";
+
+.radio-input-group {
+  margin: 25px 0 20px;
+  display: flex;
+  justify-content: center;
+  &__item {
+    &:last-child {
+      .radio-input-group__item-label {
+        border-radius: 0 12px 12px 0;
+      }
+    }
+    &:first-child {
+      .radio-input-group__item-label {
+        border-radius: 12px 0 0 12px;
+        border-left-width: 3px;
+      }
+    }
+    &-field {
+      position: absolute;
+      clip: rect(0, 0, 0, 0);
+      pointer-events: none;
+      &:checked + .radio-input-group__item-label {
+        background-color: $lightest-gray;
+        &:hover {
+          background-color: $medium-gray;
+        }
+      }
+    }
+    &-label {
+      display: block;
+      border-color: $dark-gray;
+      border-width: 3px 3px 3px 0;
+      border-style: solid;
+      cursor: pointer;
+      user-select: none;
+      background-color: $background-color;
+      padding: 10px 20px;
+      font-size: 20px;
+      &:hover {
+        background-color: $lightest-gray;
+      }
+      @include _768 {
+        font-size: 19px;
+        padding: 9px 16px;
+      }
+      @include _576 {
+        font-size: 18px;
+        padding: 8px 14px;
+      }
+      @include _430 {
+        font-size: 16px;
+        padding: 7px 10px;
+      }
+    }
+  }
+}
