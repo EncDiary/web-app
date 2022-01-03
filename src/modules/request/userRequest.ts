@@ -44,7 +44,7 @@ export const getDisposableKeyRequest = (username: string) => {
   });
 };
 
-export const authUserRequest = (username: string, plaintext: string) => {
+export const authUserRequest = (username: string, signature: string) => {
   enableIsLoading();
 
   return axios({
@@ -53,7 +53,7 @@ export const authUserRequest = (username: string, plaintext: string) => {
     url: "/auth",
     data: qs.stringify({
       username,
-      plaintext,
+      signature,
     }),
   })
     .catch((error: AxiosError) => {

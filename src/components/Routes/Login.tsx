@@ -7,7 +7,6 @@ import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 import UnauthorizedWrapper from "../Generic/UnauthorizedWrapper";
 import "./Login.scss";
-import { errorAlert } from "../../modules/sweetalert";
 import {
   authUserRequest,
   getDisposableKeyRequest,
@@ -16,12 +15,12 @@ import store from "../../store";
 import JSEncrypt from "jsencrypt";
 import { enc } from "crypto-js";
 import { useFileInputState } from "../../hooks/useFileInputState";
-import { disableIsLoading } from "../../modules/loading";
 import { useEffect, useState } from "react";
 import {
   checkPrivateKeyValidity,
   checkUsernameValidity,
 } from "../../modules/validator";
+import { createSignature } from "../../modules/crypto";
 
 const Login = () => {
   const history = useHistory();
@@ -51,24 +50,16 @@ const Login = () => {
     const jse = new JSEncrypt();
     jse.setPrivateKey(fileText);
 
-    const plaintext = jse.decrypt(serverResponse.data.ciphertext);
-
-    if (!plaintext) {
-      disableIsLoading();
-      errorAlert("Неверный пароль");
-      return;
-    }
+    const signature = createSignature(jse, serverResponse.data.message);
 
     const serverAuthResponse = await authUserRequest(
       formValues.username,
-      plaintext
+      signature
     );
 
     if (!serverAuthResponse) return;
 
-    const privateKeyData = enc.Base64.parse(jse.getPrivateKeyB64());
-
-    const passphrase = privateKeyData;
+    const passphrase = enc.Base64.parse(jse.getPrivateKeyB64());
 
     store.appStore.setAccount(
       formValues.username.toLowerCase(),

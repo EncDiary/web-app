@@ -1,11 +1,11 @@
 import jwt from "jsonwebtoken";
 import store from "../store";
 import { IAccount } from "../types/account";
+import { createSignature } from "./crypto";
 import {
   authUserRequest,
   getDisposableKeyRequest,
 } from "./request/userRequest";
-import { errorAlert } from "./sweetalert";
 
 export const updateJwtToken = async (account: IAccount) => {
   const decodedToken = jwt.decode(account.token);
@@ -14,13 +14,12 @@ export const updateJwtToken = async (account: IAccount) => {
   const serverResponse = await getDisposableKeyRequest(account.username);
   if (!serverResponse) return;
 
-  const plaintext = account.privateKey.decrypt(serverResponse.data.ciphertext);
-  if (!plaintext) {
-    errorAlert("Неверный ключ");
-    return;
-  }
+  const signature = createSignature(
+    account.privateKey,
+    serverResponse.data.message
+  );
 
-  const serverAuthResponse = await authUserRequest(account.username, plaintext);
+  const serverAuthResponse = await authUserRequest(account.username, signature);
   if (!serverAuthResponse) return;
 
   store.appStore.updateToken(serverAuthResponse.data.token);

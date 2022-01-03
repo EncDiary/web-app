@@ -1,4 +1,5 @@
 import CryptoJS from "crypto-js";
+import JSEncrypt from "jsencrypt";
 
 export const aesDecrypt = (
   passphrase: string | CryptoJS.lib.WordArray,
@@ -48,4 +49,14 @@ const passphraseToKey = (
     keySize: 64 / 8,
     iterations: 1000,
   });
+};
+
+export const createSignature = (jse: JSEncrypt, message: string) => {
+  return (
+    jse.sign(
+      message,
+      (text: string) => CryptoJS.SHA512(text).toString(),
+      "sha512"
+    ) || ""
+  );
 };
