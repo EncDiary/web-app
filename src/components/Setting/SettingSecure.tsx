@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useFormState } from "../../hooks/useFormState";
 import { getDotSeparatedDate } from "../../modules/datetime";
 import {
@@ -130,7 +130,7 @@ const SettingChangePassword: FC = () => {
 };
 
 const SettingDeleteAccount: FC<SettingDeleteAccountProps> = ({ account }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const deleteAccount = async () => {
     const result = await writeTextAlert(
@@ -150,7 +150,7 @@ const SettingDeleteAccount: FC<SettingDeleteAccountProps> = ({ account }) => {
         errorAlert("Ошибка при удалении дневника");
       }
       successAlert("Дневник удален успешно");
-      history.push("/login");
+      navigate("/login");
     }
   };
 

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { useIdleTimer } from "react-idle-timer";
-import { Redirect, Route, Switch, useHistory } from "react-router";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import store from "../store";
 import { Loading } from "./Generic/Spinner";
 import Demo from "./Routes/Demo";
@@ -13,12 +13,12 @@ import Setting from "./Routes/Setting";
 import Write from "./Routes/Write";
 
 const App: React.FC = observer(() => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { account, isLoading, isAppBlur } = store.appStore;
 
   const handleOnIdle = () => {
     if (account) {
-      history.push("/login");
+      navigate("/login");
       store.noteStore.clearNotes();
       store.appStore.clearAccount();
     }
@@ -31,30 +31,17 @@ const App: React.FC = observer(() => {
 
   return (
     <div id="app" className={isLoading || isAppBlur ? "blur" : ""}>
-      <Switch>
-        <Route path="/login" exact>
-          <Login />
-        </Route>
-        <Route path="/register" exact>
-          <Register />
-        </Route>
-        <Route path="/write" exact>
-          <Write />
-        </Route>
-        <Route path="/notes" exact>
-          <Notes />
-        </Route>
-        <Route path="/info" exact>
-          <Info />
-        </Route>
-        <Route path="/setting">
-          <Setting />
-        </Route>
-        <Route path="/demo" exact>
-          <Demo />
-        </Route>
-        <Redirect to="/login" />
-      </Switch>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/write" element={<Write />} />
+        <Route path="/notes" element={<Notes />} />
+        <Route path="/info" element={<Info />} />
+        <Route path="/setting/*" element={<Setting />} />
+        <Route path="/demo" element={<Demo />} />
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+
       {isLoading && <Loading />}
     </div>
   );

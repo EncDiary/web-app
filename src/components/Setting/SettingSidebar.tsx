@@ -55,8 +55,7 @@ const SettingSidebarButton: FC<SettingSidebarButtonProps> = ({
   return (
     <NavLink
       to={link}
-      className="sidebar__link"
-      activeClassName="sidebar__link_active"
+      className={({ isActive }) => `sidebar__link${isActive ? "_active" : ""}`}
     >
       <div className="sidebar__link-icon">{icon}</div>
       <div className="sidebar__link-text">{text}</div>

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { aesDecrypt } from "../../modules/crypto";
 import { INote } from "../../types/note";
 import Container from "../Generic/Container";
@@ -67,7 +67,7 @@ const Notes: FC = () => {
   }, [pageNumber, limit, account]);
 
   if (!account) {
-    return <Redirect to="/login" />;
+    return <Navigate to="/login" />;
   }
 
   return (

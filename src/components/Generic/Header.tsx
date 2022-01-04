@@ -1,6 +1,5 @@
 import { FC, ReactElement } from "react";
-import { useHistory } from "react-router";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   BookIcon,
   EditIcon,
@@ -27,10 +26,10 @@ interface HeaderNavigationLinkProps {
 }
 
 const Header: FC<HeaderProps> = ({ account }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const logOut = () => {
-    history.push("/login");
+    navigate("/login");
     store.noteStore.clearNotes();
     store.appStore.clearAccount();
   };
@@ -71,8 +70,9 @@ const HeaderNavigationLink: FC<HeaderNavigationLinkProps> = ({
   return (
     <NavLink
       to={link}
-      className="header__navigation-item"
-      activeClassName="header__navigation-item_active"
+      className={({ isActive }) =>
+        `header__navigation-item${isActive ? "_active" : ""}`
+      }
     >
       <div className="header__navigation-item-icon">{content}</div>
     </NavLink>

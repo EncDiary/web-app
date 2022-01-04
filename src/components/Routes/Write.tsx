@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { Redirect } from "react-router";
+import { Navigate } from "react-router-dom";
 import store from "../../store";
 import Header from "../Generic/Header";
 import MainContent from "../Generic/MainContent";
@@ -9,7 +9,7 @@ import NoteToday from "../Note/NoteToday";
 const Write = observer(() => {
   const account = store.appStore.account;
   if (!account) {
-    return <Redirect to="/login" />;
+    return <Navigate to="/login" />;
   }
 
   return (

@@ -6,7 +6,7 @@ import RegisterDonate from "./RegisterDonate";
 import RegisterSecret from "./RegisterSecret";
 import RegisterUsername from "./RegisterUsername";
 import { errorAlert, successAlert } from "../../modules/sweetalert";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { registerRequest } from "../../modules/request/userRequest";
 import JSEncrypt from "jsencrypt";
 import { useFileInputState } from "../../hooks/useFileInputState";
@@ -25,7 +25,7 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
   currentRegisterPanel,
   setCurrentRegisterPanel,
 }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const switchRegisterPanel = (currentRegisterPanel: registerPanelEnum) => {
     switch (currentRegisterPanel) {
@@ -97,7 +97,6 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
       return;
     }
 
-
     const serverResponse = await registerRequest(
       formValues.username.toLowerCase(),
       jse.getPublicKey()
@@ -105,7 +104,7 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
 
     if (!serverResponse) return;
     successAlert("Пользователь успешно зарегистрирован");
-    history.push("/login");
+    navigate("/login");
   };
 
   const [isUsernameValid, setIsUsernameValid] = useState(false);

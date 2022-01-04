@@ -1,8 +1,8 @@
 import { enc } from "crypto-js";
 import JSEncrypt from "jsencrypt";
 import { FC, useEffect } from "react";
-import { useHistory } from "react-router";
-import { disableIsLoading } from "../../modules/loading";
+import { useNavigate } from "react-router-dom";
+import { createSignature } from "../../modules/crypto";
 import {
   authUserRequest,
   getDisposableKeyRequest,
@@ -11,7 +11,7 @@ import { errorAlert } from "../../modules/sweetalert";
 import store from "../../store";
 
 const Demo: FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const demoAuth = async () => {
@@ -29,15 +29,9 @@ const Demo: FC = () => {
       const jse = new JSEncrypt();
       jse.setPrivateKey(privateKey);
 
-      const plaintext = jse.decrypt(serverResponse.data.ciphertext);
+      const signature = createSignature(jse, serverResponse.data.message);
 
-      if (!plaintext) {
-        disableIsLoading();
-        errorAlert("Неверный пароль");
-        return;
-      }
-
-      const serverAuthResponse = await authUserRequest(username, plaintext);
+      const serverAuthResponse = await authUserRequest(username, signature);
       if (!serverAuthResponse) return;
 
       const privateKeyBase64 = jse.getPrivateKeyB64();
@@ -50,11 +44,11 @@ const Demo: FC = () => {
         passphrase
       );
 
-      history.push("/write");
+      navigate("/write");
     };
 
     demoAuth();
-  }, [history]);
+  }, [navigate]);
 
   return <></>;
 };

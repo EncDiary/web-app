@@ -1,4 +1,4 @@
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormState } from "../../hooks/useFormState";
 import Button, { ButtonLink } from "../Generic/Button";
 import FileInput from "../Generic/Input/FileInput";
@@ -23,7 +23,7 @@ import {
 import { createSignature } from "../../modules/crypto";
 
 const Login = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [formValues, changeHandler] = useFormState({
     username: "",
@@ -42,7 +42,11 @@ const Login = () => {
 
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!isFormValid) return;
+    if (
+      !checkUsernameValidity(formValues.username) ||
+      !checkPrivateKeyValidity(fileText)
+    )
+      return;
 
     const serverResponse = await getDisposableKeyRequest(formValues.username);
     if (!serverResponse) return;
@@ -68,7 +72,7 @@ const Login = () => {
       passphrase
     );
 
-    history.push("/write");
+    navigate("/write");
   };
 
   return (

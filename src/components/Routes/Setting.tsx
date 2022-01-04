@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { FC } from "react";
-import { Redirect, Route, Switch } from "react-router";
+import { Navigate, Route, Routes } from "react-router-dom";
 import store from "../../store";
 import Header from "../Generic/Header";
 import MainContent from "../Generic/MainContent";
@@ -14,7 +14,7 @@ import "./Setting.scss";
 const Setting: FC = observer(() => {
   const account = store.appStore.account;
   if (!account) {
-    return <Redirect to="/login" />;
+    return <Navigate to="/login" />;
   }
 
   return (
@@ -24,17 +24,15 @@ const Setting: FC = observer(() => {
         <SettingSidebar />
         <MainContent type="setting">
           <div className="setting__container">
-            <Switch>
-              <Route path="/setting/secure">
-                <SettingSecure account={account} />
-              </Route>
-              <Route path="/setting/hotkey">
-                <SettingHotkey />
-              </Route>
-              <Route>
-                <SettingMain />
-              </Route>
-            </Switch>
+            <Routes>
+              <Route path="main" element={<SettingMain />} />
+              <Route
+                path="secure"
+                element={<SettingSecure account={account} />}
+              />
+              <Route path="hotkey" element={<SettingHotkey />} />
+              <Route path="*" element={<Navigate to="main" />} />
+            </Routes>
           </div>
         </MainContent>
       </WithSidebar>

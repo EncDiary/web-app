@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { FC } from "react";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import store from "../../store";
 import Container from "../Generic/Container";
 import Header from "../Generic/Header";
@@ -11,7 +11,7 @@ import Title from "../Generic/Title";
 const Info: FC = observer(() => {
   const account = store.appStore.account;
   if (!account) {
-    return <Redirect to="/login" />;
+    return <Navigate to="/login" />;
   }
 
   return (

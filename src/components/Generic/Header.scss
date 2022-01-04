@@ -50,6 +50,7 @@
         border: none;
       }
       &_active {
+        @extend .header__navigation-item;
         background-color: $light-gray;
         &:hover {
           background-color: $medium-gray;
