@@ -28,7 +28,7 @@ export const registerRequest = (username: string, publicKey: string) => {
     .finally(disableIsLoading);
 };
 
-export const getDisposableKeyRequest = (username: string) => {
+export const getAuthMessageRequest = (username: string) => {
   enableIsLoading();
 
   return axios({

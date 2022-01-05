@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useFormState } from "../../hooks/useFormState";
-import Button, { ButtonLink } from "../Generic/Button";
+import Button from "../Generic/Button";
 import FileInput from "../Generic/Input/FileInput";
 import TextInput from "../Generic/Input/TextInput";
 import TextBlock from "../Generic/TextBlock";
@@ -9,7 +9,7 @@ import UnauthorizedWrapper from "../Generic/UnauthorizedWrapper";
 import "./Login.scss";
 import {
   authUserRequest,
-  getDisposableKeyRequest,
+  getAuthMessageRequest,
 } from "../../modules/request/userRequest";
 import store from "../../store";
 import JSEncrypt from "jsencrypt";
@@ -21,6 +21,7 @@ import {
   checkUsernameValidity,
 } from "../../modules/validator";
 import { createSignature } from "../../modules/crypto";
+import { errorAlert } from "../../modules/sweetalert";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -30,7 +31,6 @@ const Login = () => {
   });
 
   const [fileText, fileName, setFileText, setFileName] = useFileInputState();
-
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
@@ -40,6 +40,44 @@ const Login = () => {
     );
   }, [formValues.username, fileText]);
 
+  const auth = async (username: string, privateKey: string) => {
+    const serverGetMessageResponse = await getAuthMessageRequest(username);
+    if (!serverGetMessageResponse) return;
+
+    const jse = new JSEncrypt();
+    jse.setPrivateKey(privateKey);
+
+    const signature = createSignature(
+      jse,
+      serverGetMessageResponse.data.message
+    );
+
+    const serverAuthResponse = await authUserRequest(username, signature);
+    if (!serverAuthResponse) return;
+
+    const passphrase = enc.Base64.parse(jse.getPrivateKeyB64());
+    store.appStore.setAccount(
+      username.toLowerCase(),
+      jse,
+      serverAuthResponse.data.token,
+      passphrase
+    );
+
+    navigate("/write");
+  };
+
+  const authDemo = async () => {
+    const username = process.env.REACT_APP_DEMO_USERNAME || "";
+    const privateKey = process.env.REACT_APP_DEMO_PRIVATE_KEY || "";
+
+    if (!username || !privateKey) {
+      errorAlert("Невозможно открыть демоверсию");
+      return;
+    }
+
+    await auth(username, privateKey);
+  };
+
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     if (
@@ -48,31 +86,7 @@ const Login = () => {
     )
       return;
 
-    const serverResponse = await getDisposableKeyRequest(formValues.username);
-    if (!serverResponse) return;
-
-    const jse = new JSEncrypt();
-    jse.setPrivateKey(fileText);
-
-    const signature = createSignature(jse, serverResponse.data.message);
-
-    const serverAuthResponse = await authUserRequest(
-      formValues.username,
-      signature
-    );
-
-    if (!serverAuthResponse) return;
-
-    const passphrase = enc.Base64.parse(jse.getPrivateKeyB64());
-
-    store.appStore.setAccount(
-      formValues.username.toLowerCase(),
-      jse,
-      serverAuthResponse.data.token,
-      passphrase
-    );
-
-    navigate("/write");
+    await auth(formValues.username, fileText);
   };
 
   return (
@@ -108,11 +122,11 @@ const Login = () => {
       <TextBlock size="small">
         Don't have account? <Link to="/register">Register</Link>
       </TextBlock>
-      <ButtonLink
+      <Button
         text="Попробовать Демоверсию"
-        link="/demo"
         colorTheme="secondary"
         className="login__demo-version"
+        onClick={authDemo}
       />
     </UnauthorizedWrapper>
   );

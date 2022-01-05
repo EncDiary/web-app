@@ -4,7 +4,6 @@ import { useIdleTimer } from "react-idle-timer";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import store from "../store";
 import { Loading } from "./Generic/Spinner";
-import Demo from "./Routes/Demo";
 import Info from "./Routes/Info";
 import Login from "./Routes/Login";
 import Notes from "./Routes/Notes";
@@ -38,7 +37,6 @@ const App: React.FC = observer(() => {
         <Route path="/notes" element={<Notes />} />
         <Route path="/info" element={<Info />} />
         <Route path="/setting/*" element={<Setting />} />
-        <Route path="/demo" element={<Demo />} />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
 
