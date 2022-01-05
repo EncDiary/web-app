@@ -21,6 +21,7 @@ import {
 } from "../../modules/validator";
 import { createSignature } from "../../modules/crypto";
 import { errorAlert } from "../../modules/sweetalert";
+import { spinnerCreator } from "../Generic/Spinner";
 
 const Login = () => {
   const account = store.appStore.account;
@@ -39,29 +40,30 @@ const Login = () => {
     );
   }, [formValues.username, fileText]);
 
-  const auth = async (username: string, privateKey: string) => {
-    const serverGetMessageResponse = await getAuthMessageRequest(username);
-    if (!serverGetMessageResponse) return;
+  const auth = (username: string, privateKey: string) =>
+    spinnerCreator(async () => {
+      const serverGetMessageResponse = await getAuthMessageRequest(username);
+      if (!serverGetMessageResponse) return;
 
-    const jse = new JSEncrypt();
-    jse.setPrivateKey(privateKey);
+      const jse = new JSEncrypt();
+      jse.setPrivateKey(privateKey);
 
-    const signature = createSignature(
-      jse,
-      serverGetMessageResponse.data.message
-    );
+      const signature = createSignature(
+        jse,
+        serverGetMessageResponse.data.message
+      );
 
-    const serverAuthResponse = await authUserRequest(username, signature);
-    if (!serverAuthResponse) return;
+      const serverAuthResponse = await authUserRequest(username, signature);
+      if (!serverAuthResponse) return;
 
-    const passphrase = enc.Base64.parse(jse.getPrivateKeyB64());
-    store.appStore.setAccount(
-      username.toLowerCase(),
-      jse,
-      serverAuthResponse.data.token,
-      passphrase
-    );
-  };
+      const passphrase = enc.Base64.parse(jse.getPrivateKeyB64());
+      store.appStore.setAccount(
+        username.toLowerCase(),
+        jse,
+        serverAuthResponse.data.token,
+        passphrase
+      );
+    });
 
   const authDemo = async () => {
     const username = process.env.REACT_APP_DEMO_USERNAME || "";

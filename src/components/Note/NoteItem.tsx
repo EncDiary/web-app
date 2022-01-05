@@ -9,6 +9,7 @@ import { getLongDate, getShortWeekDay, getTime } from "../../modules/datetime";
 import { deleteNoteRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
 import { IAccount } from "../../types/account";
+import { spinnerCreator } from "../Generic/Spinner";
 
 interface NoteItemProps {
   account: IAccount;
@@ -46,9 +47,11 @@ const NoteItem: FC<NoteItemProps> = ({ account, note }) => {
       )}`
     );
     if (result.isConfirmed) {
-      const serverResponse = await deleteNoteRequest(note.id, account);
-      if (!serverResponse) return;
-      store.noteStore.delete(note.id);
+      spinnerCreator(async () => {
+        const serverResponse = await deleteNoteRequest(note.id, account);
+        if (!serverResponse) return;
+        store.noteStore.delete(note.id);
+      });
     }
   };
 

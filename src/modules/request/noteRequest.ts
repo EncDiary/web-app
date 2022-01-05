@@ -3,7 +3,6 @@ import qs from "qs";
 import { errorAlert } from "../sweetalert";
 import { IAccount } from "../../types/account";
 import { updateJwtToken } from "../jwt";
-import { disableIsLoading, enableIsLoading } from "../loading";
 import { getErrorMessage } from ".";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -16,7 +15,6 @@ export const createNoteRequest = async (
   },
   account: IAccount
 ) => {
-  enableIsLoading();
   await updateJwtToken(account);
 
   return axios({
@@ -25,11 +23,9 @@ export const createNoteRequest = async (
     url: "/note",
     headers: { Authorization: `Bearer ${account.token}` },
     data: qs.stringify(cipherNote),
-  })
-    .catch((error: AxiosError) => {
-      errorAlert(getErrorMessage(error));
-    })
-    .finally(disableIsLoading);
+  }).catch((error: AxiosError) => {
+    errorAlert(getErrorMessage(error));
+  });
 };
 
 export const editNoteRequest = async (
@@ -41,7 +37,6 @@ export const editNoteRequest = async (
   },
   account: IAccount
 ) => {
-  enableIsLoading();
   await updateJwtToken(account);
 
   return axios({
@@ -50,15 +45,12 @@ export const editNoteRequest = async (
     url: `/note/${noteId}`,
     headers: { Authorization: `Bearer ${account.token}` },
     data: qs.stringify(cipherNote),
-  })
-    .catch((error: AxiosError) => {
-      errorAlert(getErrorMessage(error));
-    })
-    .finally(disableIsLoading);
+  }).catch((error: AxiosError) => {
+    errorAlert(getErrorMessage(error));
+  });
 };
 
 export const deleteNoteRequest = async (noteId: string, account: IAccount) => {
-  enableIsLoading();
   await updateJwtToken(account);
 
   return axios({
@@ -66,15 +58,12 @@ export const deleteNoteRequest = async (noteId: string, account: IAccount) => {
     baseURL: serverUrl,
     url: `/note/${noteId}`,
     headers: { Authorization: `Bearer ${account.token}` },
-  })
-    .catch((error: AxiosError) => {
-      errorAlert(getErrorMessage(error));
-    })
-    .finally(disableIsLoading);
+  }).catch((error: AxiosError) => {
+    errorAlert(getErrorMessage(error));
+  });
 };
 
 export const getTodayNotesRequest = async (account: IAccount) => {
-  enableIsLoading();
   await updateJwtToken(account);
 
   return axios({
@@ -82,11 +71,9 @@ export const getTodayNotesRequest = async (account: IAccount) => {
     baseURL: serverUrl,
     url: "/notes/today",
     headers: { Authorization: `Bearer ${account.token}` },
-  })
-    .catch((error: AxiosError) => {
-      errorAlert(getErrorMessage(error));
-    })
-    .finally(disableIsLoading);
+  }).catch((error: AxiosError) => {
+    errorAlert(getErrorMessage(error));
+  });
 };
 
 export const getNotesWithLimit = async (
@@ -94,7 +81,6 @@ export const getNotesWithLimit = async (
   offset: number,
   account: IAccount
 ) => {
-  enableIsLoading();
   await updateJwtToken(account);
 
   return axios({
@@ -103,9 +89,7 @@ export const getNotesWithLimit = async (
     url: "/notes",
     params: { limit, offset },
     headers: { Authorization: `Bearer ${account.token}` },
-  })
-    .catch((error: AxiosError) => {
-      errorAlert(getErrorMessage(error));
-    })
-    .finally(disableIsLoading);
+  }).catch((error: AxiosError) => {
+    errorAlert(getErrorMessage(error));
+  });
 };

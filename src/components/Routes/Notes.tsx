@@ -10,6 +10,7 @@ import NoteList from "../Note/NoteList";
 import { getNotesWithLimit } from "../../modules/request/noteRequest";
 import store from "../../store";
 import { IAccount } from "../../types/account";
+import { spinnerCreator } from "../Generic/Spinner";
 
 const Notes: FC = () => {
   const {
@@ -44,7 +45,7 @@ const Notes: FC = () => {
         (note: {
           id: string;
           ciphertext: string;
-          datetime: string;
+          datetime: number;
           iv: string;
           salt: string;
         }) => {
@@ -54,7 +55,7 @@ const Notes: FC = () => {
             note.salt,
             note.iv
           );
-          notes.push({ id: note.id, text, datetime: +note.datetime * 1000 });
+          notes.push({ id: note.id, text, datetime: note.datetime * 1000 });
         }
       );
       store.noteStore.setNotes(notes);
@@ -62,7 +63,7 @@ const Notes: FC = () => {
       setAreNotesOver(serverResponse.data.notes_is_over);
     };
 
-    fetchNotes();
+    spinnerCreator(fetchNotes);
   }, [pageNumber, limit, account]);
 
   return (

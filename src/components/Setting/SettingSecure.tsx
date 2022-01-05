@@ -16,12 +16,10 @@ import {
   deleteAccountRequest,
   getBackupRequest,
 } from "../../modules/request/userRequest";
-import {
-  errorAlert,
-  successAlert,
-  writeTextAlert,
-} from "../../modules/sweetalert";
+import { successAlert, writeTextAlert } from "../../modules/sweetalert";
 import { IAccount } from "../../types/account";
+import { spinnerCreator } from "../Generic/Spinner";
+import store from "../../store";
 
 interface SettingSecureProps {
   account: IAccount;
@@ -47,24 +45,25 @@ const SettingSecure: FC<SettingSecureProps> = ({ account }) => {
 };
 
 const SettingDownloadBackup: FC<SettingDownloadBackupProps> = ({ account }) => {
-  const exportBackup = async (backupType: "encrypted" | "decrypted") => {
-    const serverResponse = await getBackupRequest(account);
-    if (!serverResponse) return;
-    const currentDate = getDotSeparatedDate(new Date());
+  const exportBackup = (backupType: "encrypted" | "decrypted") =>
+    spinnerCreator(async () => {
+      const serverResponse = await getBackupRequest(account);
+      if (!serverResponse) return;
+      const currentDate = getDotSeparatedDate(new Date());
 
-    switch (backupType) {
-      case "encrypted":
-        exportEncryptedBackup(serverResponse.data, currentDate);
-        break;
-      case "decrypted":
-        exportDecryptedBackup(
-          serverResponse.data,
-          currentDate,
-          account.passphrase
-        );
-        break;
-    }
-  };
+      switch (backupType) {
+        case "encrypted":
+          exportEncryptedBackup(serverResponse.data, currentDate);
+          break;
+        case "decrypted":
+          exportDecryptedBackup(
+            serverResponse.data,
+            currentDate,
+            account.passphrase
+          );
+          break;
+      }
+    });
 
   return (
     <SettingSection>
@@ -144,13 +143,15 @@ const SettingDeleteAccount: FC<SettingDeleteAccountProps> = ({ account }) => {
       }
     );
     if (result.isConfirmed) {
-      const serverDeleteAccountResponse = await deleteAccountRequest(account);
+      spinnerCreator(async () => {
+        const serverDeleteAccountResponse = await deleteAccountRequest(account);
 
-      if (!serverDeleteAccountResponse) {
-        errorAlert("Ошибка при удалении дневника");
-      }
-      successAlert("Дневник удален успешно");
-      navigate("/login");
+        if (!serverDeleteAccountResponse) return;
+
+        successAlert("Дневник удален успешно");
+        store.appStore.clearAccount();
+        navigate("/login");
+      });
     }
   };
 

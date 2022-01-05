@@ -9,6 +9,8 @@ import "./NoteToday.scss";
 import { getTodayNotesRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
 import { IAccount } from "../../types/account";
+import { getTodayMidnightTime } from "../../modules/datetime";
+import { spinnerCreator } from "../Generic/Spinner";
 
 interface NoteTodayProps {
   account: IAccount;
@@ -22,23 +24,18 @@ const NoteToday: FC<NoteTodayProps> = ({ account }) => {
       const serverResponse = await getTodayNotesRequest(account);
       if (!serverResponse) return;
 
-      const today = new Date();
-      const todayMidnightTime = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate()
-      ).getTime();
+      const todayMidnightTime = getTodayMidnightTime();
 
       const notes: INote[] = [];
       serverResponse.data.notes.forEach(
         (note: {
           id: string;
           ciphertext: string;
-          datetime: string;
+          datetime: number;
           iv: string;
           salt: string;
         }) => {
-          const datetime = +note.datetime * 1000;
+          const datetime = note.datetime * 1000;
           const text = aesDecrypt(
             account.passphrase,
             note.ciphertext,
@@ -53,7 +50,7 @@ const NoteToday: FC<NoteTodayProps> = ({ account }) => {
       store.noteStore.setNotes(notes);
     };
 
-    fetchNotes();
+    spinnerCreator(fetchNotes);
   }, [account]);
 
   return (

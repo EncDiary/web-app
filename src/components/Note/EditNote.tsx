@@ -11,6 +11,7 @@ import { editNoteRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
 import { IAccount } from "../../types/account";
 import Modal from "../Generic/Modal";
+import { spinnerCreator } from "../Generic/Spinner";
 
 interface EditNoteProps {
   account: IAccount;
@@ -34,13 +35,18 @@ const EditNote: FC<EditNoteProps> = ({ account, note, isOpen, setIsOpen }) => {
       setIsOpen(false);
       return;
     }
+    spinnerCreator(async () => {
+      const cipherNote = aesEncrypt(account.passphrase, text);
+      const serverResponse = await editNoteRequest(
+        note.id,
+        cipherNote,
+        account
+      );
+      if (!serverResponse) return;
 
-    const cipherNote = aesEncrypt(account.passphrase, text);
-    const serverResponse = await editNoteRequest(note.id, cipherNote, account);
-    if (!serverResponse) return;
-
-    store.noteStore.edit(note.id, text);
-    setIsOpen(false);
+      store.noteStore.edit(note.id, text);
+      setIsOpen(false);
+    });
   };
 
   return (

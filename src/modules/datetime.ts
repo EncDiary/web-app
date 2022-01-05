@@ -24,3 +24,13 @@ export const getTime = (date: Date) => {
     minute: "numeric",
   });
 };
+
+export const getTodayMidnightTime = () => {
+  const date = new Date();
+  const todayMidnightTime = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  ).getTime();
+  return todayMidnightTime;
+};

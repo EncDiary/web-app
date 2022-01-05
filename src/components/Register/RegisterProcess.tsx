@@ -15,6 +15,7 @@ import {
   checkPublicKeyValidity,
   checkUsernameValidity,
 } from "../../modules/validator";
+import { spinnerCreator } from "../Generic/Spinner";
 
 interface RegisterProcessProps {
   currentRegisterPanel: registerPanelEnum;
@@ -97,14 +98,16 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
       return;
     }
 
-    const serverResponse = await registerRequest(
-      formValues.username.toLowerCase(),
-      jse.getPublicKey()
-    );
+    await spinnerCreator(async () => {
+      const serverResponse = await registerRequest(
+        formValues.username.toLowerCase(),
+        jse.getPublicKey()
+      );
 
-    if (!serverResponse) return;
-    successAlert("Пользователь успешно зарегистрирован");
-    navigate("/login");
+      if (!serverResponse) return;
+      successAlert("Пользователь успешно зарегистрирован");
+      navigate("/login");
+    });
   };
 
   const [isUsernameValid, setIsUsernameValid] = useState(false);

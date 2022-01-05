@@ -3,14 +3,11 @@ import qs from "qs";
 import { getErrorMessage } from ".";
 import { IAccount } from "../../types/account";
 import { updateJwtToken } from "../jwt";
-import { disableIsLoading, enableIsLoading } from "../loading";
 import { errorAlert } from "../sweetalert";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 export const registerRequest = (username: string, publicKey: string) => {
-  enableIsLoading();
-
   return axios({
     method: "post",
     baseURL: serverUrl,
@@ -19,16 +16,12 @@ export const registerRequest = (username: string, publicKey: string) => {
       username,
       public_key: publicKey,
     }),
-  })
-    .catch((error: AxiosError) => {
-      errorAlert(getErrorMessage(error));
-    })
-    .finally(disableIsLoading);
+  }).catch((error: AxiosError) => {
+    errorAlert(getErrorMessage(error));
+  });
 };
 
 export const getAuthMessageRequest = (username: string) => {
-  enableIsLoading();
-
   return axios({
     method: "post",
     baseURL: serverUrl,
@@ -38,13 +31,10 @@ export const getAuthMessageRequest = (username: string) => {
     }),
   }).catch((error: AxiosError) => {
     errorAlert(getErrorMessage(error));
-    disableIsLoading();
   });
 };
 
 export const authUserRequest = (username: string, signature: string) => {
-  enableIsLoading();
-
   return axios({
     method: "post",
     baseURL: serverUrl,
@@ -53,15 +43,12 @@ export const authUserRequest = (username: string, signature: string) => {
       username,
       signature,
     }),
-  })
-    .catch((error: AxiosError) => {
-      errorAlert(getErrorMessage(error));
-    })
-    .finally(disableIsLoading);
+  }).catch((error: AxiosError) => {
+    errorAlert(getErrorMessage(error));
+  });
 };
 
 export const getBackupRequest = async (account: IAccount) => {
-  enableIsLoading();
   await updateJwtToken(account);
 
   return axios({
@@ -69,25 +56,20 @@ export const getBackupRequest = async (account: IAccount) => {
     baseURL: serverUrl,
     url: "/backup",
     headers: { Authorization: `Bearer ${account.token}` },
-  })
-    .catch((error: AxiosError) => {
-      errorAlert(getErrorMessage(error));
-    })
-    .finally(disableIsLoading);
+  }).catch((error: AxiosError) => {
+    errorAlert(getErrorMessage(error));
+  });
 };
 
 export const deleteAccountRequest = async (account: IAccount) => {
-  enableIsLoading();
   await updateJwtToken(account);
 
   return axios({
-    method: "delete",
+    method: "post",
     baseURL: serverUrl,
     url: `/delete_account`,
     headers: { Authorization: `Bearer ${account.token}` },
-  })
-    .catch((error: AxiosError) => {
-      errorAlert(getErrorMessage(error));
-    })
-    .finally(disableIsLoading);
+  }).catch((error: AxiosError) => {
+    errorAlert(getErrorMessage(error));
+  });
 };

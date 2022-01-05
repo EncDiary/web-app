@@ -18,12 +18,12 @@ export const exportDecryptedBackup = async (
   fetchedData.notes.forEach(
     (note: {
       ciphertext: string;
-      datetime: string;
+      datetime: number;
       iv: string;
       salt: string;
     }) => {
       const text = aesDecrypt(passphrase, note.ciphertext, note.salt, note.iv);
-      notes.push({ text, datetime: +note.datetime });
+      notes.push({ text, datetime: note.datetime });
     }
   );
 
@@ -49,8 +49,8 @@ export const exportEncryptedBackup = async (
     salt: string;
   }[] = [];
   fetchedData.notes.forEach(
-    (note: { text: string; datetime: string; iv: string; salt: string }) => {
-      notes.push({ ...note, datetime: +note.datetime });
+    (note: { text: string; datetime: number; iv: string; salt: string }) => {
+      notes.push({ ...note, datetime: note.datetime });
     }
   );
 

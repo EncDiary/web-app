@@ -8,6 +8,7 @@ import "./CreateNote.scss";
 import { createNoteRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
 import { IAccount } from "../../types/account";
+import { spinnerCreator } from "../Generic/Spinner";
 
 interface CreateNoteProps {
   account: IAccount;
@@ -22,17 +23,18 @@ const CreateNote: FC<CreateNoteProps> = ({ account }) => {
       errorAlert("Сначала введите текст записи");
       return;
     }
+    spinnerCreator(async () => {
+      const cipherNote = aesEncrypt(account.passphrase, text);
+      const serverResponse = await createNoteRequest(cipherNote, account);
+      if (!serverResponse) return;
 
-    const cipherNote = aesEncrypt(account.passphrase, text);
-    const serverResponse = await createNoteRequest(cipherNote, account);
-    if (!serverResponse) return;
-
-    store.noteStore.create({
-      id: serverResponse.data.id,
-      text,
-      datetime: serverResponse.data.datetime * 1000,
+      store.noteStore.create({
+        id: serverResponse.data.id,
+        text,
+        datetime: serverResponse.data.datetime * 1000,
+      });
+      editor?.commands.clearContent();
     });
-    editor?.commands.clearContent();
   };
 
   return (
