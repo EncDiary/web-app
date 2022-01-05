@@ -29,12 +29,12 @@ export const exportDecryptedBackup = async (
 
   exportJson(
     {
-      username: fetchedData.user.username,
+      username: fetchedData.username,
       is_encrypted: false,
       backup_date: currentDate,
       notes,
     },
-    "EncDiary_decrypted"
+    `EncDiary_decrypt_${currentDate}`
   );
 };
 
@@ -56,12 +56,11 @@ export const exportEncryptedBackup = async (
 
   exportJson(
     {
-      username: fetchedData.user.username,
+      username: fetchedData.username,
       is_encrypted: true,
-      passphrase_salt: fetchedData.user.passphrase_salt,
       backup_date: currentDate,
       notes,
     },
-    `EncDiary_encrypted`
+    `EncDiary_encrypt_${currentDate}`
   );
 };
