@@ -2,11 +2,16 @@ import { FC } from "react";
 import "./MainContent.scss";
 
 interface MainContentProps {
-  type: string;
+  withSidebar?: boolean;
 }
 
-const MainContent: FC<MainContentProps> = ({ children, type }) => {
-  return <main className={`main_${type}`}>{children}</main>;
+const MainContent: FC<MainContentProps> = ({
+  children,
+  withSidebar = false,
+}) => {
+  return (
+    <main className={withSidebar ? "main_with-sidebar" : ""}>{children}</main>
+  );
 };
 
 export default MainContent;

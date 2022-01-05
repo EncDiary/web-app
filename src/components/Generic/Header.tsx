@@ -30,7 +30,6 @@ const Header: FC<HeaderProps> = ({ account }) => {
 
   const logOut = () => {
     navigate("/login");
-    store.noteStore.clearNotes();
     store.appStore.clearAccount();
   };
 

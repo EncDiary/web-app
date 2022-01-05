@@ -1,11 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useFormState } from "../../hooks/useFormState";
 import Button from "../Generic/Button";
 import FileInput from "../Generic/Input/FileInput";
 import TextInput from "../Generic/Input/TextInput";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
-import UnauthorizedWrapper from "../Generic/UnauthorizedWrapper";
 import "./Login.scss";
 import {
   authUserRequest,
@@ -24,7 +23,7 @@ import { createSignature } from "../../modules/crypto";
 import { errorAlert } from "../../modules/sweetalert";
 
 const Login = () => {
-  const navigate = useNavigate();
+  const account = store.appStore.account;
 
   const [formValues, changeHandler] = useFormState({
     username: "",
@@ -62,8 +61,6 @@ const Login = () => {
       serverAuthResponse.data.token,
       passphrase
     );
-
-    navigate("/write");
   };
 
   const authDemo = async () => {
@@ -89,8 +86,10 @@ const Login = () => {
     await auth(formValues.username, fileText);
   };
 
-  return (
-    <UnauthorizedWrapper>
+  return account ? (
+    <Navigate to="/write" />
+  ) : (
+    <>
       <Title text="Login" size="largest" />
       <form onSubmit={submitHandler}>
         <TextInput
@@ -128,7 +127,7 @@ const Login = () => {
         className="login__demo-version"
         onClick={authDemo}
       />
-    </UnauthorizedWrapper>
+    </>
   );
 };
 

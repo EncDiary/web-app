@@ -15,6 +15,7 @@
   margin: 7px;
   padding: 0;
   box-sizing: content-box;
+  cursor: pointer;
   @include _576 {
     width: 24px;
     height: 24px;
@@ -22,6 +23,7 @@
   }
   &:disabled {
     opacity: 0.5;
+    cursor: default;
   }
   &:focus-visible {
     box-shadow: 0 0 3px 3px $light-gray;

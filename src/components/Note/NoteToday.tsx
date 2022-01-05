@@ -54,7 +54,7 @@ const NoteToday: FC<NoteTodayProps> = ({ account }) => {
     };
 
     fetchNotes();
-  });
+  }, [account]);
 
   return (
     <section className="today-notes">

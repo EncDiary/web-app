@@ -1,14 +1,12 @@
 import axios, { AxiosError } from "axios";
 import qs from "qs";
+import { getErrorMessage } from ".";
 import { IAccount } from "../../types/account";
 import { updateJwtToken } from "../jwt";
 import { disableIsLoading, enableIsLoading } from "../loading";
 import { errorAlert } from "../sweetalert";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
-
-const getErrorMessage = (error: AxiosError) =>
-  error.response?.data.message ?? "Неизвестная ошибка";
 
 export const registerRequest = (username: string, publicKey: string) => {
   enableIsLoading();

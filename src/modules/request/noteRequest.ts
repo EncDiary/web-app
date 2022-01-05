@@ -4,11 +4,9 @@ import { errorAlert } from "../sweetalert";
 import { IAccount } from "../../types/account";
 import { updateJwtToken } from "../jwt";
 import { disableIsLoading, enableIsLoading } from "../loading";
+import { getErrorMessage } from ".";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
-
-const getErrorMessage = (error: AxiosError) =>
-  error.response?.data.message ?? "Неизвестная ошибка";
 
 export const createNoteRequest = async (
   cipherNote: {

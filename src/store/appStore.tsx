@@ -31,6 +31,7 @@ class AppStore {
 
   clearAccount() {
     this.account = undefined;
+    this.rootStore.noteStore.clearNotes();
   }
 
   setIsLoading(isLoading: boolean) {

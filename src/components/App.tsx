@@ -10,6 +10,8 @@ import Notes from "./Routes/Notes";
 import Register from "./Routes/Register";
 import Setting from "./Routes/Setting";
 import Write from "./Routes/Write";
+import AccountTemplate from "./Templates/AccountTemplate";
+import UnauthorizedTemplate from "./Templates/UnauthorizedTemplate";
 
 const App: React.FC = observer(() => {
   const navigate = useNavigate();
@@ -18,7 +20,6 @@ const App: React.FC = observer(() => {
   const handleOnIdle = () => {
     if (account) {
       navigate("/login");
-      store.noteStore.clearNotes();
       store.appStore.clearAccount();
     }
   };
@@ -31,12 +32,16 @@ const App: React.FC = observer(() => {
   return (
     <div id="app" className={isLoading || isAppBlur ? "blur" : ""}>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/write" element={<Write />} />
-        <Route path="/notes" element={<Notes />} />
-        <Route path="/info" element={<Info />} />
-        <Route path="/setting/*" element={<Setting />} />
+        <Route element={<UnauthorizedTemplate />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Route>
+        <Route element={<AccountTemplate />}>
+          <Route path="/write" element={<Write />} />
+          <Route path="/notes" element={<Notes />} />
+          <Route path="/info" element={<Info />} />
+          <Route path="/setting/*" element={<Setting />} />
+        </Route>
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
 
