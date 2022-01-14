@@ -2,7 +2,7 @@ import { FC, useEffect } from "react";
 import { aesDecrypt } from "../../modules/crypto";
 import { INote } from "../../types/note";
 import { ButtonLink } from "../Generic/Button";
-import Container from "../Generic/Container";
+import Container from "../Generic/Container/Container";
 import Title from "../Generic/Title";
 import NoteList from "./NoteList";
 import "./NoteToday.scss";

@@ -1,8 +1,8 @@
 import { FC } from "react";
-import "./UnauthorizedWrapper.scss";
+import "./UnauthorizedContainer.scss";
 
 const UnauthorizedWrapper: FC = ({ children }) => {
-  return <div className="unauthorized-wrapper">{children}</div>;
+  return <div className="unauthorized-container">{children}</div>;
 };
 
 export default UnauthorizedWrapper;

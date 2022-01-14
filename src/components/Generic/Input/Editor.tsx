@@ -17,10 +17,10 @@ import {
   RedoIcon,
   UndoIcon,
   UnorderedListIcon,
-} from "../../assets/svg-icons";
+} from "../../../assets/svg-icons";
 import "./Editor.scss";
-import Button from "./Button";
-import store from "../../store";
+import Button from "../Button";
+import store from "../../../store";
 
 export const SetEditor = (text: string) => {
   return useEditor({

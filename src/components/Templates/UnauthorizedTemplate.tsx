@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Outlet } from "react-router-dom";
-import UnauthorizedWrapper from "../Generic/UnauthorizedWrapper";
+import UnauthorizedWrapper from "../Generic/Container/UnauthorizedContainer";
 
 const UnauthorizedTemplate: FC = () => {
   return (

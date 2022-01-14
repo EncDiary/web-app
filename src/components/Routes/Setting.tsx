@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { Navigate, Route, Routes, useOutletContext } from "react-router-dom";
 import { IAccount } from "../../types/account";
-import MainContent from "../Generic/MainContent";
-import WithSidebar from "../Generic/WithSidebar";
+import MainContent from "../Generic/Container/MainContent";
+import MainWithSidebar from "../Generic/Container/MainWithSidebar";
 import SettingHotkey from "../Setting/SettingHotkey";
 import SettingMain from "../Setting/SettingMain";
 import SettingSecure from "../Setting/SettingSecure";
@@ -13,7 +13,7 @@ const Setting: FC = () => {
   const account: IAccount = useOutletContext();
 
   return (
-    <WithSidebar>
+    <MainWithSidebar>
       <SettingSidebar />
       <MainContent withSidebar>
         <div className="setting__container">
@@ -28,7 +28,7 @@ const Setting: FC = () => {
           </Routes>
         </div>
       </MainContent>
-    </WithSidebar>
+    </MainWithSidebar>
   );
 };
 

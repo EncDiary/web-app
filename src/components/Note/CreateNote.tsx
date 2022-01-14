@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { aesEncrypt } from "../../modules/crypto";
 import Button from "../Generic/Button";
-import Container from "../Generic/Container";
-import { EditorPanel, SetEditor } from "../Generic/Editor";
+import Container from "../Generic/Container/Container";
+import { EditorPanel, SetEditor } from "../Generic/Input/Editor";
 import { errorAlert } from "../../modules/sweetalert";
 import "./CreateNote.scss";
 import { createNoteRequest } from "../../modules/request/noteRequest";

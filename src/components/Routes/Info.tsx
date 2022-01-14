@@ -1,6 +1,6 @@
 import { FC } from "react";
-import Container from "../Generic/Container";
-import MainContent from "../Generic/MainContent";
+import Container from "../Generic/Container/Container";
+import MainContent from "../Generic/Container/MainContent";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 

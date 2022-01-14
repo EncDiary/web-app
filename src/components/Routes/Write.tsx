@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useOutletContext } from "react-router-dom";
 import { IAccount } from "../../types/account";
-import MainContent from "../Generic/MainContent";
+import MainContent from "../Generic/Container/MainContent";
 import CreateNote from "../Note/CreateNote";
 import NoteToday from "../Note/NoteToday";
 
