@@ -31,6 +31,7 @@ export const TableHotkeys: FC<TableHotkeysProps> = ({ header, rows }) => {
                     ? "table__row_last"
                     : "table__row"
                 }
+                key={i}
               >
                 {i === 0 && (
                   <td
@@ -42,8 +43,8 @@ export const TableHotkeys: FC<TableHotkeysProps> = ({ header, rows }) => {
                   </td>
                 )}
                 <td className="table__cell">
-                  {hotkeyWords.map((hotkeyWord) => {
-                    return <Code>{hotkeyWord}</Code>;
+                  {hotkeyWords.map((hotkeyWord, j) => {
+                    return <Code key={j}>{hotkeyWord}</Code>;
                   })}
                 </td>
               </tr>

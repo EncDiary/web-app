@@ -3,19 +3,19 @@ import { registerPanelEnum } from "../../types/register";
 import Button from "../Generic/Button";
 import DonateCrypto from "../Generic/DonateCrypto";
 import { NextBackNavigation } from "../Generic/NextBackNavigation";
-import RadioInputGroup from "../Generic/RadioInputGroup";
+import RadioInputGroup from "../Generic/Input/RadioInputGroup";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 import { cryptoTypes } from "../../types/donateCrypto";
 import { cryptoDonate as cryptoDonateList } from "../../data/cryptoDonate";
 
 interface RegisterDonateProps {
-  setCurrentRegisterPanel: Dispatch<SetStateAction<registerPanelEnum>>;
+  setPanel: Dispatch<SetStateAction<registerPanelEnum>>;
   submitHandler: () => void;
 }
 
 const RegisterDonate: FC<RegisterDonateProps> = ({
-  setCurrentRegisterPanel,
+  setPanel,
   submitHandler,
 }) => {
   const [currentSelection, setCurrentSelection] =
@@ -54,7 +54,7 @@ const RegisterDonate: FC<RegisterDonateProps> = ({
           text="Back"
           colorTheme="secondary"
           size="large"
-          onClick={() => setCurrentRegisterPanel(registerPanelEnum.secret)}
+          onClick={() => setPanel(registerPanelEnum.secret)}
         />
         <Button text="Create" size="large" onClick={submitHandler} />
       </NextBackNavigation>

@@ -1,4 +1,11 @@
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useFormState } from "../../hooks/useFormState";
 import { registerPanelEnum } from "../../types/register";
 import RegisterBullet from "./RegisterBullet";
@@ -8,7 +15,6 @@ import RegisterUsername from "./RegisterUsername";
 import { errorAlert, successAlert } from "../../modules/sweetalert";
 import { useNavigate } from "react-router-dom";
 import { registerRequest } from "../../modules/request/userRequest";
-import JSEncrypt from "jsencrypt";
 import { useFileInputState } from "../../hooks/useFileInputState";
 import {
   checkPrivateKeyValidity,
@@ -16,16 +22,16 @@ import {
   checkUsernameValidity,
 } from "../../modules/validator";
 import { spinnerCreator } from "../Generic/Spinner";
+import RegisterTerms from "./RegisterTerms";
+import { useCheckboxesState } from "../../hooks/useCheckboxesState";
+import { checkKeypair } from "../../modules/crypto";
 
 interface RegisterProcessProps {
-  currentRegisterPanel: registerPanelEnum;
-  setCurrentRegisterPanel: Dispatch<SetStateAction<registerPanelEnum>>;
+  panel: registerPanelEnum;
+  setPanel: Dispatch<SetStateAction<registerPanelEnum>>;
 }
 
-const RegisterProcess: FC<RegisterProcessProps> = ({
-  currentRegisterPanel,
-  setCurrentRegisterPanel,
-}) => {
+const RegisterProcess: FC<RegisterProcessProps> = ({ panel, setPanel }) => {
   const navigate = useNavigate();
 
   const switchRegisterPanel = (currentRegisterPanel: registerPanelEnum) => {
@@ -33,17 +39,17 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
       case registerPanelEnum.username:
         return (
           <RegisterUsername
-            setCurrentRegisterPanel={setCurrentRegisterPanel}
+            setPanel={setPanel}
             username={formValues.username}
             setFormValues={setFormValues}
-            isValid={isUsernameValid}
+            isValid={checkIsUsernameValid()}
           />
         );
       case registerPanelEnum.secret:
         return (
           <RegisterSecret
-            setCurrentRegisterPanel={setCurrentRegisterPanel}
-            isValid={isPrivateKeyValid && isPublicKeyValid}
+            setPanel={setPanel}
+            isValid={checkIsSecretValid()}
             setPrivateKeyText={setPrivateKeyText}
             privateKeyName={privateKeyName}
             setPrivateKeyName={setPrivateKeyName}
@@ -52,18 +58,32 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
             setPublicKeyName={setPublicKeyName}
           />
         );
+      case registerPanelEnum.terms:
+        return (
+          <RegisterTerms
+            setPanel={setPanel}
+            isValid={checkTermsAcceptance()}
+            termsValues={termsValues}
+            setTermsValues={setTermsValues}
+          />
+        );
       case registerPanelEnum.donate:
         return (
-          <RegisterDonate
-            setCurrentRegisterPanel={setCurrentRegisterPanel}
-            submitHandler={submitHandler}
-          />
+          <RegisterDonate setPanel={setPanel} submitHandler={submitHandler} />
         );
     }
   };
 
   const [formValues, setFormValues] = useFormState({
     username: "",
+  });
+
+  const [termsValues, setTermsValues] = useCheckboxesState({
+    term_save_keys: false,
+    term_give_key: false,
+    term_lose_key: false,
+    term_bugs: false,
+    term_responsibility: false,
   });
 
   const [privateKeyText, privateKeyName, setPrivateKeyText, setPrivateKeyName] =
@@ -73,8 +93,28 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
 
   const [currentPanelNumber, setCurrentPanelNumber] = useState(1);
 
+  const checkIsUsernameValid = useCallback(() => {
+    return checkUsernameValidity(formValues.username);
+  }, [formValues.username]);
+
+  const checkIsSecretValid = useCallback(() => {
+    return (
+      checkPrivateKeyValidity(privateKeyText) &&
+      checkPublicKeyValidity(publicKeyText)
+    );
+  }, [privateKeyText, publicKeyText]);
+
+  const checkTermsAcceptance = useCallback(() => {
+    return Object.values(termsValues).every((isChecked) => isChecked);
+  }, [termsValues]);
+
   const submitHandler = async () => {
-    if (!(isUsernameValid && isPrivateKeyValid && isPublicKeyValid)) return;
+    if (
+      !checkIsUsernameValid() ||
+      !checkIsSecretValid() ||
+      !checkTermsAcceptance()
+    )
+      return;
 
     if (publicKeyText.length > 500) {
       errorAlert(
@@ -84,13 +124,8 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
       return;
     }
 
-    const jse = new JSEncrypt();
-    jse.setPrivateKey(privateKeyText);
-
-    const jsePublicKey = new JSEncrypt();
-    jsePublicKey.setPublicKey(publicKeyText);
-
-    if (jse.getPublicKeyB64() !== jsePublicKey.getPublicKeyB64()) {
+    const checkingResult = checkKeypair(privateKeyText, publicKeyText);
+    if (!checkingResult.status) {
       errorAlert(
         "Ошибка проверки пары ключей",
         "Проверьте ключи на соответствие"
@@ -101,7 +136,7 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
     await spinnerCreator(async () => {
       const serverResponse = await registerRequest(
         formValues.username.toLowerCase(),
-        jse.getPublicKey()
+        checkingResult.jse.getPublicKey()
       );
 
       if (!serverResponse) return;
@@ -110,29 +145,24 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
     });
   };
 
-  const [isUsernameValid, setIsUsernameValid] = useState(false);
-  const [isPrivateKeyValid, setIsPrivateKeyValid] = useState(false);
-  const [isPublicKeyValid, setIsPublicKeyValid] = useState(false);
-
   useEffect(() => {
-    const isFormValid = {
-      username: checkUsernameValidity(formValues.username),
-      privateKey: checkPrivateKeyValidity(privateKeyText),
-      publicKey: checkPublicKeyValidity(publicKeyText),
-    };
-
-    setIsUsernameValid(isFormValid.username);
-    setIsPrivateKeyValid(isFormValid.privateKey);
-    setIsPublicKeyValid(isFormValid.publicKey);
-
-    if (!isFormValid.username) {
+    if (!checkIsUsernameValid()) {
       setCurrentPanelNumber(1);
-    } else if (!(isFormValid.privateKey && isFormValid.publicKey)) {
+    } else if (!checkIsSecretValid()) {
       setCurrentPanelNumber(2);
-    } else {
+    } else if (!checkTermsAcceptance()) {
       setCurrentPanelNumber(3);
+    } else {
+      setCurrentPanelNumber(4);
     }
-  }, [formValues, privateKeyText, publicKeyText]);
+  }, [
+    formValues,
+    privateKeyText,
+    publicKeyText,
+    checkTermsAcceptance,
+    checkIsSecretValid,
+    checkIsUsernameValid,
+  ]);
 
   return (
     <>
@@ -140,13 +170,14 @@ const RegisterProcess: FC<RegisterProcessProps> = ({
         panels={[
           registerPanelEnum.username,
           registerPanelEnum.secret,
+          registerPanelEnum.terms,
           registerPanelEnum.donate,
         ]}
-        currentPanel={currentRegisterPanel}
-        setCurrentPanel={setCurrentRegisterPanel}
+        currentPanel={panel}
+        setCurrentPanel={setPanel}
         currentPanelNumber={currentPanelNumber}
       />
-      {switchRegisterPanel(currentRegisterPanel)}
+      {switchRegisterPanel(panel)}
     </>
   );
 };

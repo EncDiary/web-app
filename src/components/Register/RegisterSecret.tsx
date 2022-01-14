@@ -7,7 +7,7 @@ import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 
 interface RegisterSecretProps {
-  setCurrentRegisterPanel: Dispatch<SetStateAction<registerPanelEnum>>;
+  setPanel: Dispatch<SetStateAction<registerPanelEnum>>;
   isValid: boolean;
   setPrivateKeyText: (text: string) => void;
   privateKeyName: string;
@@ -18,7 +18,7 @@ interface RegisterSecretProps {
 }
 
 const RegisterSecret: FC<RegisterSecretProps> = ({
-  setCurrentRegisterPanel,
+  setPanel,
   isValid,
   setPrivateKeyText,
   privateKeyName,
@@ -59,12 +59,12 @@ const RegisterSecret: FC<RegisterSecretProps> = ({
           text="Back"
           colorTheme="secondary"
           size="large"
-          onClick={() => setCurrentRegisterPanel(registerPanelEnum.username)}
+          onClick={() => setPanel(registerPanelEnum.username)}
         />
         <Button
           text="Next"
           size="large"
-          onClick={() => setCurrentRegisterPanel(registerPanelEnum.donate)}
+          onClick={() => setPanel(registerPanelEnum.terms)}
           disabled={!isValid}
         />
       </NextBackNavigation>

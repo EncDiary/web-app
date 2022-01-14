@@ -1,5 +1,5 @@
 import { FC } from "react";
-import ToggleSwitch from "../Generic/ToggleSwitch";
+import ToggleSwitch from "../Generic/Input/ToggleSwitch";
 import Title from "../Generic/Title";
 import SettingSection from "./SettingSection";
 import { observer } from "mobx-react-lite";

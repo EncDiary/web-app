@@ -7,10 +7,10 @@ import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 
 interface RegisterStartProps {
-  setCurrentRegisterPanel: Dispatch<SetStateAction<registerPanelEnum>>;
+  setPanel: Dispatch<SetStateAction<registerPanelEnum>>;
 }
 
-const RegisterStart: FC<RegisterStartProps> = ({ setCurrentRegisterPanel }) => {
+const RegisterStart: FC<RegisterStartProps> = ({ setPanel }) => {
   return (
     <>
       <Title text="Register" size="largest" />
@@ -24,7 +24,7 @@ const RegisterStart: FC<RegisterStartProps> = ({ setCurrentRegisterPanel }) => {
         <Button
           text="Start"
           size="large"
-          onClick={() => setCurrentRegisterPanel(registerPanelEnum.username)}
+          onClick={() => setPanel(registerPanelEnum.username)}
         />
       </NextNavigation>
       <hr />

@@ -7,14 +7,14 @@ import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 
 interface RegisterUsernameProps {
-  setCurrentRegisterPanel: Dispatch<SetStateAction<registerPanelEnum>>;
+  setPanel: Dispatch<SetStateAction<registerPanelEnum>>;
   username: string;
   setFormValues: (event: React.ChangeEvent<HTMLInputElement>) => void;
   isValid: boolean;
 }
 
 const RegisterUsername: FC<RegisterUsernameProps> = ({
-  setCurrentRegisterPanel,
+  setPanel,
   username,
   setFormValues,
   isValid,
@@ -38,7 +38,7 @@ const RegisterUsername: FC<RegisterUsernameProps> = ({
         <Button
           text="Next"
           size="large"
-          onClick={() => setCurrentRegisterPanel(registerPanelEnum.secret)}
+          onClick={() => setPanel(registerPanelEnum.secret)}
           disabled={!isValid}
         />
       </NextNavigation>

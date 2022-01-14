@@ -4,17 +4,12 @@ import RegisterProcess from "../Register/RegisterProcess";
 import RegisterStart from "../Register/RegisterStart";
 
 const Register: FC = () => {
-  const [currentRegisterPanel, setCurrentRegisterPanel] = useState(
-    registerPanelEnum.start
-  );
+  const [panel, setPanel] = useState(registerPanelEnum.start);
 
-  return currentRegisterPanel === registerPanelEnum.start ? (
-    <RegisterStart setCurrentRegisterPanel={setCurrentRegisterPanel} />
+  return panel === registerPanelEnum.start ? (
+    <RegisterStart setPanel={setPanel} />
   ) : (
-    <RegisterProcess
-      currentRegisterPanel={currentRegisterPanel}
-      setCurrentRegisterPanel={setCurrentRegisterPanel}
-    />
+    <RegisterProcess panel={panel} setPanel={setPanel} />
   );
 };
 

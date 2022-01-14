@@ -60,3 +60,16 @@ export const createSignature = (jse: JSEncrypt, message: string) => {
     ) || ""
   );
 };
+
+export const checkKeypair = (privateKeyText: string, publicKeyText: string) => {
+  const jsePrivKey = new JSEncrypt();
+  const jsePubKey = new JSEncrypt();
+
+  jsePrivKey.setPrivateKey(privateKeyText);
+  jsePubKey.setPublicKey(publicKeyText);
+
+  return {
+    status: jsePrivKey.getPublicKeyB64() === jsePubKey.getPublicKeyB64(),
+    jse: jsePrivKey,
+  };
+};
