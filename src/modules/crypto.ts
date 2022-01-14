@@ -1,51 +1,51 @@
-import CryptoJS from "crypto-js";
+import { AES, algo, enc, lib, PBKDF2, SHA512 } from "crypto-js";
 import JSEncrypt from "jsencrypt";
 
 export const aesDecrypt = (
-  passphrase: string | CryptoJS.lib.WordArray,
+  passphrase: string | lib.WordArray,
   encrypted: string,
   saltString: string,
   ivString: string
 ) => {
-  const salt = CryptoJS.enc.Hex.parse(saltString);
-  const iv = CryptoJS.enc.Hex.parse(ivString);
+  const salt = enc.Hex.parse(saltString);
+  const iv = enc.Hex.parse(ivString);
   const key = passphraseToKey(passphrase, salt);
 
-  const decrypted = CryptoJS.AES.decrypt(encrypted, key, { iv });
+  const decrypted = AES.decrypt(encrypted, key, { iv });
   try {
-    return decrypted.toString(CryptoJS.enc.Utf8);
+    return decrypted.toString(enc.Utf8);
   } catch (error) {
     return "";
   }
 };
 
 export const aesEncrypt = (
-  passphrase: string | CryptoJS.lib.WordArray,
+  passphrase: string | lib.WordArray,
   plaintext: string
 ) => {
   const salt = generateRandomBytes(256);
   const iv = generateRandomBytes(16);
   const key = passphraseToKey(passphrase, salt);
 
-  const encrypted = CryptoJS.AES.encrypt(plaintext, key, { iv });
+  const encrypted = AES.encrypt(plaintext, key, { iv });
 
   return {
-    ciphertext: CryptoJS.enc.Base64.stringify(encrypted.ciphertext),
-    salt: CryptoJS.enc.Hex.stringify(salt),
-    iv: CryptoJS.enc.Hex.stringify(iv),
+    ciphertext: enc.Base64.stringify(encrypted.ciphertext),
+    salt: enc.Hex.stringify(salt),
+    iv: enc.Hex.stringify(iv),
   };
 };
 
 const generateRandomBytes = (bytesNumber: number) => {
-  return CryptoJS.lib.WordArray.random(bytesNumber);
+  return lib.WordArray.random(bytesNumber);
 };
 
 const passphraseToKey = (
-  passphrase: string | CryptoJS.lib.WordArray,
-  salt: CryptoJS.lib.WordArray
+  passphrase: string | lib.WordArray,
+  salt: lib.WordArray
 ) => {
-  return CryptoJS.PBKDF2(passphrase, salt, {
-    hasher: CryptoJS.algo.SHA512,
+  return PBKDF2(passphrase, salt, {
+    hasher: algo.SHA512,
     keySize: 64 / 8,
     iterations: 1000,
   });
@@ -53,11 +53,7 @@ const passphraseToKey = (
 
 export const createSignature = (jse: JSEncrypt, message: string) => {
   return (
-    jse.sign(
-      message,
-      (text: string) => CryptoJS.SHA512(text).toString(),
-      "sha512"
-    ) || ""
+    jse.sign(message, (text: string) => SHA512(text).toString(), "sha512") || ""
   );
 };
 
@@ -73,3 +69,6 @@ export const checkKeypair = (privateKeyText: string, publicKeyText: string) => {
     jse: jsePrivKey,
   };
 };
+
+export const convertPrivKeyToPassphrase = (jse: JSEncrypt) =>
+  enc.Base64.parse(jse.getPrivateKeyB64());

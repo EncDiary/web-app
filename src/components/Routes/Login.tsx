@@ -12,14 +12,16 @@ import {
 } from "../../modules/request/userRequest";
 import store from "../../store";
 import JSEncrypt from "jsencrypt";
-import { enc } from "crypto-js";
 import { useFileInputState } from "../../hooks/useFileInputState";
 import { useEffect, useState } from "react";
 import {
   checkPrivateKeyValidity,
   checkUsernameValidity,
 } from "../../modules/validator";
-import { createSignature } from "../../modules/crypto";
+import {
+  convertPrivKeyToPassphrase,
+  createSignature,
+} from "../../modules/crypto";
 import { errorAlert } from "../../modules/sweetalert";
 import { spinnerCreator } from "../Generic/Spinner";
 
@@ -56,7 +58,7 @@ const Login = () => {
       const serverAuthResponse = await authUserRequest(username, signature);
       if (!serverAuthResponse) return;
 
-      const passphrase = enc.Base64.parse(jse.getPrivateKeyB64());
+      const passphrase = convertPrivKeyToPassphrase(jse);
       store.appStore.setAccount(
         username.toLowerCase(),
         jse,
