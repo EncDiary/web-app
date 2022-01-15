@@ -35,6 +35,7 @@ const CreateNote: FC<CreateNoteProps> = ({ account }) => {
       });
       editor?.commands.clearContent();
     });
+    window.scrollTo(0, 0);
   };
 
   return (

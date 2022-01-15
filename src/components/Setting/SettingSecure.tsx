@@ -1,13 +1,11 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
-import { useFormState } from "../../hooks/useFormState";
 import { getDotSeparatedDate } from "../../modules/datetime";
 import {
   exportDecryptedBackup,
   exportEncryptedBackup,
 } from "../../modules/file";
 import Button from "../Generic/Button";
-import TextInput from "../Generic/Input/TextInput";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 import SettingSection from "./SettingSection";
@@ -38,7 +36,6 @@ const SettingSecure: FC<SettingSecureProps> = ({ account }) => {
     <>
       <Title text="Безопасность" align="left" />
       <SettingDownloadBackup account={account} />
-      <SettingChangePassword />
       <SettingDeleteAccount account={account} />
     </>
   );
@@ -82,47 +79,6 @@ const SettingDownloadBackup: FC<SettingDownloadBackupProps> = ({ account }) => {
           colorTheme="secondary"
           onClick={() => exportBackup("decrypted")}
         />
-      </div>
-    </SettingSection>
-  );
-};
-
-const SettingChangePassword: FC = () => {
-  const [formValues, changeHandler] = useFormState({
-    old_password: "",
-    new_password: "",
-    repeat_new_password: "",
-  });
-
-  return (
-    <SettingSection>
-      <Title text="Изменение пароля" size="medium" align="left" />
-      <TextBlock>
-        Во избежание потерь перед изменением пароля сохраните бэкап всех записей
-      </TextBlock>
-      <div className="change-password">
-        <TextInput
-          name="old_password"
-          type="password"
-          value={formValues.old_password}
-          placeholder="Старый пароль"
-          onChange={changeHandler}
-        />
-        <TextInput
-          name="new_password"
-          type="password"
-          value={formValues.new_password}
-          placeholder="Новый пароль"
-          onChange={changeHandler}
-        />
-        <TextInput
-          name="repeat_new_password"
-          type="password"
-          value={formValues.repeat_new_password}
-          placeholder="Повторите новый пароль"
-          onChange={changeHandler}
-        />
-        <Button text="Сменить пароль" />
       </div>
     </SettingSection>
   );

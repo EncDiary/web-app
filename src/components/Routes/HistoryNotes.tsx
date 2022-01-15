@@ -35,6 +35,8 @@ const HistoryNotes: FC = () => {
   }, []);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const fetchNotes = async () => {
       const serverResponse = await getNotesWithLimit(
         limit,

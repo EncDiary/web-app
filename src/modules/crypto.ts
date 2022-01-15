@@ -47,7 +47,7 @@ const passphraseToKey = (
   return PBKDF2(passphrase, salt, {
     hasher: algo.SHA512,
     keySize: 64 / 8,
-    iterations: 1000,
+    iterations: 200,
   });
 };
 
