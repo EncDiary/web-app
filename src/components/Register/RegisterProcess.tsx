@@ -2,8 +2,8 @@ import {
   Dispatch,
   FC,
   SetStateAction,
-  useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { useFormState } from "../../hooks/useFormState";
@@ -42,14 +42,14 @@ const RegisterProcess: FC<RegisterProcessProps> = ({ panel, setPanel }) => {
             setPanel={setPanel}
             username={formValues.username}
             setFormValues={setFormValues}
-            isValid={checkIsUsernameValid()}
+            isValid={isUsernameValid}
           />
         );
       case registerPanelEnum.secret:
         return (
           <RegisterSecret
             setPanel={setPanel}
-            isValid={checkIsSecretValid()}
+            isValid={isSecretValid}
             setPrivateKeyText={setPrivateKeyText}
             privateKeyName={privateKeyName}
             setPrivateKeyName={setPrivateKeyName}
@@ -62,7 +62,7 @@ const RegisterProcess: FC<RegisterProcessProps> = ({ panel, setPanel }) => {
         return (
           <RegisterTerms
             setPanel={setPanel}
-            isValid={checkTermsAcceptance()}
+            isValid={isTermsAccepted}
             termsValues={termsValues}
             setTermsValues={setTermsValues}
           />
@@ -93,28 +93,23 @@ const RegisterProcess: FC<RegisterProcessProps> = ({ panel, setPanel }) => {
 
   const [currentPanelNumber, setCurrentPanelNumber] = useState(1);
 
-  const checkIsUsernameValid = useCallback(() => {
+  const isUsernameValid = useMemo(() => {
     return checkUsernameValidity(formValues.username);
   }, [formValues.username]);
 
-  const checkIsSecretValid = useCallback(() => {
+  const isSecretValid = useMemo(() => {
     return (
       checkPrivateKeyValidity(privateKeyText) &&
       checkPublicKeyValidity(publicKeyText)
     );
   }, [privateKeyText, publicKeyText]);
 
-  const checkTermsAcceptance = useCallback(() => {
+  const isTermsAccepted = useMemo(() => {
     return Object.values(termsValues).every((isChecked) => isChecked);
   }, [termsValues]);
 
   const submitHandler = async () => {
-    if (
-      !checkIsUsernameValid() ||
-      !checkIsSecretValid() ||
-      !checkTermsAcceptance()
-    )
-      return;
+    if (!isUsernameValid || !isSecretValid || !isTermsAccepted) return;
 
     if (publicKeyText.length > 500) {
       errorAlert(
@@ -146,23 +141,16 @@ const RegisterProcess: FC<RegisterProcessProps> = ({ panel, setPanel }) => {
   };
 
   useEffect(() => {
-    if (!checkIsUsernameValid()) {
+    if (!isUsernameValid) {
       setCurrentPanelNumber(1);
-    } else if (!checkIsSecretValid()) {
+    } else if (!isSecretValid) {
       setCurrentPanelNumber(2);
-    } else if (!checkTermsAcceptance()) {
+    } else if (!isTermsAccepted) {
       setCurrentPanelNumber(3);
     } else {
       setCurrentPanelNumber(4);
     }
-  }, [
-    formValues,
-    privateKeyText,
-    publicKeyText,
-    checkTermsAcceptance,
-    checkIsSecretValid,
-    checkIsUsernameValid,
-  ]);
+  }, [isTermsAccepted, isSecretValid, isUsernameValid]);
 
   return (
     <>

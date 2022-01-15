@@ -13,7 +13,7 @@ import {
 import store from "../../store";
 import JSEncrypt from "jsencrypt";
 import { useFileInputState } from "../../hooks/useFileInputState";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import {
   checkPrivateKeyValidity,
   checkUsernameValidity,
@@ -33,12 +33,11 @@ const Login = () => {
   });
 
   const [fileText, fileName, setFileText, setFileName] = useFileInputState();
-  const [isFormValid, setIsFormValid] = useState(false);
 
-  useEffect(() => {
-    setIsFormValid(
-      checkUsernameValidity(formValues.username) &&
-        checkPrivateKeyValidity(fileText)
+  const isFormValid = useMemo(() => {
+    return (
+      checkUsernameValidity(formValues.username.trim()) &&
+      checkPrivateKeyValidity(fileText)
     );
   }, [formValues.username, fileText]);
 
@@ -75,19 +74,13 @@ const Login = () => {
       errorAlert("Невозможно открыть демоверсию");
       return;
     }
-
     await auth(username, privateKey);
   };
 
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (
-      !checkUsernameValidity(formValues.username) ||
-      !checkPrivateKeyValidity(fileText)
-    )
-      return;
-
-    await auth(formValues.username, fileText);
+    if (!isFormValid) return;
+    await auth(formValues.username.trim(), fileText);
   };
 
   return account ? (
