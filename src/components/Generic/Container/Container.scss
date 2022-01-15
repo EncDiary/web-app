@@ -10,11 +10,11 @@
     padding: 0 50px;
   }
   @include _768 {
-    width: 576px;
-    padding: 0 30px;
+    width: 100%;
   }
   @include _576 {
     width: 100%;
+    padding: 0 30px;
   }
   @include _430 {
     padding: 0 18px;

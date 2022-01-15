@@ -1,5 +1,6 @@
 @import "~normalize.css/normalize.css";
 @import "/src/assets/styles/colors.scss";
+@import "/src/assets/styles/mediaQueries.scss";
 
 @font-face {
   font-family: "Roboto";
@@ -60,5 +61,59 @@ a {
   padding: 0 2px;
   &:hover {
     border-bottom: 3px solid $dark-gray;
+  }
+}
+
+p {
+  margin: 20px 0;
+  line-height: 1.25;
+  text-indent: 16px;
+  @include _768 {
+    margin: 19px 0;
+  }
+  @include _576 {
+    margin: 17px 0;
+  }
+  @include _430 {
+    margin: 15px 0;
+  }
+}
+
+ul,
+ol {
+  padding-left: 25px;
+  margin: 22px 0;
+  @include _768 {
+    margin: 20px 0;
+  }
+  @include _576 {
+    margin: 18px 0;
+  }
+  @include _430 {
+    margin: 17px 0;
+    padding-left: 19px;
+  }
+}
+
+li {
+  padding-left: 8px;
+  @include _576 {
+    padding-left: 6px;
+  }
+  @include _430 {
+    padding-left: 3px;
+  }
+  p {
+    margin: 18px 0;
+    text-indent: 0;
+    @include _768 {
+      margin: 17px 0;
+    }
+    @include _576 {
+      margin: 16px 0;
+    }
+    @include _430 {
+      margin: 14px 0;
+    }
   }
 }

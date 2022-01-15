@@ -55,6 +55,7 @@
     border-radius: 1rem;
     padding: 12px 26px;
     font-size: 18px;
+    background-color: $background-color-dark;
     @include _992 {
       min-height: 330px;
     }

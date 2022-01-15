@@ -22,7 +22,6 @@ const RegisterTerms: FC<RegisterTermsProps> = ({
   termsValues,
   setTermsValues,
 }) => {
-  console.log(termsValues);
   return (
     <>
       <Title text="Terms" size="largest" />
