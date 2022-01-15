@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
+import { isValidNotesNumberPerPage, TNotesNumberPerPage } from "../types/note";
 
 class SettingStore {
   noteActions = {
@@ -7,7 +8,7 @@ class SettingStore {
     isDeletable: true,
   };
   editor = { isMenubarDisplayed: true };
-  notesNumberPerPage: 10 | 20 | 50 | 100 | 300 = 10;
+  notesNumberPerPage: TNotesNumberPerPage = 10;
 
   rootStore: RootStore;
   constructor(rootStore: RootStore) {
@@ -36,13 +37,7 @@ class SettingStore {
   }
 
   setNotesNumberPerPage(notesNumber: number) {
-    if (
-      notesNumber === 10 ||
-      notesNumber === 20 ||
-      notesNumber === 50 ||
-      notesNumber === 100 ||
-      notesNumber === 300
-    ) {
+    if (isValidNotesNumberPerPage(notesNumber)) {
       this.notesNumberPerPage = notesNumber;
       localStorage.setItem(
         "notesNumberPerPage",

@@ -1,11 +1,10 @@
 @import "/src/assets/styles/mediaQueries.scss";
 
-.today-notes {
-  padding: 10px 0 30px;
+.history-notes {
   &__no-notes {
     font-size: 24px;
     text-align: center;
-    margin: 50px auto 40px;
+    margin: 60px auto 40px;
     max-width: 400px;
     line-height: 1.25;
     @include _768 {
@@ -18,10 +17,11 @@
       margin: 40px auto 35px;
     }
     @include _430 {
+      max-width: 100%;
       font-size: 19px;
     }
   }
-  &__full-list-button {
+  &__write-button {
     margin: 0 auto 30px;
   }
 }

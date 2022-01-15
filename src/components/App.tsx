@@ -6,7 +6,7 @@ import store from "../store";
 import { Loading } from "./Generic/Spinner";
 import Info from "./Routes/Info";
 import Login from "./Routes/Login";
-import Notes from "./Routes/Notes";
+import HistoryNotes from "./Routes/HistoryNotes";
 import Register from "./Routes/Register";
 import Setting from "./Routes/Setting";
 import Write from "./Routes/Write";
@@ -38,7 +38,7 @@ const App: React.FC = observer(() => {
         </Route>
         <Route element={<AccountTemplate />}>
           <Route path="/write" element={<Write />} />
-          <Route path="/notes" element={<Notes />} />
+          <Route path="/notes" element={<HistoryNotes />} />
           <Route path="/info" element={<Info />} />
           <Route path="/setting/*" element={<Setting />} />
         </Route>

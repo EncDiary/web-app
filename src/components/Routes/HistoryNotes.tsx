@@ -11,10 +11,13 @@ import { getNotesWithLimit } from "../../modules/request/noteRequest";
 import store from "../../store";
 import { IAccount } from "../../types/account";
 import { spinnerCreator } from "../Generic/Spinner";
+import "./HistoryNotes.scss";
+import { ButtonLink } from "../Generic/Button";
 
-const Notes: FC = () => {
+const HistoryNotes: FC = () => {
   const {
     settingStore: { notesNumberPerPage: limit },
+    noteStore: { notes },
   } = store;
 
   const account: IAccount = useOutletContext();
@@ -66,34 +69,50 @@ const Notes: FC = () => {
     spinnerCreator(fetchNotes);
   }, [pageNumber, limit, account]);
 
+  useEffect(() => {
+    if (notes.length === 0 && pageNumber !== 1) {
+      setPageNumber(pageNumber - 1);
+    }
+  }, [setPageNumber, notes.length, pageNumber]);
+
+  const paginationElement = (
+    <Pagination
+      content={`${startNumber} – ${endNumber}`}
+      onClickBack={() => setPageNumber(pageNumber - 1)}
+      onClickNext={() => setPageNumber(pageNumber + 1)}
+      isBackDisabled={pageNumber < 2}
+      isNextDisabled={areNotesOver}
+    />
+  );
+
   return (
     <MainContent>
-      <section className="history">
+      <section className="history-notes">
         <Container>
-          <Title text="Список записей" />
-          {!isLoading && (
-            <>
-              <Pagination
-                content={`${startNumber} – ${endNumber}`}
-                onClickBack={() => setPageNumber(pageNumber - 1)}
-                onClickNext={() => setPageNumber(pageNumber + 1)}
-                isBackDisabled={pageNumber < 2}
-                isNextDisabled={areNotesOver}
-              />
-              <NoteList account={account} />
-              <Pagination
-                content={`${startNumber} – ${endNumber}`}
-                onClickBack={() => setPageNumber(pageNumber - 1)}
-                onClickNext={() => setPageNumber(pageNumber + 1)}
-                isBackDisabled={pageNumber < 2}
-                isNextDisabled={areNotesOver}
-              />
-            </>
-          )}
+          <Title text="История записей" />
+          {!isLoading &&
+            (notes.length === 0 && pageNumber === 1 ? (
+              <>
+                <div className="history-notes__no-notes">
+                  Записей еще нет. Нажмите на кнопку ниже, чтобы создать новую
+                </div>
+                <ButtonLink
+                  text="Создать запись"
+                  link="/write"
+                  className="history-notes__write-button"
+                />
+              </>
+            ) : (
+              <>
+                {paginationElement}
+                <NoteList account={account} />
+                {paginationElement}
+              </>
+            ))}
         </Container>
       </section>
     </MainContent>
   );
 };
 
-export default Notes;
+export default HistoryNotes;

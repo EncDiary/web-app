@@ -11,12 +11,14 @@ import store from "../../store";
 import { IAccount } from "../../types/account";
 import { getTodayMidnightTime } from "../../modules/datetime";
 import { spinnerCreator } from "../Generic/Spinner";
+import { observer } from "mobx-react-lite";
 
 interface NoteTodayProps {
   account: IAccount;
 }
 
-const NoteToday: FC<NoteTodayProps> = ({ account }) => {
+const NoteToday: FC<NoteTodayProps> = observer(({ account }) => {
+  const notes = store.noteStore.notes;
   useEffect(() => {
     store.noteStore.clearNotes();
 
@@ -57,7 +59,13 @@ const NoteToday: FC<NoteTodayProps> = ({ account }) => {
     <section className="today-notes">
       <Container>
         <Title text="Сегодняшние записи" />
-        <NoteList account={account} />
+        {notes.length !== 0 ? (
+          <NoteList account={account} />
+        ) : (
+          <div className="today-notes__no-notes">
+            За сегодняшний день не было сделано ни одной записи
+          </div>
+        )}
         <ButtonLink
           text="Все записи"
           link="/notes"
@@ -66,6 +74,6 @@ const NoteToday: FC<NoteTodayProps> = ({ account }) => {
       </Container>
     </section>
   );
-};
+});
 
 export default NoteToday;
