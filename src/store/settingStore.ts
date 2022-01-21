@@ -1,5 +1,10 @@
 import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
+import {
+  checkIsEditorConfigValid,
+  checkIsNoteActionsConfigValid,
+  checkNotesPerPageConfigValid,
+} from "../modules/typeChecker";
 import { isValidNotesNumberPerPage, TNotesNumberPerPage } from "../types/note";
 
 class SettingStore {
@@ -15,19 +20,34 @@ class SettingStore {
     makeAutoObservable(this);
     this.rootStore = rootStore;
 
-    const noteActions = localStorage.getItem("noteActions");
-    if (noteActions) {
-      this.noteActions = JSON.parse(noteActions);
+    const noteActionsData = localStorage.getItem("noteActions");
+    if (noteActionsData) {
+      try {
+        const noteActions = JSON.parse(noteActionsData);
+        if (checkIsNoteActionsConfigValid(noteActions)) {
+          this.noteActions = noteActions;
+        }
+      } catch {}
     }
 
-    const notesNumberPerPage = localStorage.getItem("notesNumberPerPage");
-    if (notesNumberPerPage) {
-      this.notesNumberPerPage = JSON.parse(notesNumberPerPage);
+    const notesPerPageData = localStorage.getItem("notesNumberPerPage");
+    if (notesPerPageData) {
+      try {
+        const notesPerPage = JSON.parse(notesPerPageData);
+        if (checkNotesPerPageConfigValid(notesPerPage)) {
+          this.notesNumberPerPage = notesPerPage;
+        }
+      } catch {}
     }
 
-    const editor = localStorage.getItem("editor");
-    if (editor) {
-      this.editor = JSON.parse(editor);
+    const editorData = localStorage.getItem("editor");
+    if (editorData) {
+      try {
+        const editor = JSON.parse(editorData);
+        if (checkIsEditorConfigValid(editor)) {
+          this.editor = editor;
+        }
+      } catch {}
     }
   }
 
