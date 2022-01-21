@@ -26,7 +26,7 @@ import { errorAlert } from "../../modules/sweetalert";
 import { spinnerCreator } from "../Generic/Spinner";
 
 const Login = () => {
-  const account = store.appStore.account;
+  const account = store.userStore.account;
 
   const [formValues, changeHandler] = useFormState({
     username: "",
@@ -58,7 +58,7 @@ const Login = () => {
       if (!serverAuthResponse) return;
 
       const passphrase = convertPrivKeyToPassphrase(jse);
-      store.appStore.setAccount(
+      store.userStore.setAccount(
         username.toLowerCase(),
         jse,
         serverAuthResponse.data.token,

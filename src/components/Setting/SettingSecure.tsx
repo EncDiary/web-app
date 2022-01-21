@@ -105,7 +105,7 @@ const SettingDeleteAccount: FC<SettingDeleteAccountProps> = ({ account }) => {
         if (!serverDeleteAccountResponse) return;
 
         successAlert("Дневник удален успешно");
-        store.appStore.clearAccount();
+        store.userStore.clearAccount();
         navigate("/login");
       });
     }

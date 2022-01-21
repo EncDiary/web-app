@@ -5,7 +5,7 @@ import store from "../../store";
 import Header from "../Generic/Header";
 
 const AccountTemplate: FC = observer(() => {
-  const account = store.appStore.account;
+  const account = store.userStore.account;
   if (!account) {
     return <Navigate to="/login" />;
   }

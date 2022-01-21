@@ -15,12 +15,15 @@ import UnauthorizedTemplate from "./Templates/UnauthorizedTemplate";
 
 const App: React.FC = observer(() => {
   const navigate = useNavigate();
-  const { account, isLoading, isAppBlur } = store.appStore;
+  const {
+    appStore: { isLoading, isAppBlur },
+    userStore: { account },
+  } = store;
 
   const handleOnIdle = () => {
     if (account) {
       navigate("/login");
-      store.appStore.clearAccount();
+      store.userStore.clearAccount();
     }
   };
 

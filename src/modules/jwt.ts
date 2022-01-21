@@ -19,7 +19,7 @@ export const updateJwtToken = async (account: IAccount) => {
   const serverAuthResponse = await authUserRequest(account.username, signature);
   if (!serverAuthResponse) return;
 
-  store.appStore.updateToken(serverAuthResponse.data.token);
+  store.userStore.updateToken(serverAuthResponse.data.token);
 };
 
 const checkIsTokenExpired = (token: string | jwt.JwtPayload | null) => {
