@@ -5,9 +5,16 @@ interface CheckboxProps {
   checked?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
+  disabled?: boolean;
 }
 
-const Checkbox: FC<CheckboxProps> = ({ children, checked, onChange, name }) => {
+const Checkbox: FC<CheckboxProps> = ({
+  children,
+  checked,
+  onChange,
+  name,
+  disabled,
+}) => {
   return (
     <div className="checkbox-field">
       <input
@@ -16,6 +23,7 @@ const Checkbox: FC<CheckboxProps> = ({ children, checked, onChange, name }) => {
         checked={checked}
         onChange={onChange}
         name={name}
+        disabled={disabled}
       />
       <label className="checkbox-field__label">{children}</label>
     </div>

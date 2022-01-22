@@ -18,8 +18,7 @@ const RegisterDonate: FC<RegisterDonateProps> = ({
   setPanel,
   submitHandler,
 }) => {
-  const [currentSelection, setCurrentSelection] =
-    useState<cryptoTypes>(undefined);
+  const [currentSelection, setCurrentSelection] = useState<cryptoTypes>("btc");
 
   const currentItem = cryptoDonateList.find(
     (item) => item.id === currentSelection
