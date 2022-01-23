@@ -1,0 +1,59 @@
+@import "/src/assets/styles/colors.scss";
+@import "/src/assets/styles/mediaQueries.scss";
+
+.radio-field {
+  margin-bottom: 10px;
+  font-size: 18px;
+  @include _768 {
+    font-size: 17px;
+  }
+  @include _576 {
+    font-size: 16px;
+  }
+  input[type="radio"] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+    &:focus-visible + label::before {
+      box-shadow: 0 0 3px 2px $light-gray;
+    }
+  }
+  label {
+    cursor: pointer;
+    position: relative;
+    padding-left: 30px;
+    @include _768 {
+      padding-left: 28px;
+    }
+    @include _576 {
+      padding-left: 25px;
+    }
+    &:before {
+      content: "";
+      width: 21px;
+      height: 21px;
+      position: absolute;
+      left: 0;
+      bottom: 1px;
+      border-radius: 50%;
+      border: 2px solid $black;
+      box-sizing: border-box;
+      transition: 0.1s ease-out;
+      @include _768 {
+        width: 19px;
+        height: 19px;
+      }
+      @include _576 {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+  input[type="radio"]:checked + label::before {
+    border: 7px solid $black;
+    @include _768 {
+      border: 6px solid $black;
+    }
+  }
+}

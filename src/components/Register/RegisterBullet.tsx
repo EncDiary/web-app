@@ -4,9 +4,9 @@ import "./RegisterBullet.scss";
 
 interface RegisterBulletProps {
   panels: registerPanelEnum[];
-  currentPanel: registerPanelEnum;
-  setCurrentPanel: Dispatch<SetStateAction<registerPanelEnum>>;
   currentPanelNumber: number;
+  setPanelNumber: Dispatch<SetStateAction<number>>;
+  availablePanelNumber: number;
 }
 
 interface RegisterBulletItemProps {
@@ -17,17 +17,17 @@ interface RegisterBulletItemProps {
 
 const RegisterBullet: FC<RegisterBulletProps> = ({
   panels,
-  currentPanel,
-  setCurrentPanel,
   currentPanelNumber,
+  setPanelNumber,
+  availablePanelNumber,
 }) => {
   return (
     <div className="bullets">
       {panels.map((panel, panelNumber) => (
         <RegisterBulletItem
-          isActive={panel === currentPanel}
-          onClick={() => setCurrentPanel(panel)}
-          disabled={panelNumber + 1 > currentPanelNumber}
+          isActive={panelNumber === currentPanelNumber}
+          onClick={() => setPanelNumber(panelNumber)}
+          disabled={panelNumber > availablePanelNumber}
           key={panel}
         />
       ))}

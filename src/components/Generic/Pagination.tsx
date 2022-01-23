@@ -47,12 +47,9 @@ const PaginationRow: FC<PaginationRowProps> = ({
   disabled = false,
 }) => {
   return (
-    <Button
-      text={<div className="pagination__row-icon">{content}</div>}
-      className="pagination__row"
-      onClick={onClick}
-      disabled={disabled}
-    />
+    <Button className="pagination__row" onClick={onClick} disabled={disabled}>
+      <div className="pagination__row-icon">{content}</div>
+    </Button>
   );
 };
 

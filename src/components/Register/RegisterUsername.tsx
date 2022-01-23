@@ -1,5 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react";
-import { registerPanelEnum } from "../../types/register";
+import { FC } from "react";
 import Button from "../Generic/Button";
 import TextInput from "../Generic/Input/TextInput";
 import { NextNavigation } from "../Generic/NextBackNavigation";
@@ -7,14 +6,14 @@ import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 
 interface RegisterUsernameProps {
-  setPanel: Dispatch<SetStateAction<registerPanelEnum>>;
+  goToNextPanel: () => void;
   username: string;
   setFormValues: (event: React.ChangeEvent<HTMLInputElement>) => void;
   isValid: boolean;
 }
 
 const RegisterUsername: FC<RegisterUsernameProps> = ({
-  setPanel,
+  goToNextPanel,
   username,
   setFormValues,
   isValid,
@@ -35,12 +34,9 @@ const RegisterUsername: FC<RegisterUsernameProps> = ({
         Username is used when logging in to WebDiary.
       </TextBlock>
       <NextNavigation>
-        <Button
-          text="Next"
-          size="large"
-          onClick={() => setPanel(registerPanelEnum.secret)}
-          disabled={!isValid}
-        />
+        <Button size="large" onClick={goToNextPanel} disabled={!isValid}>
+          Next
+        </Button>
       </NextNavigation>
     </>
   );

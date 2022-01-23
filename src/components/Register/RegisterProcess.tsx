@@ -1,16 +1,9 @@
-import {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useFormState } from "../../hooks/useFormState";
 import { registerPanelEnum } from "../../types/register";
 import RegisterBullet from "./RegisterBullet";
 import RegisterDonate from "./RegisterDonate";
-import RegisterSecret from "./RegisterSecret";
+import RegisterSecret from "./RegisterSecret/RegisterSecret";
 import RegisterUsername from "./RegisterUsername";
 import { errorAlert, successAlert } from "../../modules/sweetalert";
 import { useNavigate } from "react-router-dom";
@@ -25,30 +18,56 @@ import { spinnerCreator } from "../Generic/Spinner";
 import RegisterTerms from "./RegisterTerms";
 import { useCheckboxesState } from "../../hooks/useCheckboxesState";
 import { checkKeypair } from "../../modules/crypto";
+import RegisterSecretAction from "./RegisterSecretAction";
 
-interface RegisterProcessProps {
-  panel: registerPanelEnum;
-  setPanel: Dispatch<SetStateAction<registerPanelEnum>>;
-}
-
-const RegisterProcess: FC<RegisterProcessProps> = ({ panel, setPanel }) => {
+const RegisterProcess: FC = () => {
   const navigate = useNavigate();
 
-  const switchRegisterPanel = (currentRegisterPanel: registerPanelEnum) => {
-    switch (currentRegisterPanel) {
+  const [panelNumber, setPanelNumber] = useState(0);
+
+  const goToNextPanel = () => {
+    setPanelNumber(panelNumber + 1);
+  };
+
+  const goToPrevPanel = () => {
+    setPanelNumber(panelNumber - 1);
+  };
+
+  const panels = [
+    registerPanelEnum.username,
+    registerPanelEnum.secretAction,
+    registerPanelEnum.secret,
+    registerPanelEnum.terms,
+    registerPanelEnum.donate,
+  ];
+
+  const switchPanel = (panelNumber: number) => {
+    switch (panels[panelNumber]) {
       case registerPanelEnum.username:
         return (
           <RegisterUsername
-            setPanel={setPanel}
+            goToNextPanel={goToNextPanel}
             username={formValues.username}
             setFormValues={setFormValues}
             isValid={isUsernameValid}
           />
         );
+      case registerPanelEnum.secretAction:
+        return (
+          <RegisterSecretAction
+            goToNextPanel={goToNextPanel}
+            goToPrevPanel={goToPrevPanel}
+            isValid={isSecretActionValid}
+            secretAction={secretAction}
+            setSecretAction={setSecretAction}
+            clearFiles={clearFiles}
+          />
+        );
       case registerPanelEnum.secret:
         return (
           <RegisterSecret
-            setPanel={setPanel}
+            goToNextPanel={goToNextPanel}
+            goToPrevPanel={goToPrevPanel}
             isValid={isSecretValid}
             setPrivateKeyText={setPrivateKeyText}
             privateKeyName={privateKeyName}
@@ -56,12 +75,16 @@ const RegisterProcess: FC<RegisterProcessProps> = ({ panel, setPanel }) => {
             setPublicKeyText={setPublicKeyText}
             publicKeyName={publicKeyName}
             setPublicKeyName={setPublicKeyName}
+            useGenerator={secretAction === "generate"}
+            privateKeyText={privateKeyText}
+            publicKeyText={publicKeyText}
           />
         );
       case registerPanelEnum.terms:
         return (
           <RegisterTerms
-            setPanel={setPanel}
+            goToNextPanel={goToNextPanel}
+            goToPrevPanel={goToPrevPanel}
             isValid={isTermsAccepted}
             termsValues={termsValues}
             setTermsValues={setTermsValues}
@@ -69,7 +92,10 @@ const RegisterProcess: FC<RegisterProcessProps> = ({ panel, setPanel }) => {
         );
       case registerPanelEnum.donate:
         return (
-          <RegisterDonate setPanel={setPanel} submitHandler={submitHandler} />
+          <RegisterDonate
+            goToPrevPanel={goToPrevPanel}
+            submitHandler={submitHandler}
+          />
         );
     }
   };
@@ -77,6 +103,10 @@ const RegisterProcess: FC<RegisterProcessProps> = ({ panel, setPanel }) => {
   const [formValues, setFormValues] = useFormState({
     username: "",
   });
+
+  const [secretAction, setSecretAction] = useState<
+    undefined | "generate" | "use-own-keys"
+  >();
 
   const [termsValues, setTermsValues] = useCheckboxesState({
     term_save_keys: false,
@@ -91,11 +121,23 @@ const RegisterProcess: FC<RegisterProcessProps> = ({ panel, setPanel }) => {
   const [publicKeyText, publicKeyName, setPublicKeyText, setPublicKeyName] =
     useFileInputState();
 
-  const [currentPanelNumber, setCurrentPanelNumber] = useState(1);
+  const clearFiles = () => {
+    setPrivateKeyText("");
+    setPrivateKeyName("Выберите файл");
+    setPublicKeyText("");
+    setPublicKeyName("Выберите файл");
+  };
+
+  const [availablePanelNumber, setAvailablePanelNumber] = useState(0);
 
   const isUsernameValid = useMemo(() => {
     return checkUsernameValidity(formValues.username);
   }, [formValues.username]);
+
+  const isSecretActionValid = useMemo(
+    () => Boolean(secretAction),
+    [secretAction]
+  );
 
   const isSecretValid = useMemo(() => {
     return (
@@ -142,30 +184,27 @@ const RegisterProcess: FC<RegisterProcessProps> = ({ panel, setPanel }) => {
 
   useEffect(() => {
     if (!isUsernameValid) {
-      setCurrentPanelNumber(1);
+      setAvailablePanelNumber(0);
+    } else if (!isSecretActionValid) {
+      setAvailablePanelNumber(1);
     } else if (!isSecretValid) {
-      setCurrentPanelNumber(2);
+      setAvailablePanelNumber(2);
     } else if (!isTermsAccepted) {
-      setCurrentPanelNumber(3);
+      setAvailablePanelNumber(3);
     } else {
-      setCurrentPanelNumber(4);
+      setAvailablePanelNumber(4);
     }
-  }, [isTermsAccepted, isSecretValid, isUsernameValid]);
+  }, [isTermsAccepted, isSecretValid, isUsernameValid, isSecretActionValid]);
 
   return (
     <>
       <RegisterBullet
-        panels={[
-          registerPanelEnum.username,
-          registerPanelEnum.secret,
-          registerPanelEnum.terms,
-          registerPanelEnum.donate,
-        ]}
-        currentPanel={panel}
-        setCurrentPanel={setPanel}
-        currentPanelNumber={currentPanelNumber}
+        panels={panels}
+        currentPanelNumber={panelNumber}
+        setPanelNumber={setPanelNumber}
+        availablePanelNumber={availablePanelNumber}
       />
-      {switchRegisterPanel(panel)}
+      {switchPanel(panelNumber)}
     </>
   );
 };

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import "./Button.scss";
 
 interface ButtonProps {
-  text: string | JSX.Element;
   onClick?: () => void;
   type?: "button" | "submit" | "reset" | undefined;
   colorTheme?: "primary" | "secondary";
@@ -14,14 +13,13 @@ interface ButtonProps {
 
 interface ButtonLinkProps {
   link: string;
-  text: string;
   colorTheme?: "primary" | "secondary";
   size?: "medium" | "large";
   className?: string;
 }
 
 const Button: FC<ButtonProps> = ({
-  text,
+  children,
   onClick,
   colorTheme = "primary",
   size = "medium",
@@ -34,14 +32,14 @@ const Button: FC<ButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
     >
-      {text}
+      {children}
     </button>
   );
 };
 
 export const ButtonLink: FC<ButtonLinkProps> = ({
   link,
-  text,
+  children,
   colorTheme = "primary",
   size = "medium",
   className = "",
@@ -51,7 +49,7 @@ export const ButtonLink: FC<ButtonLinkProps> = ({
       to={link}
       className={`button_${colorTheme} button_${size} ${className}`}
     >
-      {text}
+      {children}
     </Link>
   );
 };

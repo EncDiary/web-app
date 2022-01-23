@@ -1,5 +1,4 @@
-import { Dispatch, FC, SetStateAction, useState } from "react";
-import { registerPanelEnum } from "../../types/register";
+import { FC, useState } from "react";
 import Button from "../Generic/Button";
 import DonateCrypto from "../Generic/DonateCrypto";
 import { NextBackNavigation } from "../Generic/NextBackNavigation";
@@ -10,12 +9,12 @@ import { cryptoTypes } from "../../types/donateCrypto";
 import { cryptoDonate as cryptoDonateList } from "../../data/cryptoDonate";
 
 interface RegisterDonateProps {
-  setPanel: Dispatch<SetStateAction<registerPanelEnum>>;
+  goToPrevPanel: () => void;
   submitHandler: () => void;
 }
 
 const RegisterDonate: FC<RegisterDonateProps> = ({
-  setPanel,
+  goToPrevPanel,
   submitHandler,
 }) => {
   const [currentSelection, setCurrentSelection] = useState<cryptoTypes>("btc");
@@ -49,13 +48,12 @@ const RegisterDonate: FC<RegisterDonateProps> = ({
       )}
 
       <NextBackNavigation>
-        <Button
-          text="Back"
-          colorTheme="secondary"
-          size="large"
-          onClick={() => setPanel(registerPanelEnum.secret)}
-        />
-        <Button text="Create" size="large" onClick={submitHandler} />
+        <Button colorTheme="secondary" size="large" onClick={goToPrevPanel}>
+          Back
+        </Button>
+        <Button size="large" onClick={submitHandler}>
+          Create
+        </Button>
       </NextBackNavigation>
     </>
   );

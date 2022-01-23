@@ -1,11 +1,14 @@
 import { aesDecrypt } from "./crypto";
 
-export const exportJson = (data: any, filename: string) => {
-  const json = JSON.stringify(data);
-  const blob = new Blob([json], { type: "application/json" });
+export const exportFile = (
+  data: string,
+  filename: string,
+  filetype: string
+) => {
+  const blob = new Blob([data], { type: filetype });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = `${filename}.json`;
+  link.download = `${filename}`;
   link.click();
 };
 
@@ -27,14 +30,15 @@ export const exportDecryptedBackup = async (
     }
   );
 
-  exportJson(
-    {
+  exportFile(
+    JSON.stringify({
       username: fetchedData.username,
       is_encrypted: false,
       backup_date: currentDate,
       notes,
-    },
-    `EncDiary_decrypt_${currentDate}`
+    }),
+    `EncDiary_decrypt_${currentDate}.json`,
+    "application/json"
   );
 };
 
@@ -54,13 +58,14 @@ export const exportEncryptedBackup = async (
     }
   );
 
-  exportJson(
-    {
+  exportFile(
+    JSON.stringify({
       username: fetchedData.username,
       is_encrypted: true,
       backup_date: currentDate,
       notes,
-    },
-    `EncDiary_encrypt_${currentDate}`
+    }),
+    `EncDiary_encrypt_${currentDate}.json`,
+    "application/json"
   );
 };

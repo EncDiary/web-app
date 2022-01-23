@@ -70,15 +70,15 @@ const SettingDownloadBackup: FC<SettingDownloadBackupProps> = ({ account }) => {
         странице до окончания процесса
       </TextBlock>
       <div className="backup-export">
+        <Button onClick={() => exportBackup("encrypted")}>
+          Зашифрованный бэкап
+        </Button>
         <Button
-          text="Зашифрованный бэкап"
-          onClick={() => exportBackup("encrypted")}
-        />
-        <Button
-          text="Бэкап в чистом виде (не рекомендуется!)"
           colorTheme="secondary"
           onClick={() => exportBackup("decrypted")}
-        />
+        >
+          Бэкап в чистом виде (не рекомендуется!)
+        </Button>
       </div>
     </SettingSection>
   );
@@ -120,7 +120,7 @@ const SettingDeleteAccount: FC<SettingDeleteAccountProps> = ({ account }) => {
         переиспользован кем угодно. (Перед удалением появится окно с
         подтвеждением действия)
       </TextBlock>
-      <Button text="Подтвердить удаление" onClick={() => deleteAccount()} />
+      <Button onClick={() => deleteAccount()}>Подтвердить удаление</Button>
     </SettingSection>
   );
 };

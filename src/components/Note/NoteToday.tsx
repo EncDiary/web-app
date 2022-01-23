@@ -66,11 +66,9 @@ const NoteToday: FC<NoteTodayProps> = observer(({ account }) => {
             За сегодняшний день не было сделано ни одной записи
           </div>
         )}
-        <ButtonLink
-          text="Все записи"
-          link="/notes"
-          className="today-notes__full-list-button"
-        />
+        <ButtonLink link="/notes" className="today-notes__full-list-button">
+          Все записи
+        </ButtonLink>
       </Container>
     </section>
   );

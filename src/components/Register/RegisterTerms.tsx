@@ -1,5 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react";
-import { registerPanelEnum } from "../../types/register";
+import { FC } from "react";
 import Button from "../Generic/Button";
 import Checkbox from "../Generic/Input/Checkbox";
 import { NextBackNavigation } from "../Generic/NextBackNavigation";
@@ -8,7 +7,8 @@ import Title from "../Generic/Title";
 import "./RegisterTerms.scss";
 
 interface RegisterTermsProps {
-  setPanel: Dispatch<SetStateAction<registerPanelEnum>>;
+  goToNextPanel: () => void;
+  goToPrevPanel: () => void;
   isValid: boolean;
   termsValues: {
     [key: string]: boolean;
@@ -17,7 +17,8 @@ interface RegisterTermsProps {
 }
 
 const RegisterTerms: FC<RegisterTermsProps> = ({
-  setPanel,
+  goToNextPanel,
+  goToPrevPanel,
   isValid,
   termsValues,
   setTermsValues,
@@ -90,18 +91,12 @@ const RegisterTerms: FC<RegisterTermsProps> = ({
       </div>
 
       <NextBackNavigation>
-        <Button
-          text="Back"
-          colorTheme="secondary"
-          size="large"
-          onClick={() => setPanel(registerPanelEnum.secret)}
-        />
-        <Button
-          text="Next"
-          size="large"
-          onClick={() => setPanel(registerPanelEnum.donate)}
-          disabled={!isValid}
-        />
+        <Button colorTheme="secondary" size="large" onClick={goToPrevPanel}>
+          Back
+        </Button>
+        <Button size="large" onClick={goToNextPanel} disabled={!isValid}>
+          Next
+        </Button>
       </NextBackNavigation>
     </>
   );

@@ -1,14 +1,8 @@
-import { Dispatch, FC, SetStateAction } from "react";
-import { registerPanelEnum } from "../../types/register";
-import Button from "../Generic/Button";
-import FileInput from "../Generic/Input/FileInput";
-import { NextBackNavigation } from "../Generic/NextBackNavigation";
-import TextBlock from "../Generic/TextBlock";
-import Title from "../Generic/Title";
+import { FC } from "react";
+import FileInput from "../../Generic/Input/FileInput";
+import TextBlock from "../../Generic/TextBlock";
 
-interface RegisterSecretProps {
-  setPanel: Dispatch<SetStateAction<registerPanelEnum>>;
-  isValid: boolean;
+interface RegisterSecretWithoutGeneratorProps {
   setPrivateKeyText: (text: string) => void;
   privateKeyName: string;
   setPrivateKeyName: (name: string) => void;
@@ -17,19 +11,18 @@ interface RegisterSecretProps {
   setPublicKeyName: (name: string) => void;
 }
 
-const RegisterSecret: FC<RegisterSecretProps> = ({
-  setPanel,
-  isValid,
-  setPrivateKeyText,
+const RegisterSecretWithoutGenerator: FC<
+  RegisterSecretWithoutGeneratorProps
+> = ({
   privateKeyName,
   setPrivateKeyName,
-  setPublicKeyText,
+  setPrivateKeyText,
   publicKeyName,
   setPublicKeyName,
+  setPublicKeyText,
 }) => {
   return (
     <>
-      <Title text="Secret" size="largest" />
       <FileInput
         id="register-upload-privkey"
         description="Приватный ключ"
@@ -54,22 +47,8 @@ const RegisterSecret: FC<RegisterSecretProps> = ({
         Используя ненадежный пароль вы рискуете скомпрометировать свои записи.
         Разработчик за ваши данные ответственности не несет
       </TextBlock>
-      <NextBackNavigation>
-        <Button
-          text="Back"
-          colorTheme="secondary"
-          size="large"
-          onClick={() => setPanel(registerPanelEnum.username)}
-        />
-        <Button
-          text="Next"
-          size="large"
-          onClick={() => setPanel(registerPanelEnum.terms)}
-          disabled={!isValid}
-        />
-      </NextBackNavigation>
     </>
   );
 };
 
-export default RegisterSecret;
+export default RegisterSecretWithoutGenerator;

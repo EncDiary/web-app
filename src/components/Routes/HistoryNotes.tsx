@@ -99,10 +99,11 @@ const HistoryNotes: FC = () => {
                   Записей еще нет. Нажмите на кнопку ниже, чтобы создать новую
                 </div>
                 <ButtonLink
-                  text="Создать запись"
                   link="/write"
                   className="history-notes__write-button"
-                />
+                >
+                  Создать запись
+                </ButtonLink>
               </>
             ) : (
               <>

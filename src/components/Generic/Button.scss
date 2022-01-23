@@ -8,8 +8,15 @@
   border: none;
   cursor: pointer;
   display: block;
-  width: max-content;
   text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  word-wrap: break-word;
+  svg {
+    width: 27px;
+    height: 27px;
+  }
   &:disabled {
     opacity: 0.6;
     color: $light-black;

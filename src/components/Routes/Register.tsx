@@ -1,15 +1,14 @@
 import { FC, useState } from "react";
-import { registerPanelEnum } from "../../types/register";
 import RegisterProcess from "../Register/RegisterProcess";
 import RegisterStart from "../Register/RegisterStart";
 
 const Register: FC = () => {
-  const [panel, setPanel] = useState(registerPanelEnum.start);
+  const [isStarted, setIsStarted] = useState(false);
 
-  return panel === registerPanelEnum.start ? (
-    <RegisterStart setPanel={setPanel} />
+  return !isStarted ? (
+    <RegisterStart goToNextPanel={() => setIsStarted(true)} />
   ) : (
-    <RegisterProcess panel={panel} setPanel={setPanel} />
+    <RegisterProcess />
   );
 };
 

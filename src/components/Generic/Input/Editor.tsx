@@ -57,47 +57,53 @@ const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
     <div className="wysiwyg__menu">
       <MenuBarGroup>
         <Button
-          text={<BoldIcon />}
           className="wysiwyg__menu-group-item"
           colorTheme={checkOptionEnabled("bold")}
           onClick={() => editor.chain().focus().toggleBold().run()}
-        />
+        >
+          <BoldIcon />
+        </Button>
         <Button
-          text={<ItalicIcon />}
           className="wysiwyg__menu-group-item"
           colorTheme={checkOptionEnabled("italic")}
           onClick={() => editor.chain().focus().toggleItalic().run()}
-        />
+        >
+          <ItalicIcon />
+        </Button>
       </MenuBarGroup>
 
       <MenuBarGroup>
         <Button
-          text={<UnorderedListIcon />}
           className="wysiwyg__menu-group-item"
           colorTheme={checkOptionEnabled("bulletList")}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-        />
+        >
+          <UnorderedListIcon />
+        </Button>
         <Button
-          text={<OrderedListIcon />}
           className="wysiwyg__menu-group-item"
           colorTheme={checkOptionEnabled("orderedList")}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        />
+        >
+          <OrderedListIcon />
+        </Button>
       </MenuBarGroup>
 
       <MenuBarGroup>
         <Button
-          text={<UndoIcon />}
           className="wysiwyg__menu-group-item"
           colorTheme={"secondary"}
           onClick={() => editor.chain().focus().undo().run()}
-        />
+        >
+          <UndoIcon />
+        </Button>
         <Button
-          text={<RedoIcon />}
           className="wysiwyg__menu-group-item"
           colorTheme={"secondary"}
           onClick={() => editor.chain().focus().redo().run()}
-        />
+        >
+          <RedoIcon />
+        </Button>
       </MenuBarGroup>
     </div>
   );

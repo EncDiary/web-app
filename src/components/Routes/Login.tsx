@@ -107,23 +107,25 @@ const Login = () => {
           Your private key won't be uploaded to the servers.
         </TextBlock>
         <Button
-          text="Login"
           size="large"
           type="submit"
           className="login__button"
           disabled={!isFormValid}
-        />
+        >
+          Login
+        </Button>
       </form>
       <hr />
       <TextBlock size="small">
         Don't have account? <Link to="/register">Register</Link>
       </TextBlock>
       <Button
-        text="Попробовать Демоверсию"
         colorTheme="secondary"
         className="login__demo-version"
         onClick={authDemo}
-      />
+      >
+        Попробовать Демоверсию
+      </Button>
     </>
   );
 };

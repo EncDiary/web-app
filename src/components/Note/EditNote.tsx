@@ -55,16 +55,18 @@ const EditNote: FC<EditNoteProps> = ({ account, note, isOpen, setIsOpen }) => {
       <EditorPanel editor={editor} />
       <div className="edit-note__buttons">
         <Button
-          text="Отмена"
           colorTheme="secondary"
           onClick={() => setIsOpen(false)}
           className="edit-note__buttons-item"
-        />
+        >
+          Отмена
+        </Button>
         <Button
-          text="Сохранить"
           onClick={() => submitHandler()}
           className="edit-note__buttons-item"
-        />
+        >
+          Сохранить
+        </Button>
       </div>
     </Modal>
   );

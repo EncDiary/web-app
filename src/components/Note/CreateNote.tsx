@@ -42,11 +42,9 @@ const CreateNote: FC<CreateNoteProps> = ({ account }) => {
     <section className="writer">
       <Container>
         <EditorPanel editor={editor} />
-        <Button
-          text="Сохранить"
-          className="writer__save-button"
-          onClick={() => submitHandler()}
-        />
+        <Button className="writer__save-button" onClick={() => submitHandler()}>
+          Сохранить
+        </Button>
       </Container>
     </section>
   );

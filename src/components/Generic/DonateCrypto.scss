@@ -13,40 +13,22 @@
     width: 100%;
   }
   &__address {
-    display: flex;
-    align-items: center;
-    word-break: break-all;
-    align-items: flex-start;
+    word-wrap: break-word;
     width: 100%;
     padding: 3px 5px 5px;
     box-sizing: border-box;
     font-family: "Roboto Mono";
-    &-copy {
-      padding: 5px;
-      margin-left: 5px;
-      line-height: 0;
-      border: 2px solid #fff;
-      border-radius: 50%;
-      transition: 0.2s;
-      cursor: pointer;
-      &:hover {
-        color: $medium-gray;
-        svg {
-          stroke-width: 3;
-        }
-      }
-      svg {
-        stroke-width: 2.5;
-        width: 20px;
-        height: 20px;
-      }
-      &_copied {
-        border-color: $medium-gray;
-        background-color: $lightest-gray;
-        &:hover {
-          color: $dark-gray;
-        }
-      }
+    margin: 10px 0;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 12px;
+    &:hover {
+      background-color: $lightest-gray;
+    }
+    &_copied {
+      border-color: $medium-gray;
+      background-color: $background-color-dark;
+      box-shadow: 0 0 3px 3px $medium-gray;
     }
   }
 }

@@ -1,16 +1,15 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { FC } from "react";
 import { Link } from "react-router-dom";
-import { registerPanelEnum } from "../../types/register";
 import Button from "../Generic/Button";
 import { NextNavigation } from "../Generic/NextBackNavigation";
 import TextBlock from "../Generic/TextBlock";
 import Title from "../Generic/Title";
 
 interface RegisterStartProps {
-  setPanel: Dispatch<SetStateAction<registerPanelEnum>>;
+  goToNextPanel: () => void;
 }
 
-const RegisterStart: FC<RegisterStartProps> = ({ setPanel }) => {
+const RegisterStart: FC<RegisterStartProps> = ({ goToNextPanel }) => {
   return (
     <>
       <Title text="Register" size="largest" />
@@ -21,11 +20,9 @@ const RegisterStart: FC<RegisterStartProps> = ({ setPanel }) => {
         You will be prompted to choose username and password
       </TextBlock>
       <NextNavigation>
-        <Button
-          text="Start"
-          size="large"
-          onClick={() => setPanel(registerPanelEnum.username)}
-        />
+        <Button size="large" onClick={goToNextPanel}>
+          Start
+        </Button>
       </NextNavigation>
       <hr />
       <TextBlock size="small">
