@@ -78,7 +78,7 @@ const Info: FC = () => {
 
           <InfoBlock>
             <Title size="small" text="Encryption" align="left" />
-            <UnorderedList items={["CryptoJS", "JSEncrypt", "JsonWebToken"]} />
+            <UnorderedList items={["CryptoJS", "JSEncrypt", "jwt-decode"]} />
           </InfoBlock>
 
           <InfoBlock>
