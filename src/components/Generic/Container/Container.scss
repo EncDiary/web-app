@@ -1,19 +1,14 @@
 @import "/src/assets/styles/mediaQueries.scss";
 
 .container {
-  width: 992px;
-  padding: 0 121px;
-  box-sizing: border-box;
-  margin: auto;
+  padding: 0 calc(50% - 400px);
   @include _992 {
-    width: 768px;
-    padding: 0 50px;
+    padding: 0 calc(50% - 334px);
   }
   @include _768 {
-    width: 100%;
+    padding: 0 50px;
   }
   @include _576 {
-    width: 100%;
     padding: 0 30px;
   }
   @include _430 {
