@@ -3,13 +3,17 @@ import "./UnorderedList.scss";
 
 interface UnorderedListProps {
   items: string[] | ReactElement[];
+  itemClassName?: string;
 }
 
-const UnorderedList: FC<UnorderedListProps> = ({ items }) => {
+const UnorderedList: FC<UnorderedListProps> = ({
+  items,
+  itemClassName = "",
+}) => {
   return (
     <ul className="ul">
       {items.map((item, i) => (
-        <li className="ul__item" key={i}>
+        <li className={`ul__item ${itemClassName}`} key={i}>
           {item}
         </li>
       ))}

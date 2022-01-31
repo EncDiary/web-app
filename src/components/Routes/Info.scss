@@ -1,8 +1,14 @@
 .info {
   margin-bottom: 50px;
-}
-
-.info-block {
-  padding-bottom: 4px;
-  word-wrap: break-word;
+  &-block {
+    padding-bottom: 4px;
+    word-wrap: break-word;
+  }
+  &-donate-item {
+    word-break: break-all;
+    margin: 8px 0;
+    &__address {
+      font-family: "Roboto Mono";
+    }
+  }
 }

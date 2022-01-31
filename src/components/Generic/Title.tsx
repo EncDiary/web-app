@@ -2,7 +2,6 @@ import { FC } from "react";
 import "./Title.scss";
 
 interface TitleProps {
-  text: string;
   size?: "medium" | "large" | "largest" | "small";
   align?: "center" | "left" | "right";
 }
@@ -12,17 +11,17 @@ interface HProps {
 }
 
 export const Title: FC<TitleProps> = ({
-  text,
+  children,
   size = "large",
   align = "center",
 }) => {
   const className = `title_${size} title_${align}`;
   return size === "largest" || size === "large" ? (
-    <H1 className={className}>{text}</H1>
+    <H1 className={className}>{children}</H1>
   ) : size === "medium" ? (
-    <H2 className={className}>{text}</H2>
+    <H2 className={className}>{children}</H2>
   ) : (
-    <H3 className={className}>{text}</H3>
+    <H3 className={className}>{children}</H3>
   );
 };
 

@@ -12,16 +12,15 @@ interface RegisterStartProps {
 const RegisterStart: FC<RegisterStartProps> = ({ goToNextPanel }) => {
   return (
     <>
-      <Title text="Register" size="largest" />
+      <Title size="largest">Регистрация</Title>
       <TextBlock size="large">
-        This wizard will help you create your WebDiary account.
-      </TextBlock>
-      <TextBlock size="large">
-        You will be prompted to choose username and password
+        Для создания аккаунта EncDiary вам потребуется придумать юзернейм и
+        предоставить RSA ключи. Вы можете использовать свои ключи или позволить
+        EncDiary создать из для вас
       </TextBlock>
       <NextNavigation>
         <Button size="large" onClick={goToNextPanel}>
-          Start
+          Начать
         </Button>
       </NextNavigation>
       <hr />

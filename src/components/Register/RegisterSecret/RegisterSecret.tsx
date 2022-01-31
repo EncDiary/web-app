@@ -1,6 +1,7 @@
 import { FC } from "react";
 import Button from "../../Generic/Button";
 import { NextBackNavigation } from "../../Generic/NextBackNavigation";
+import TextBlock from "../../Generic/TextBlock";
 import Title from "../../Generic/Title";
 import RegisterSecretWithGenerator from "./RegisterSecretWithGenerator";
 import RegisterSecretWithoutGenerator from "./RegisterSecretWithoutGenerator";
@@ -36,7 +37,7 @@ const RegisterSecret: FC<RegisterSecretProps> = ({
 }) => {
   return (
     <>
-      <Title text="Secret" size="largest" />
+      <Title size="largest">RSA ключи</Title>
       {useGenerator ? (
         <RegisterSecretWithGenerator
           setPrivateKeyText={setPrivateKeyText}
@@ -55,12 +56,19 @@ const RegisterSecret: FC<RegisterSecretProps> = ({
         />
       )}
 
+      <TextBlock size="small">
+        EncDiary хранит лишь ваш публичный ключ - для возможности проверки
+        владения учетной записью. Приватный ключ не передается на сервер. При
+        утере приватного ключа восстановить записи технически не представляется
+        возможным.
+      </TextBlock>
+
       <NextBackNavigation>
         <Button colorTheme="secondary" size="large" onClick={goToPrevPanel}>
-          Back
+          Назад
         </Button>
         <Button size="large" onClick={goToNextPanel} disabled={!isValid}>
-          Next
+          Далее
         </Button>
       </NextBackNavigation>
     </>

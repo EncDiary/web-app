@@ -27,7 +27,7 @@ const RegisterSecretAction: FC<RegisterSecretActionProps> = ({
 }) => {
   return (
     <>
-      <Title text="Secret Type" size="largest" />
+      <Title size="largest">RSA ключи</Title>
       <TextBlock size="large">Выберите подходящее действие:</TextBlock>
       <div className="secret-type__choosing">
         <RadioInput
@@ -59,10 +59,10 @@ const RegisterSecretAction: FC<RegisterSecretActionProps> = ({
 
       <NextBackNavigation>
         <Button colorTheme="secondary" size="large" onClick={goToPrevPanel}>
-          Back
+          Назад
         </Button>
         <Button size="large" onClick={goToNextPanel} disabled={!isValid}>
-          Next
+          Далее
         </Button>
       </NextBackNavigation>
     </>

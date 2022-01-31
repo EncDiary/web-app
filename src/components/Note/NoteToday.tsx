@@ -58,7 +58,7 @@ const NoteToday: FC<NoteTodayProps> = observer(({ account }) => {
   return (
     <section className="today-notes">
       <Container>
-        <Title text="Сегодняшние записи" />
+        <Title>Сегодняшние записи</Title>
         {notes.length !== 0 ? (
           <NoteList account={account} />
         ) : (

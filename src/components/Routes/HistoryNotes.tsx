@@ -91,7 +91,7 @@ const HistoryNotes: FC = () => {
     <MainContent>
       <section className="history-notes">
         <Container>
-          <Title text="История записей" />
+          <Title>История записей</Title>
           {!isLoading &&
             (notes.length === 0 && pageNumber === 1 ? (
               <>

@@ -51,7 +51,7 @@ const EditNote: FC<EditNoteProps> = ({ account, note, isOpen, setIsOpen }) => {
 
   return (
     <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
-      <Title text="Редактирование записи" size="medium" />
+      <Title size="medium">Редактирование записи</Title>
       <EditorPanel editor={editor} />
       <div className="edit-note__buttons">
         <Button

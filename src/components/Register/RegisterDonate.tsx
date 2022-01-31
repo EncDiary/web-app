@@ -25,11 +25,11 @@ const RegisterDonate: FC<RegisterDonateProps> = ({
 
   return (
     <>
-      <Title text="Donate" size="largest" />
-      <TextBlock size="largest">Плати сколько хочешь</TextBlock>
+      <Title size="largest">Донат</Title>
       <TextBlock size="large">
-        WebDiary абсолютно свободный проект и развивается только благодаря
-        донатам. Вы можете не платить, если вы не хотите
+        EncDiary абсолютно свободный проект и развивается только благодаря
+        поддержке со стороны пользователей. Помочь проекту можно отправив
+        средства на эти адреса
       </TextBlock>
 
       <RadioInputGroup
@@ -49,10 +49,10 @@ const RegisterDonate: FC<RegisterDonateProps> = ({
 
       <NextBackNavigation>
         <Button colorTheme="secondary" size="large" onClick={goToPrevPanel}>
-          Back
+          Назад
         </Button>
         <Button size="large" onClick={submitHandler}>
-          Create
+          Создать
         </Button>
       </NextBackNavigation>
     </>

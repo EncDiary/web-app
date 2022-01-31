@@ -14,10 +14,10 @@ const Info: FC = () => {
       <section className="info">
         <Container>
           <InfoBlock>
-            <Title text="Об EncDiary" />
+            <Title>Об EncDiary</Title>
             <TextBlock>
               Это приложение с открытым исходным кодом под лицензией{" "}
-              <ExternalLink href="https://github.com/idefant/encdiary-web/blob/main/LICENSE">
+              <ExternalLink href="https://github.com/EncDiary/web-app/blob/main/LICENSE">
                 GNU GPLv3
               </ExternalLink>
               .
@@ -29,22 +29,24 @@ const Info: FC = () => {
           </InfoBlock>
 
           <InfoBlock>
-            <Title size="medium" text="Исходный код" align="left" />
+            <Title size="medium" align="left">
+              Исходный код
+            </Title>
             <UnorderedList
               items={[
                 <>
-                  <ExternalLink href="https://github.com/idefant/encdiary-web">
+                  <ExternalLink href="https://github.com/EncDiary/web-app">
                     Web Frontend
                   </ExternalLink>{" "}
                   (main repo)
                 </>,
-                <ExternalLink href="https://github.com/idefant/encdiary-api">
+                <ExternalLink href="https://github.com/EncDiary/api">
                   API
                 </ExternalLink>,
-                <ExternalLink href="https://github.com/idefant/encdiary-landing">
+                <ExternalLink href="https://github.com/EncDiary/landing">
                   Landing
                 </ExternalLink>,
-                <ExternalLink href="https://github.com/idefant/encdiary-admin">
+                <ExternalLink href="https://github.com/EncDiary/admin-panel">
                   Admin Panel
                 </ExternalLink>,
               ]}
@@ -52,11 +54,9 @@ const Info: FC = () => {
           </InfoBlock>
 
           <InfoBlock>
-            <Title
-              size="medium"
-              text="EncDiary создан с использованием следующих инструментов:"
-              align="left"
-            />
+            <Title size="medium" align="left">
+              EncDiary создан с использованием следующих инструментов:
+            </Title>
             <UnorderedList
               items={[
                 "Create React App",
@@ -72,22 +72,30 @@ const Info: FC = () => {
           </InfoBlock>
 
           <InfoBlock>
-            <Title size="small" text="Components" align="left" />
+            <Title size="small" align="left">
+              Components
+            </Title>
             <UnorderedList items={["TipTap", "React Modal", "Sweetalert2"]} />
           </InfoBlock>
 
           <InfoBlock>
-            <Title size="small" text="Encryption" align="left" />
+            <Title size="small" align="left">
+              Encryption
+            </Title>
             <UnorderedList items={["CryptoJS", "JSEncrypt", "jwt-decode"]} />
           </InfoBlock>
 
           <InfoBlock>
-            <Title size="small" text="Styles" align="left" />
+            <Title size="small" align="left">
+              Styles
+            </Title>
             <UnorderedList items={["Node Sass", "Normalize.css"]} />
           </InfoBlock>
 
           <InfoBlock>
-            <Title size="medium" text="TODO" align="left" />
+            <Title size="medium" align="left">
+              TODO
+            </Title>
             <Checkbox disabled>Import</Checkbox>
             <Checkbox disabled>Change keypair</Checkbox>
             <Checkbox disabled>2FA (Password)</Checkbox>
@@ -95,26 +103,28 @@ const Info: FC = () => {
           </InfoBlock>
 
           <InfoBlock>
-            <Title
-              size="medium"
-              text="Поблагодарить разработчика"
-              align="left"
-            />
+            <Title size="medium" align="left">
+              Поблагодарить разработчика
+            </Title>
             <UnorderedList
+              itemClassName="info-donate-item"
               items={[
-                <>
-                  <b>Bitcoin</b>: bc1q5zk5m3tfgw5gt84jy344n6ddx25ywz3t8s4jt6
-                </>,
-                <>
-                  <b>Ethereum</b>: 0xe19B7704BDB65Ca1e11149f1728A740e9FE4b092
-                </>,
-                <>
-                  <b>BNB</b>: bnb15kkevtkqnplmn4upsjwyrgwkpf3ksrxhpy68sw
-                </>,
-                <>
-                  <b>Monero</b>:
-                  82bEmpVCrbeWgdAmYELWG3hRbx9Xby23YBJRVaiNsubvMuR9PJRUdngQnGpS68wARGRsqT2rHDZwCF1fBBDF6avdQiUR2f6
-                </>,
+                <InfoDonateItem
+                  coin="Bitcoin"
+                  address="bc1q5zk5m3tfgw5gt84jy344n6ddx25ywz3t8s4jt6"
+                />,
+                <InfoDonateItem
+                  coin="Ethereum"
+                  address="0xe19B7704BDB65Ca1e11149f1728A740e9FE4b092"
+                />,
+                <InfoDonateItem
+                  coin="BNB"
+                  address="bnb15kkevtkqnplmn4upsjwyrgwkpf3ksrxhpy68sw"
+                />,
+                <InfoDonateItem
+                  coin="Monero"
+                  address="82bEmpVCrbeWgdAmYELWG3hRbx9Xby23YBJRVaiNsubvMuR9PJRUdngQnGpS68wARGRsqT2rHDZwCF1fBBDF6avdQiUR2f6"
+                />,
               ]}
             />
           </InfoBlock>
@@ -126,6 +136,20 @@ const Info: FC = () => {
 
 const InfoBlock: FC = ({ children }) => {
   return <div className="info-block">{children}</div>;
+};
+
+interface InfoDonateItemProps {
+  coin: string;
+  address: string;
+}
+
+const InfoDonateItem: FC<InfoDonateItemProps> = ({ coin, address }) => {
+  return (
+    <>
+      <b>{coin}</b>:{" "}
+      <span className="info-donate-item__address">{address}</span>
+    </>
+  );
 };
 
 export default Info;

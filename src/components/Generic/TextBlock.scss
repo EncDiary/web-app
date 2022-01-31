@@ -1,19 +1,6 @@
 @import "/src/assets/styles/mediaQueries.scss";
 
 .text-block {
-  &_largest {
-    font-size: 32px;
-    margin-bottom: 24px;
-    @include _768 {
-      font-size: 30px;
-    }
-    @include _576 {
-      font-size: 28px;
-    }
-    @include _430 {
-      font-size: 26px;
-    }
-  }
   &_large {
     font-size: 20px;
     margin-bottom: 15px;

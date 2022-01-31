@@ -10,7 +10,7 @@ import store from "../../store";
 const SettingMain: FC = () => {
   return (
     <>
-      <Title text="Основное" align="left" />
+      <Title align="left">Основное</Title>
       <SettingNoteActions />
       <SettingListNotes />
       <SettingEditor />
@@ -23,7 +23,9 @@ const SettingNoteActions: FC = observer(() => {
 
   return (
     <SettingSection>
-      <Title text="Действия над записями" size="medium" align="left" />
+      <Title size="medium" align="left">
+        Действия над записями
+      </Title>
       <ToggleSwitch
         text="Редактирование"
         isEnabled={isEditable}
@@ -42,7 +44,9 @@ const SettingListNotes: FC = observer(() => {
   const notesNumber = store.settingStore.notesNumberPerPage;
   return (
     <SettingSection>
-      <Title text="Список записей" size="medium" align="left" />
+      <Title size="medium" align="left">
+        Список записей
+      </Title>
       <TextBlock>
         Количество отображаемых записей:
         <SelectInput
@@ -67,7 +71,9 @@ const SettingEditor = observer(() => {
   const isMenubarDisplayed = store.settingStore.editor.isMenubarDisplayed;
   return (
     <SettingSection>
-      <Title text="Редактор" size="medium" align="left" />
+      <Title size="medium" align="left">
+        Редактор
+      </Title>
       <ToggleSwitch
         text="Показывать панель инструментов"
         isEnabled={isMenubarDisplayed}

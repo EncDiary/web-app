@@ -34,7 +34,7 @@ interface SettingDeleteAccountProps {
 const SettingSecure: FC<SettingSecureProps> = ({ account }) => {
   return (
     <>
-      <Title text="Безопасность" align="left" />
+      <Title align="left">Безопасность</Title>
       <SettingDownloadBackup account={account} />
       <SettingDeleteAccount account={account} />
     </>
@@ -64,7 +64,9 @@ const SettingDownloadBackup: FC<SettingDownloadBackupProps> = ({ account }) => {
 
   return (
     <SettingSection>
-      <Title text="Экспорт записей" size="medium" align="left" />
+      <Title size="medium" align="left">
+        Экспорт записей
+      </Title>
       <TextBlock>
         Подготовка бэкапа может занять некоторое время. Оставайтесь на этой
         странице до окончания процесса
@@ -77,7 +79,7 @@ const SettingDownloadBackup: FC<SettingDownloadBackupProps> = ({ account }) => {
           colorTheme="secondary"
           onClick={() => exportBackup("decrypted")}
         >
-          Бэкап в чистом виде (не рекомендуется!)
+          Бэкап без шифрования
         </Button>
       </div>
     </SettingSection>
@@ -113,12 +115,14 @@ const SettingDeleteAccount: FC<SettingDeleteAccountProps> = ({ account }) => {
 
   return (
     <SettingSection>
-      <Title text="Удаление аккаунта" size="medium" align="left" />
+      <Title size="medium" align="left">
+        Удаление аккаунта
+      </Title>
       <TextBlock>
-        Удаление учетной записи происходит безвозвратно. Будьте уверены в своих
-        действиях. В дальнейшем логин <b>{account.username}</b> может быть
-        переиспользован кем угодно. (Перед удалением появится окно с
-        подтвеждением действия)
+        Осторожно! Удаление учетной записи - процесс необратимый. Будет удалена
+        вся информация о вашем аккаунте и всех записях. В дальнейшем логин{" "}
+        <b>{account.username}</b> может быть переиспользован кем угодно. (Перед
+        удалением появится окно с подтверждением действия)
       </TextBlock>
       <Button onClick={() => deleteAccount()}>Подтвердить удаление</Button>
     </SettingSection>

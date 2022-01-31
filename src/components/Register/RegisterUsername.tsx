@@ -20,7 +20,7 @@ const RegisterUsername: FC<RegisterUsernameProps> = ({
 }) => {
   return (
     <>
-      <Title text="Username" size="largest" />
+      <Title size="largest">Юзернейм</Title>
       <TextInput
         placeholder="Username"
         type="text"
@@ -30,12 +30,16 @@ const RegisterUsername: FC<RegisterUsernameProps> = ({
         name="username"
       />
       <TextBlock size="small">
-        Username and dates of notes are the only things that are not encrypted.
-        Username is used when logging in to WebDiary.
+        Юзернейм должен состоять минимум из 5 символов. Разрешенные символы:
+        латинские буквы, цифры, символ нижнего подчеркивания (_).
+      </TextBlock>
+      <TextBlock size="small">
+        Юзернейм не может начинаться с цифры. Нижнее подчеркивания может
+        использоваться только в середине юзернейма
       </TextBlock>
       <NextNavigation>
         <Button size="large" onClick={goToNextPanel} disabled={!isValid}>
-          Next
+          Далее
         </Button>
       </NextNavigation>
     </>

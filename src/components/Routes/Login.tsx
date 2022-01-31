@@ -87,10 +87,10 @@ const Login = () => {
     <Navigate to="/write" />
   ) : (
     <>
-      <Title text="Login" size="largest" />
+      <Title size="largest">Логин</Title>
       <form onSubmit={submitHandler}>
         <TextInput
-          placeholder="Username"
+          placeholder="Юзернейм"
           value={formValues.username}
           name="username"
           onChange={changeHandler}
@@ -104,7 +104,8 @@ const Login = () => {
           setFileText={setFileText}
         />
         <TextBlock size="small">
-          Your private key won't be uploaded to the servers.
+          Приватный ключ используется для криптографической подписи сообщения и
+          не загружается на сервер EncDiary
         </TextBlock>
         <Button
           size="large"
@@ -112,12 +113,12 @@ const Login = () => {
           className="login__button"
           disabled={!isFormValid}
         >
-          Login
+          Войти
         </Button>
       </form>
       <hr />
       <TextBlock size="small">
-        Don't have account? <Link to="/register">Register</Link>
+        Нет учетной записи? <Link to="/register">Регистрация</Link>
       </TextBlock>
       <Button
         colorTheme="secondary"

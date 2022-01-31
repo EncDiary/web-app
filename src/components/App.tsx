@@ -43,7 +43,7 @@ const App: React.FC = observer(() => {
           <Route path="/write" element={<Write />} />
           <Route path="/notes" element={<HistoryNotes />} />
           <Route path="/info" element={<Info />} />
-          <Route path="/setting/*" element={<Setting />} />
+          <Route path="/setting" element={<Setting />} />
         </Route>
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>

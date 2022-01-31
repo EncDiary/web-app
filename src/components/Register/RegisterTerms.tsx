@@ -25,7 +25,7 @@ const RegisterTerms: FC<RegisterTermsProps> = ({
 }) => {
   return (
     <>
-      <Title text="Terms" size="largest" />
+      <Title size="largest">Условия использования</Title>
       <TextBlock>
         Сервис EncDiary предназначен для управления личным конфиденциальным
         дневником. Это веб-приложение, в котором пользователь может
@@ -92,10 +92,10 @@ const RegisterTerms: FC<RegisterTermsProps> = ({
 
       <NextBackNavigation>
         <Button colorTheme="secondary" size="large" onClick={goToPrevPanel}>
-          Back
+          Назад
         </Button>
         <Button size="large" onClick={goToNextPanel} disabled={!isValid}>
-          Next
+          Далее
         </Button>
       </NextBackNavigation>
     </>
