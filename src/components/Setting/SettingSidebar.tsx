@@ -1,20 +1,30 @@
 import { FC, ReactElement, useState } from "react";
-import { NavLink } from "react-router-dom";
 import {
   CommandIcon,
   LockIcon,
   MenuIcon,
   ToolIcon,
 } from "../../assets/svg-icons";
+import { TSettingSections } from "../../types/setting";
 import "./SettingSidebar.scss";
+
+interface SettingSidebarProps {
+  currentSection: TSettingSections;
+  setCurrentSection: React.Dispatch<React.SetStateAction<TSettingSections>>;
+}
 
 interface SettingSidebarButtonProps {
   text: string;
   icon?: ReactElement;
-  link: string;
+  section: TSettingSections;
+  currentSection: TSettingSections;
+  setCurrentSection: React.Dispatch<React.SetStateAction<TSettingSections>>;
 }
 
-const SettingSidebar: FC = () => {
+const SettingSidebar: FC<SettingSidebarProps> = ({
+  currentSection,
+  setCurrentSection,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -26,21 +36,29 @@ const SettingSidebar: FC = () => {
         <MenuIcon />
         Меню настроек
       </button>
-      <div className={`sidebar__links ${isOpen ? "sidebar__links_show" : ""}`}>
+      <div
+        className={`sidebar__buttons ${isOpen ? "sidebar__buttons_show" : ""}`}
+      >
         <SettingSidebarButton
           text="Основное"
           icon={<ToolIcon />}
-          link="/setting/main"
+          section="main"
+          currentSection={currentSection}
+          setCurrentSection={setCurrentSection}
         />
         <SettingSidebarButton
           text="Безопасность"
           icon={<LockIcon />}
-          link="/setting/secure"
+          section="secure"
+          currentSection={currentSection}
+          setCurrentSection={setCurrentSection}
         />
         <SettingSidebarButton
           text="Горячие клавиши"
           icon={<CommandIcon />}
-          link="/setting/hotkey"
+          section="hotkeys"
+          currentSection={currentSection}
+          setCurrentSection={setCurrentSection}
         />
       </div>
     </aside>
@@ -50,16 +68,20 @@ const SettingSidebar: FC = () => {
 const SettingSidebarButton: FC<SettingSidebarButtonProps> = ({
   text,
   icon,
-  link,
+  section,
+  currentSection,
+  setCurrentSection,
 }) => {
   return (
-    <NavLink
-      to={link}
-      className={({ isActive }) => `sidebar__link${isActive ? "_active" : ""}`}
+    <button
+      className={`sidebar__button${
+        section === currentSection ? "_active" : ""
+      }`}
+      onClick={() => setCurrentSection(section)}
     >
-      <div className="sidebar__link-icon">{icon}</div>
-      <div className="sidebar__link-text">{text}</div>
-    </NavLink>
+      <div className="sidebar__button-icon">{icon}</div>
+      <div className="sidebar__button-text">{text}</div>
+    </button>
   );
 };
 
