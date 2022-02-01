@@ -16,7 +16,7 @@ const RegisterStart: FC<RegisterStartProps> = ({ goToNextPanel }) => {
       <TextBlock size="large">
         Для создания аккаунта EncDiary вам потребуется придумать юзернейм и
         предоставить RSA ключи. Вы можете использовать свои ключи или позволить
-        EncDiary создать из для вас
+        EncDiary создать их для вас
       </TextBlock>
       <NextNavigation>
         <Button size="large" onClick={goToNextPanel}>

@@ -1,46 +1,118 @@
-# Getting Started with Create React App
+# EncDiary
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+EncDiary is a web application for keeping an encrypted diary. Symmetric (AES-256-CBC) and asymmetric (RSA) encryption types are used for encryption. The project is based on Lumen PHP server with ReactJS frontend.
 
-## Available Scripts
+This is frontend part of EncDiary. You can find the API [here](https://github.com/EncDiary/api)
 
-In the project directory, you can run:
+## Screenshots
 
-### `npm start`
+![Creating a Note](https://i.imgur.com/HNaKpAd.png)
+![Today Notes](https://i.imgur.com/diZjLAC.png)
+![Notes History](https://i.imgur.com/dmjvxWy.png)
+![Login](https://i.imgur.com/NO8WwRL.png)
+![Setting](https://i.imgur.com/NeQO5Zg.png)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Dependencies
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Main
 
-### `npm test`
+- Create React App
+- React Router DOM
+- Typescript
+- MobX
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Components
 
-### `npm run build`
+- TipTap
+- React Modal
+- Sweetalert2
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Encryption
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- CryptoJS
+- JSEncryption
+- JWT Decode
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Styles
 
-### `npm run eject`
+- Node Sass
+- Normalize.css
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Additional
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Axios
+- HTML React Parser
+- qs
+- React Idle Timer
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Directory Structure
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- [public](public/) - static files
+- [.env](.env) - Configuration file
+- [src](src/) - source files
+  - [assets](src/assets/) - fonts, images, svg, styles (media & colors)
+  - [components](src/components/) - Components of app. Next to each component there is a file with styles (.scss)
+  - [data](src/data/) - Static data in json format
+  - [hooks](src/hooks/) - custom ReactJS hooks
+  - [modules](src/modules/) - general purpose functions
+  - [store](src/store/) - MobX store
+  - [types](src/types/) - TypeScript types
 
-## Learn More
+## Configuration
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Example .env file:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+REACT_APP_SERVER_URL = https://server.url/
+REACT_APP_DEMO_USERNAME = demo
+REACT_APP_DEMO_PRIVATE_KEY = -----BEGIN RSA PRIVATE KEY-----ThisIsYourRSAPrivateKey-----END RSA PRIVATE KEY-----
+```
+
+Replace value of `REACT_APP_SERVER_URL` with the url of your API server. Value of `REACT_APP_DEMO_PRIVATE_KEY` will be ready in the release. This value doesn't need to be changed. Demo notes in the database template will also be.
+
+## Development
+
+Run app for development using command:
+
+```sh
+npm start
+```
+
+After successfully starting the server, navigate to http://localhost:3000/.
+
+## Build
+
+Create production build of application using command:
+
+```sh
+npm run build
+```
+
+## Donate
+
+If you wish to, you can buy me a cup of tea with cookies
+
+- **BTC** - `bc1q5zk5m3tfgw5gt84jy344n6ddx25ywz3t8s4jt6`
+- **ETH** - `0xe19B7704BDB65Ca1e11149f1728A740e9FE4b092`
+- **BNB** - `bnb15kkevtkqnplmn4upsjwyrgwkpf3ksrxhpy68sw`
+- **XMR** - `82bEmpVCrbeWgdAmYELWG3hRbx9Xby23YBJRVaiNsubvMuR9PJRUdngQnGpS68wARGRsqT2rHDZwCF1fBBDF6avdQiUR2f6`
+
+## Additional
+
+### Generating RSA keypair
+
+These actions are performed within your terminal (Unix based OS):
+
+- Generate and see private key by executing the following commands:
+
+```sh
+openssl genrsa -out encdiary_priv.pem 1024
+cat encdiary_priv.pem
+```
+
+- Get public key by doing the following:
+
+```
+openssl rsa -pubout -in encdiary_priv.pem -out encdiary_pub.pem
+cat encdiary_pub.pem
+```

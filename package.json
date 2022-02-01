@@ -1,6 +1,6 @@
 {
-  "name": "web-diary-ts",
-  "version": "0.1.0",
+  "name": "encdiary",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@tiptap/extension-placeholder": "^2.0.0-beta.28",
