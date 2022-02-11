@@ -39,9 +39,11 @@ const NoteToday: FC<NoteTodayProps> = observer(({ account }) => {
         }) => {
           const datetime = note.datetime * 1000;
           const text = aesDecrypt(
-            account.passphrase,
             note.ciphertext,
-            note.salt,
+            store.cryptoStore.findOrCalculateAesKey(
+              note.salt,
+              account.passphrase
+            ),
             note.iv
           );
           if (datetime >= todayMidnightTime) {

@@ -1,3 +1,4 @@
+import { lib } from "crypto-js";
 import JSEncrypt from "jsencrypt";
 import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
@@ -16,9 +17,10 @@ class UserStore {
     username: string,
     privateKey: JSEncrypt,
     token: string,
-    passphrase: CryptoJS.lib.WordArray
+    passphrase: lib.WordArray,
+    salt: lib.WordArray
   ) {
-    this.account = { username, privateKey, token, passphrase };
+    this.account = { username, privateKey, token, passphrase, salt };
   }
 
   updateToken(token: string) {
@@ -29,7 +31,6 @@ class UserStore {
 
   clearAccount() {
     this.account = undefined;
-    this.rootStore.noteStore.clearNotes();
   }
 }
 

@@ -12,6 +12,7 @@ import store from "../../store";
 import { IAccount } from "../../types/account";
 import Modal from "../Generic/Modal";
 import { spinnerCreator } from "../Generic/Spinner";
+import { enc } from "crypto-js";
 
 interface EditNoteProps {
   account: IAccount;
@@ -36,10 +37,20 @@ const EditNote: FC<EditNoteProps> = ({ account, note, isOpen, setIsOpen }) => {
       return;
     }
     spinnerCreator(async () => {
-      const cipherNote = aesEncrypt(account.passphrase, text);
+      const cipherNote = aesEncrypt(
+        text,
+        store.cryptoStore.findOrCalculateAesKey(
+          enc.Hex.stringify(account.salt),
+          account.passphrase
+        )
+      );
       const serverResponse = await editNoteRequest(
         note.id,
-        cipherNote,
+        {
+          ciphertext: cipherNote.ciphertext,
+          iv: cipherNote.iv,
+          salt: enc.Hex.stringify(account.salt),
+        },
         account
       );
       if (!serverResponse) return;

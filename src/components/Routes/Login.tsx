@@ -24,6 +24,7 @@ import {
 } from "../../modules/crypto";
 import { errorAlert } from "../../modules/sweetalert";
 import { spinnerCreator } from "../Generic/Spinner";
+import { enc } from "crypto-js";
 
 const Login = () => {
   const account = store.userStore.account;
@@ -62,7 +63,8 @@ const Login = () => {
         username.toLowerCase(),
         jse,
         serverAuthResponse.data.token,
-        passphrase
+        passphrase,
+        enc.Hex.parse(serverAuthResponse.data.salt)
       );
     });
 

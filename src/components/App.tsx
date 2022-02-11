@@ -12,6 +12,7 @@ import Setting from "./Routes/Setting";
 import Write from "./Routes/Write";
 import AccountTemplate from "./Templates/AccountTemplate";
 import UnauthorizedTemplate from "./Templates/UnauthorizedTemplate";
+import { clearStore } from "../modules/clearStore";
 
 const App: React.FC = observer(() => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const App: React.FC = observer(() => {
   const handleOnIdle = () => {
     if (account) {
       navigate("/login");
-      store.userStore.clearAccount();
+      clearStore();
     }
   };
 

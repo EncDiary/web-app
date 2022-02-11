@@ -7,7 +7,11 @@ import { errorAlert } from "../sweetalert";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
-export const registerRequest = (username: string, publicKey: string) => {
+export const registerRequest = (
+  username: string,
+  publicKey: string,
+  salt: string
+) => {
   return axios({
     method: "post",
     baseURL: serverUrl,
@@ -15,6 +19,7 @@ export const registerRequest = (username: string, publicKey: string) => {
     data: qs.stringify({
       username,
       public_key: publicKey,
+      salt,
     }),
   }).catch((error: AxiosError) => {
     errorAlert(getErrorMessage(error));

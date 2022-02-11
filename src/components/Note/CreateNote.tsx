@@ -9,6 +9,7 @@ import { createNoteRequest } from "../../modules/request/noteRequest";
 import store from "../../store";
 import { IAccount } from "../../types/account";
 import { spinnerCreator } from "../Generic/Spinner";
+import { enc } from "crypto-js";
 
 interface CreateNoteProps {
   account: IAccount;
@@ -24,8 +25,21 @@ const CreateNote: FC<CreateNoteProps> = ({ account }) => {
       return;
     }
     spinnerCreator(async () => {
-      const cipherNote = aesEncrypt(account.passphrase, text);
-      const serverResponse = await createNoteRequest(cipherNote, account);
+      const cipherNote = aesEncrypt(
+        text,
+        store.cryptoStore.findOrCalculateAesKey(
+          enc.Hex.stringify(account.salt),
+          account.passphrase
+        )
+      );
+      const serverResponse = await createNoteRequest(
+        {
+          ciphertext: cipherNote.ciphertext,
+          iv: cipherNote.iv,
+          salt: enc.Hex.stringify(account.salt),
+        },
+        account
+      );
       if (!serverResponse) return;
 
       store.noteStore.create({

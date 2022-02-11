@@ -55,9 +55,11 @@ const HistoryNotes: FC = () => {
           salt: string;
         }) => {
           const text = aesDecrypt(
-            account.passphrase,
             note.ciphertext,
-            note.salt,
+            store.cryptoStore.findOrCalculateAesKey(
+              note.salt,
+              account.passphrase
+            ),
             note.iv
           );
           notes.push({ id: note.id, text, datetime: note.datetime * 1000 });

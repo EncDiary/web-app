@@ -17,7 +17,7 @@ import {
 import { successAlert, writeTextAlert } from "../../modules/sweetalert";
 import { IAccount } from "../../types/account";
 import { spinnerCreator } from "../Generic/Spinner";
-import store from "../../store";
+import { clearStore } from "../../modules/clearStore";
 
 interface SettingSecureProps {
   account: IAccount;
@@ -107,7 +107,7 @@ const SettingDeleteAccount: FC<SettingDeleteAccountProps> = ({ account }) => {
         if (!serverDeleteAccountResponse) return;
 
         successAlert("Дневник удален успешно");
-        store.userStore.clearAccount();
+        clearStore();
         navigate("/login");
       });
     }

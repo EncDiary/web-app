@@ -7,7 +7,7 @@ import {
   LockIcon,
   SettingIcon,
 } from "../../assets/svg-icons";
-import store from "../../store";
+import { clearStore } from "../../modules/clearStore";
 import { IAccount } from "../../types/account";
 import "./Header.scss";
 
@@ -30,7 +30,7 @@ const Header: FC<HeaderProps> = ({ account }) => {
 
   const logOut = () => {
     navigate("/login");
-    store.userStore.clearAccount();
+    clearStore();
   };
 
   return (

@@ -1,3 +1,5 @@
+import { lib } from "crypto-js";
+import store from "../store";
 import { aesDecrypt } from "./crypto";
 
 export const exportFile = (
@@ -15,7 +17,7 @@ export const exportFile = (
 export const exportDecryptedBackup = async (
   fetchedData: any,
   currentDate: string,
-  passphrase: string | CryptoJS.lib.WordArray
+  passphrase: lib.WordArray
 ) => {
   const notes: { text: string; datetime: number }[] = [];
   fetchedData.notes.forEach(
@@ -25,7 +27,11 @@ export const exportDecryptedBackup = async (
       iv: string;
       salt: string;
     }) => {
-      const text = aesDecrypt(passphrase, note.ciphertext, note.salt, note.iv);
+      const text = aesDecrypt(
+        note.ciphertext,
+        store.cryptoStore.findOrCalculateAesKey(note.salt, passphrase),
+        note.iv
+      );
       notes.push({ text, datetime: note.datetime });
     }
   );

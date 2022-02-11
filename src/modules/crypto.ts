@@ -2,15 +2,11 @@ import { AES, algo, enc, lib, PBKDF2, SHA512 } from "crypto-js";
 import JSEncrypt from "jsencrypt";
 
 export const aesDecrypt = (
-  passphrase: string | lib.WordArray,
   encrypted: string,
-  saltString: string,
+  key: lib.WordArray,
   ivString: string
 ) => {
-  const salt = enc.Hex.parse(saltString);
   const iv = enc.Hex.parse(ivString);
-  const key = passphraseToKey(passphrase, salt);
-
   const decrypted = AES.decrypt(encrypted, key, { iv });
   try {
     return decrypted.toString(enc.Utf8);
@@ -19,35 +15,27 @@ export const aesDecrypt = (
   }
 };
 
-export const aesEncrypt = (
-  passphrase: string | lib.WordArray,
-  plaintext: string
-) => {
-  const salt = generateRandomBytes(256);
-  const iv = generateRandomBytes(16);
-  const key = passphraseToKey(passphrase, salt);
-
+export const aesEncrypt = (plaintext: string, key: lib.WordArray) => {
+  const iv = generateRandomBytes(128 / 8);
   const encrypted = AES.encrypt(plaintext, key, { iv });
-
   return {
     ciphertext: enc.Base64.stringify(encrypted.ciphertext),
-    salt: enc.Hex.stringify(salt),
     iv: enc.Hex.stringify(iv),
   };
 };
 
-const generateRandomBytes = (bytesNumber: number) => {
+export const generateRandomBytes = (bytesNumber: number) => {
   return lib.WordArray.random(bytesNumber);
 };
 
-const passphraseToKey = (
-  passphrase: string | lib.WordArray,
+export const passphraseToKey = (
+  passphrase: lib.WordArray,
   salt: lib.WordArray
 ) => {
   return PBKDF2(passphrase, salt, {
     hasher: algo.SHA512,
-    keySize: 64 / 8,
-    iterations: 200,
+    keySize: 256 / 32,
+    iterations: 10000,
   });
 };
 

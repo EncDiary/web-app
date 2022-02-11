@@ -17,8 +17,9 @@ import {
 import { spinnerCreator } from "../Generic/Spinner";
 import RegisterTerms from "./RegisterTerms";
 import { useCheckboxesState } from "../../hooks/useCheckboxesState";
-import { checkKeypair } from "../../modules/crypto";
+import { checkKeypair, generateRandomBytes } from "../../modules/crypto";
 import RegisterSecretAction from "./RegisterSecretAction";
+import { enc } from "crypto-js";
 
 const RegisterProcess: FC = () => {
   const navigate = useNavigate();
@@ -173,7 +174,8 @@ const RegisterProcess: FC = () => {
     await spinnerCreator(async () => {
       const serverResponse = await registerRequest(
         formValues.username.toLowerCase(),
-        checkingResult.jse.getPublicKey()
+        checkingResult.jse.getPublicKey(),
+        enc.Hex.stringify(generateRandomBytes(256 / 8))
       );
 
       if (!serverResponse) return;
